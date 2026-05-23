@@ -1,36 +1,114 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🏨 HBMS Hotel - Hotel Booking Management System
 
-## Getting Started
+> Đồ án thi cuối kỳ — **Các công nghệ mới trong phát triển phần mềm**  
+> Đề tài 3: Website quản lý đặt phòng khách sạn
 
-First, run the development server:
+[![Next.js](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org)
+[![Supabase](https://img.shields.io/badge/Supabase-3ECF8E)](https://supabase.com)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)](https://www.typescriptlang.org)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38bdf8)](https://tailwindcss.com)
+
+## 🎯 Demo
+
+- **Production**: TBD (sẽ deploy ở Tuần 6)
+- **Repository**: TBD
+
+## ✨ Tính năng
+
+### 🔓 Public
+- Trang chủ với hero, search box, danh sách phòng nổi bật
+- Danh sách phòng có filter (loại, giá, tiện nghi)
+- Chi tiết phòng với gallery ảnh + reviews
+
+### 👤 Customer
+- Đăng ký / Đăng nhập (Supabase Auth)
+- Tìm phòng theo ngày + số khách
+- Đặt phòng + sinh booking_code
+- Lịch sử đặt phòng + huỷ booking
+- Đánh giá sau khi check-out
+
+### 🛡️ Admin
+- Dashboard thống kê doanh thu, occupancy rate
+- CRUD loại phòng + phòng (upload ảnh)
+- Quản lý booking (xác nhận / check-in / check-out)
+- Quản lý khách hàng + reviews
+
+## 🛠️ Stack công nghệ
+
+| Layer | Công nghệ |
+|-------|-----------|
+| Frontend | Next.js 16 (App Router) + React 19 + TypeScript |
+| Styling | Tailwind CSS v4 + shadcn/ui (base-ui) |
+| Backend | Supabase (PostgreSQL + Auth + Storage + Realtime) |
+| Validation | Zod |
+| Date/Time | dayjs |
+| Charts | Recharts |
+| Date Picker | react-day-picker |
+| Container | Docker + Docker Compose (sẽ làm) |
+| Deploy | VPS + Domain + SSL (sẽ làm) |
+
+## 🚀 Quick Start
 
 ```bash
+# 1. Clone & install
+git clone <repo-url>
+cd hotel-booking
+npm install
+
+# 2. Tạo Supabase project tại supabase.com, chạy supabase/schema.sql
+
+# 3. Tạo .env.local theo .env.example
+
+# 4. Seed data (optional)
+npm run seed
+
+# 5. Run dev
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+📖 Xem [SETUP_GUIDE.md](./SETUP_GUIDE.md) cho hướng dẫn chi tiết.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📁 Cấu trúc
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+├── app/
+│   ├── (public)/     # Trang công khai (Navbar/Footer layout)
+│   ├── auth/         # Login/Register
+│   ├── admin/        # Trang quản trị (protected)
+│   ├── actions/      # Server Actions
+│   └── proxy.ts      # Next.js 16 Proxy (replaces middleware)
+├── components/
+│   ├── navbar.tsx, footer.tsx
+│   └── ui/           # shadcn primitives
+├── lib/
+│   ├── supabase/     # client/server/middleware
+│   ├── utils/        # format helpers
+│   └── validators/   # zod schemas
+└── types/            # database types
+supabase/schema.sql   # 8 bảng + RLS + functions
+scripts/seed.ts       # data mẫu
+```
 
-## Learn More
+## 📚 Tài liệu
 
-To learn more about Next.js, take a look at the following resources:
+- [SPEC.md](./SPEC.md) - Đặc tả chi tiết dự án
+- [SETUP_GUIDE.md](./SETUP_GUIDE.md) - Hướng dẫn cài đặt
+- [docs/ai-prompts.md](./docs/ai-prompts.md) - Log AI prompts đã dùng
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📅 Roadmap
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [x] **Tuần 1**: Foundation (Auth, Schema, Layout)
+- [ ] **Tuần 2**: Quản lý phòng (Admin + Public)
+- [ ] **Tuần 3**: Booking flow (Search + Đặt phòng)
+- [ ] **Tuần 4**: Quản lý booking (Lifecycle)
+- [ ] **Tuần 5**: Tính năng nâng cao (Reviews, Realtime, Dashboard)
+- [ ] **Tuần 6**: Docker + VPS Deploy + Báo cáo
 
-## Deploy on Vercel
+## 👤 Tác giả
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Đồ án cá nhân - SV Khoa CNTT.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+*Generated with [Devin](https://cli.devin.ai/docs)*
