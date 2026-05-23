@@ -101,12 +101,87 @@
 
 ---
 
-### **Tuần 2-6** (sẽ cập nhật khi hoàn thành)
+### **Tuần 2 - Quản lý Phòng**
 
-#### Prompt #6: Component Room Card với image carousel
+#### Prompt #6: Tạo Admin layout với sidebar và dashboard
+**Ngữ cảnh:** Cần khu vực admin tách biệt với public, có sidebar điều hướng + header.
+
+**Prompt:**
+> "Tạo Admin layout với sidebar bên trái có 7 menu items (dashboard, room-types, rooms, bookings, customers, reviews, services), highlight active route bằng pathname. Header bên phải hiển thị avatar + nút logout. Layout có double-check role admin để bảo vệ route ở cả tầng UI."
+
+**Lý do:** Bảo vệ route bằng nhiều tầng (proxy + RLS + UI check) là best practice cho Next.js auth.
+
+**Kết quả:**
+- `components/admin/sidebar.tsx` - client component dùng `usePathname()` highlight
+- `app/admin/layout.tsx` - server component check role admin → redirect nếu không phải
+- `app/admin/page.tsx` - dashboard với 4 KPI cards, biểu đồ doanh thu, recent bookings, quick actions
+
+---
+
+#### Prompt #7: CRUD form Room Types với multi-select amenities
+**Ngữ cảnh:** Form thêm/sửa loại phòng có 12 tiện nghi (wifi, tv, bathtub...) cần multi-select.
+
+**Prompt:**
+> "Tạo form room-type-form.tsx tái sử dụng cho cả create và edit. Multi-select amenities dạng grid checkbox với border highlight khi chọn. Validate bằng zod, dùng useActionState. Tự động sinh slug từ name."
+
+**Lý do:** Pattern reusable form (1 component dùng cho cả create/edit) tiết kiệm code, dễ maintain.
+
+**Kết quả:**
+- `lib/validators/room.ts` - zod schemas + AMENITIES_OPTIONS list + helper `getAmenityLabel`
+- `actions/room-types.ts` - createRoomType, updateRoomType, deleteRoomType (kèm `requireAdmin()` guard)
+- `components/admin/room-type-form.tsx` - form reusable với checkbox grid
+- `app/admin/room-types/{page,delete-button,new,[id]/edit}` - đầy đủ CRUD pages
+
+---
+
+#### Prompt #8: Image Uploader trực tiếp lên Supabase Storage
+**Ngữ cảnh:** Cần upload ảnh phòng (multiple, max 6) lên Supabase Storage bucket `rooms`, có preview, validate kích thước/format.
+
+**Prompt:**
+> "Tạo component ImageUploader: chấp nhận multiple file (jpg/png/webp, max 5MB), upload lên Supabase Storage bucket rooms qua server action, preview grid với nút xóa, render hidden inputs name='images' để form submit. Loading state khi upload."
+
+**Lý do:** Upload trực tiếp lên Storage thay vì lưu base64/file system - đúng yêu cầu thi (file upload Supabase Storage).
+
+**Kết quả:**
+- `actions/rooms.ts::uploadRoomImage()` - server action validate + upload + return public URL
+- `components/admin/image-uploader.tsx` - client với grid preview, drag-drop UI, lightbox-style
+- Sử dụng `crypto.randomUUID()` làm tên file để tránh conflict
+
+---
+
+#### Prompt #9: Trang public /rooms với filter & sort
+**Ngữ cảnh:** Trang khách xem danh sách phòng có filter theo loại, khoảng giá, sort theo giá/rating.
+
+**Prompt:**
+> "Tạo trang /rooms với layout 2 cột: filter sidebar bên trái (sticky), grid card phòng bên phải. Filter: loại phòng (Select), khoảng giá (input number from-to), sort (giá tăng/giảm/rating/mới). Đẩy state lên URL searchParams để có thể share link. Tính rating trung bình từ reviews qua bookings."
+
+**Lý do:** Filter qua URL searchParams thân thiện SEO + share link, đúng pattern Next.js.
+
+**Kết quả:**
+- `components/room/rooms-filter.tsx` - client với useRouter + useSearchParams + useTransition
+- `components/room/room-card.tsx` - card đẹp với cover image, rating badge, amenities preview
+- `app/(public)/rooms/page.tsx` - server component với 2-step fetch reviews (tránh nested filter type error)
+
+---
+
+#### Prompt #10: Fix lỗi TypeScript "excessively deep" với nested Supabase select
+**Ngữ cảnh:** Build fail vì query `supabase.from('reviews').select('rating, booking:bookings(room_id)').in('booking.room_id', ...)` - TypeScript không suy luận được type sâu.
+
+**Prompt:**
+> "Build báo lỗi 'Type instantiation is excessively deep' khi dùng .in('booking.room_id', ...) trên nested filter. Refactor để tách 2 query: lấy bookings theo room_id, rồi lấy reviews theo booking_id, gom kết quả thành Map."
+
+**Lý do:** Code clear hơn, không depend vào tính năng nested filter của PostgREST mà TypeScript không hỗ trợ tốt.
+
+**Kết quả:** Refactor thành 2 query đơn giản, build pass, performance tương đương.
+
+---
+
+### **Tuần 3-6** (sẽ cập nhật khi hoàn thành)
+
+#### Prompt #11: Logic check phòng trống real-time với daterange
 *(coming soon)*
 
-#### Prompt #7: Logic check phòng trống real-time
+#### Prompt #12: Email confirmation với Resend/Supabase Functions
 *(coming soon)*
 
 ---
@@ -123,13 +198,13 @@
 
 ## 📈 Thống kê
 
-| Metric | Số lượng |
+| Metric | Số lượng (sau Tuần 2) |
 |--------|---------|
-| Tổng prompts | 5+ (tuần 1) |
-| Files được sinh ra | ~25 files |
-| Lines of code (LOC) | ~2000 |
-| Time saved (ước tính) | ~15 giờ |
+| Tổng prompts | 10+ |
+| Files được sinh ra | ~50 files |
+| Lines of code (LOC) | ~5000 |
+| Time saved (ước tính) | ~30 giờ |
 
 ---
 
-*Cập nhật cuối: Tuần 1 hoàn thành.*
+*Cập nhật cuối: Tuần 2 hoàn thành.*

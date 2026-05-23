@@ -99,7 +99,7 @@ scripts/seed.ts       # data mẫu
 ## 📅 Roadmap
 
 - [x] **Tuần 1**: Foundation (Auth, Schema, Layout)
-- [ ] **Tuần 2**: Quản lý phòng (Admin + Public)
+- [x] **Tuần 2**: Quản lý phòng (Admin CRUD + Upload ảnh + Public list/detail)
 - [ ] **Tuần 3**: Booking flow (Search + Đặt phòng)
 - [ ] **Tuần 4**: Quản lý booking (Lifecycle)
 - [ ] **Tuần 5**: Tính năng nâng cao (Reviews, Realtime, Dashboard)
