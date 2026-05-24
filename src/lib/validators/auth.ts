@@ -5,6 +5,10 @@ export const loginSchema = z.object({
   password: z.string().min(6, 'Mật khẩu phải có ít nhất 6 ký tự'),
 })
 
+export const emailLoginSchema = z.object({
+  email: z.string().email('Email không hợp lệ'),
+})
+
 export const registerSchema = z
   .object({
     full_name: z.string().min(2, 'Họ tên phải có ít nhất 2 ký tự').trim(),
@@ -22,6 +26,7 @@ export const registerSchema = z
   })
 
 export type LoginInput = z.infer<typeof loginSchema>
+export type EmailLoginInput = z.infer<typeof emailLoginSchema>
 export type RegisterInput = z.infer<typeof registerSchema>
 
 export type AuthFormState = {
