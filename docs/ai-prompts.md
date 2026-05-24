@@ -176,13 +176,42 @@
 
 ---
 
-### **Tuần 3-6** (sẽ cập nhật khi hoàn thành)
+### **Tuần 3 - Booking Flow**
 
 #### Prompt #11: Logic check phòng trống real-time với daterange
-*(coming soon)*
+**Ngữ cảnh:** Cần trang `/search` nhận `check_in`, `check_out`, `guests` từ URL và chỉ hiển thị phòng còn trống.
 
-#### Prompt #12: Email confirmation với Resend/Supabase Functions
-*(coming soon)*
+**Prompt:**
+> "Tạo booking search flow cho Next.js App Router: component SearchForm dùng URL query params, trang /search gọi Supabase RPC get_available_rooms/check_room_availability, validate check-out sau check-in và không cho chọn ngày quá khứ, hiển thị empty state khi không có phòng."
+
+**Lý do:** Tìm phòng theo ngày là bước đầu của booking flow, cần dựa trên SQL daterange để tránh trả về phòng đã được đặt.
+
+**Kết quả:**
+- `src/components/booking/search-form.tsx` - form tìm kiếm dùng native date input + guests.
+- `src/app/(public)/search/page.tsx` - server page gọi RPC `get_available_rooms`.
+- Tích hợp search form vào trang chủ và navbar compact.
+
+---
+
+#### Prompt #12: Booking form + sinh booking code
+**Ngữ cảnh:** Sau khi chọn phòng, khách cần tạo booking có mã xác nhận, dịch vụ kèm theo và tổng tiền.
+
+**Prompt:**
+> "Tạo trang /booking/[roomId] protected bằng Supabase auth. Form hiển thị phòng, ngày, số khách, services checkbox, special requests, tính tổng tiền real-time. Server action createBooking phải validate lại dữ liệu, check phòng trống lần nữa, sinh booking_code dạng HTL-YYYYMMDD-XXXX, insert bookings và booking_services, rồi redirect sang confirmation page."
+
+**Lý do:** Server action phải là nguồn tin cậy cuối cùng vì client form có thể bị sửa request.
+
+**Kết quả:**
+- `src/lib/validators/booking.ts` - zod schema cho search và create booking.
+- `src/server/actions/bookings.ts` - `createBooking()` check auth, gọi RPC transaction-safe.
+- `supabase/schema.sql` - RPC `create_booking_transaction()` dùng `pg_advisory_xact_lock` để serialize booking theo từng phòng.
+- `src/components/booking/booking-form.tsx` - form đặt phòng với tổng tiền real-time.
+- `src/app/(public)/booking/[roomId]/page.tsx` và `booking/success/[code]/page.tsx`.
+- `src/components/rooms/book-quick-form.tsx` - kiểm tra availability trước khi điều hướng sang booking.
+
+---
+
+### **Tuần 4-6** (sẽ cập nhật khi hoàn thành)
 
 ---
 
@@ -198,13 +227,13 @@
 
 ## 📈 Thống kê
 
-| Metric | Số lượng (sau Tuần 2) |
+| Metric | Số lượng (đang Tuần 3) |
 |--------|---------|
-| Tổng prompts | 10+ |
-| Files được sinh ra | ~50 files |
-| Lines of code (LOC) | ~5000 |
-| Time saved (ước tính) | ~30 giờ |
+| Tổng prompts | 12+ |
+| Files được sinh ra | ~58 files |
+| Lines of code (LOC) | ~5600 |
+| Time saved (ước tính) | ~36 giờ |
 
 ---
 
-*Cập nhật cuối: Tuần 2 hoàn thành.*
+*Cập nhật cuối: Tuần 3 đang triển khai.*
