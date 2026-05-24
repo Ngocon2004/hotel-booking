@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Calendar, MapPin, Search, Star, Wifi, Coffee, Car, Sparkles } from 'lucide-react'
+import SearchForm from '@/components/booking/search-form'
 
 export default function HomePage() {
   return (
@@ -59,37 +60,7 @@ export default function HomePage() {
         <Card className="shadow-2xl border-amber-200/50 bg-white/95 backdrop-blur-md">
           <CardContent className="p-6 sm:p-8">
             <h2 className="text-xl font-bold mb-4">Tìm kiếm nhanh</h2>
-            <div className="grid sm:grid-cols-3 gap-4">
-              <div className="space-y-2">
-                <label className="text-sm font-semibold text-gray-700">📅 Check-in</label>
-                <input
-                  type="date"
-                  className="w-full h-11 px-3 rounded-md border border-input bg-background text-sm"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-semibold text-gray-700">📅 Check-out</label>
-                <input
-                  type="date"
-                  className="w-full h-11 px-3 rounded-md border border-input bg-background text-sm"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-semibold text-gray-700">👥 Số khách</label>
-                <input
-                  type="number"
-                  min="1"
-                  defaultValue="2"
-                  className="w-full h-11 px-3 rounded-md border border-input bg-background text-sm"
-                />
-              </div>
-            </div>
-            <Link href="/search">
-              <Button className="w-full mt-4 h-12 bg-gradient-to-r from-amber-500 to-amber-700 font-semibold">
-                <Search className="w-4 h-4 mr-2" />
-                Tìm phòng còn trống
-              </Button>
-            </Link>
+            <SearchForm />
           </CardContent>
         </Card>
       </section>

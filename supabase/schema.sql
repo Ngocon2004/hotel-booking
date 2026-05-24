@@ -261,6 +261,146 @@ AS $$
 $$;
 
 -- =============================================================================
+-- FUNCTION: Tạo booking trong 1 transaction, khóa theo room để tránh race condition
+-- =============================================================================
+CREATE OR REPLACE FUNCTION public.create_booking_transaction(
+  p_room_id UUID,
+  p_check_in DATE,
+  p_check_out DATE,
+  p_guests INT,
+  p_special_requests TEXT DEFAULT NULL,
+  p_service_ids UUID[] DEFAULT ARRAY[]::UUID[]
+)
+RETURNS TEXT
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+  v_user_id UUID;
+  v_room_base_price DECIMAL(10, 2);
+  v_max_occupancy INT;
+  v_nights INT;
+  v_services_total DECIMAL(10, 2) := 0;
+  v_total_price DECIMAL(10, 2);
+  v_booking_id UUID;
+  v_booking_code TEXT;
+  v_service_count INT;
+  v_attempts INT := 0;
+BEGIN
+  v_user_id := auth.uid();
+
+  IF v_user_id IS NULL THEN
+    RAISE EXCEPTION 'Bạn cần đăng nhập để đặt phòng';
+  END IF;
+
+  IF p_check_out <= p_check_in THEN
+    RAISE EXCEPTION 'Check-out phải sau check-in';
+  END IF;
+
+  IF p_check_in < CURRENT_DATE THEN
+    RAISE EXCEPTION 'Không thể đặt phòng trong quá khứ';
+  END IF;
+
+  IF p_guests < 1 THEN
+    RAISE EXCEPTION 'Số khách tối thiểu là 1';
+  END IF;
+
+  -- Serialize toàn bộ booking cho cùng 1 phòng trong transaction hiện tại.
+  PERFORM pg_advisory_xact_lock(hashtextextended(p_room_id::TEXT, 0));
+
+  SELECT rt.base_price, rt.max_occupancy
+  INTO v_room_base_price, v_max_occupancy
+  FROM public.rooms r
+  INNER JOIN public.room_types rt ON rt.id = r.room_type_id
+  WHERE r.id = p_room_id
+    AND r.status = 'available';
+
+  IF v_room_base_price IS NULL THEN
+    RAISE EXCEPTION 'Không tìm thấy phòng khả dụng';
+  END IF;
+
+  IF p_guests > v_max_occupancy THEN
+    RAISE EXCEPTION 'Phòng này tối đa % khách', v_max_occupancy;
+  END IF;
+
+  IF NOT public.check_room_availability(p_room_id, p_check_in, p_check_out) THEN
+    RAISE EXCEPTION 'Phòng đã có người đặt trong khoảng ngày này';
+  END IF;
+
+  IF COALESCE(array_length(p_service_ids, 1), 0) > 0 THEN
+    SELECT COUNT(*), COALESCE(SUM(price), 0)
+    INTO v_service_count, v_services_total
+    FROM public.services
+    WHERE id = ANY(p_service_ids)
+      AND is_active = TRUE;
+
+    IF v_service_count != array_length(p_service_ids, 1) THEN
+      RAISE EXCEPTION 'Một số dịch vụ không còn khả dụng';
+    END IF;
+  END IF;
+
+  v_nights := p_check_out - p_check_in;
+  v_total_price := (v_room_base_price * v_nights) + v_services_total;
+
+  LOOP
+    v_attempts := v_attempts + 1;
+    v_booking_code := public.generate_booking_code();
+
+    BEGIN
+      INSERT INTO public.bookings (
+        booking_code,
+        customer_id,
+        room_id,
+        check_in_date,
+        check_out_date,
+        total_guests,
+        total_price,
+        special_requests
+      )
+      VALUES (
+        v_booking_code,
+        v_user_id,
+        p_room_id,
+        p_check_in,
+        p_check_out,
+        p_guests,
+        v_total_price,
+        NULLIF(TRIM(p_special_requests), '')
+      )
+      RETURNING id INTO v_booking_id;
+
+      EXIT;
+    EXCEPTION
+      WHEN unique_violation THEN
+        IF v_attempts >= 5 THEN
+          RAISE EXCEPTION 'Không thể sinh mã booking duy nhất';
+        END IF;
+    END;
+  END LOOP;
+
+  IF COALESCE(array_length(p_service_ids, 1), 0) > 0 THEN
+    INSERT INTO public.booking_services (
+      booking_id,
+      service_id,
+      quantity,
+      price_at_booking
+    )
+    SELECT
+      v_booking_id,
+      s.id,
+      1,
+      s.price
+    FROM public.services s
+    WHERE s.id = ANY(p_service_ids)
+      AND s.is_active = TRUE;
+  END IF;
+
+  RETURN v_booking_code;
+END;
+$$;
+
+-- =============================================================================
 -- ROW LEVEL SECURITY (RLS)
 -- =============================================================================
 
