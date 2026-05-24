@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
-import RoomCard from '@/components/room/room-card'
-import RoomsFilter from '@/components/room/rooms-filter'
+import RoomCard from '@/components/rooms/room-card'
+import RoomsFilter from '@/components/rooms/rooms-filter'
 import { Suspense } from 'react'
 import { BedDouble } from 'lucide-react'
 

@@ -20,14 +20,15 @@ type Props = {
   }
   rating?: number
   reviewCount?: number
+  bookingHref?: string
 }
 
-export default function RoomCard({ room, rating, reviewCount }: Props) {
+export default function RoomCard({ room, rating, reviewCount, bookingHref }: Props) {
   const cover = room.images?.[0]
   const type = room.room_type
 
   return (
-    <Link href={`/rooms/${room.id}`} className="group block">
+    <Link href={bookingHref || `/rooms/${room.id}`} className="group block">
       <Card className="overflow-hidden border-amber-100 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 h-full">
         {/* Cover image */}
         <div className="relative aspect-[4/3] bg-gradient-to-br from-amber-50 to-amber-100 overflow-hidden">
@@ -117,7 +118,7 @@ export default function RoomCard({ room, rating, reviewCount }: Props) {
               <span className="text-xs text-gray-500">/ đêm</span>
             </div>
             <span className="text-xs font-bold text-amber-700 group-hover:translate-x-1 transition-transform">
-              Xem chi tiết →
+              {bookingHref ? 'Đặt ngay →' : 'Xem chi tiết →'}
             </span>
           </div>
         </CardContent>

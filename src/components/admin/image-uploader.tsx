@@ -3,7 +3,7 @@
 import { useState, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Upload, X, Loader2 } from 'lucide-react'
-import { uploadRoomImage } from '@/app/actions/rooms'
+import { uploadRoomImage } from '@/server/actions/rooms'
 import { toast } from 'sonner'
 
 type Props = {

@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { updateRoomType } from '@/app/actions/room-types'
+import { updateRoomType } from '@/server/actions/room-types'
 import RoomTypeForm from '@/components/admin/room-type-form'
 import { notFound } from 'next/navigation'
 import type { FormState } from '@/lib/validators/room'

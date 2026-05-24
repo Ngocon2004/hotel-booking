@@ -11,7 +11,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { logout } from '@/app/actions/auth'
+import { logout } from '@/server/actions/auth'
+import SearchForm from '@/components/booking/search-form'
 
 export default async function Navbar() {
   const supabase = await createClient()
@@ -68,6 +69,10 @@ export default async function Navbar() {
               Đặt chỗ của tôi
             </Link>
           )}
+        </div>
+
+        <div className="hidden xl:block">
+          <SearchForm compact />
         </div>
 
         {/* Right side */}

@@ -8,6 +8,7 @@ import { formatCurrency } from '@/lib/utils/format'
 import dayjs from 'dayjs'
 import { Calendar, Users } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { checkRoomAvailability } from '@/server/actions/bookings'
 
 type Props = {
   roomId: string
@@ -23,6 +24,8 @@ export default function BookQuickForm({ roomId, pricePerNight, maxOccupancy }: P
   const [checkIn, setCheckIn] = useState(today)
   const [checkOut, setCheckOut] = useState(tomorrow)
   const [guests, setGuests] = useState(2)
+  const [isChecking, setIsChecking] = useState(false)
+  const [error, setError] = useState('')
 
   const nights = useMemo(() => {
     const ci = dayjs(checkIn)
@@ -32,8 +35,19 @@ export default function BookQuickForm({ roomId, pricePerNight, maxOccupancy }: P
 
   const total = nights * pricePerNight
 
-  const handleBook = () => {
+  const handleBook = async () => {
     if (nights <= 0) return
+    setError('')
+    setIsChecking(true)
+
+    const result = await checkRoomAvailability(roomId, checkIn, checkOut)
+    setIsChecking(false)
+
+    if (!result.available) {
+      setError(result.error || 'Phòng đã có người đặt trong khoảng ngày này')
+      return
+    }
+
     const params = new URLSearchParams({
       check_in: checkIn,
       check_out: checkOut,
@@ -63,7 +77,10 @@ export default function BookQuickForm({ roomId, pricePerNight, maxOccupancy }: P
               type="date"
               min={today}
               value={checkIn}
-              onChange={(e) => setCheckIn(e.target.value)}
+              onChange={(e) => {
+                setError('')
+                setCheckIn(e.target.value)
+              }}
               className="w-full h-10 px-2 rounded-md border border-input bg-background text-sm font-semibold"
             />
           </div>
@@ -75,7 +92,10 @@ export default function BookQuickForm({ roomId, pricePerNight, maxOccupancy }: P
               type="date"
               min={dayjs(checkIn).add(1, 'day').format('YYYY-MM-DD')}
               value={checkOut}
-              onChange={(e) => setCheckOut(e.target.value)}
+              onChange={(e) => {
+                setError('')
+                setCheckOut(e.target.value)
+              }}
               className="w-full h-10 px-2 rounded-md border border-input bg-background text-sm font-semibold"
             />
           </div>
@@ -115,11 +135,17 @@ export default function BookQuickForm({ roomId, pricePerNight, maxOccupancy }: P
 
         <Button
           onClick={handleBook}
-          disabled={nights <= 0}
+          disabled={nights <= 0 || isChecking}
           className="w-full bg-gradient-to-r from-amber-500 to-amber-700 hover:from-amber-600 hover:to-amber-800 font-bold h-11"
         >
-          {nights > 0 ? 'Đặt phòng ngay' : 'Vui lòng chọn ngày'}
+          {isChecking ? 'Đang kiểm tra...' : nights > 0 ? 'Đặt phòng ngay' : 'Vui lòng chọn ngày'}
         </Button>
+
+        {error && (
+          <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+            {error}
+          </div>
+        )}
 
         <p className="text-[10px] text-center text-gray-400">
           Bạn chưa bị tính phí - chỉ xác nhận sau khi đặt

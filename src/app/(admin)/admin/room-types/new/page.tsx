@@ -1,4 +1,4 @@
-import { createRoomType } from '@/app/actions/room-types'
+import { createRoomType } from '@/server/actions/room-types'
 import RoomTypeForm from '@/components/admin/room-type-form'
 
 export default function NewRoomTypePage() {

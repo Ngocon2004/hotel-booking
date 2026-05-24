@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react'
 import { Button } from '@/components/ui/button'
 import { Trash2 } from 'lucide-react'
-import { deleteRoomType } from '@/app/actions/room-types'
+import { deleteRoom } from '@/server/actions/rooms'
 import {
   Dialog,
   DialogContent,
@@ -14,12 +14,12 @@ import {
 } from '@/components/ui/dialog'
 import { toast } from 'sonner'
 
-export default function DeleteRoomTypeButton({
+export default function DeleteRoomButton({
   id,
-  name,
+  roomNumber,
 }: {
   id: string
-  name: string
+  roomNumber: string
 }) {
   const [open, setOpen] = useState(false)
   const [pending, startTransition] = useTransition()
@@ -27,8 +27,8 @@ export default function DeleteRoomTypeButton({
   const handleDelete = () => {
     startTransition(async () => {
       try {
-        await deleteRoomType(id)
-        toast.success(`Đã xoá loại phòng "${name}"`)
+        await deleteRoom(id)
+        toast.success(`Đã xoá phòng ${roomNumber}`)
         setOpen(false)
       } catch (err: any) {
         toast.error(err?.message || 'Xoá thất bại')
@@ -52,8 +52,8 @@ export default function DeleteRoomTypeButton({
           <DialogHeader>
             <DialogTitle>Xác nhận xoá</DialogTitle>
             <DialogDescription>
-              Bạn có chắc muốn xoá loại phòng <strong>{name}</strong>? Tất cả phòng liên
-              quan sẽ không thể xoá nếu vẫn còn ràng buộc.
+              Bạn có chắc muốn xoá phòng <strong>{roomNumber}</strong>?
+              Phòng có booking sẽ không thể xoá.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>

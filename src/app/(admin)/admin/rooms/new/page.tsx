@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { createRoom } from '@/app/actions/rooms'
+import { createRoom } from '@/server/actions/rooms'
 import RoomForm from '@/components/admin/room-form'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
