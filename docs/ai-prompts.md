@@ -390,3 +390,30 @@
 ---
 
 *Cập nhật cuối: Tuần 6 - sau booking lifecycle core, Docker smoke test và chuẩn hóa prompt log.*
+---
+
+#### Prompt #20: Them Swagger UI va dong bo tai lieu Markdown
+**Ngu canh:** Sau khi tao nham file Word mo ta backend, can sua dung yeu cau thanh Swagger UI. Dong thoi cac file README, SPEC, ROADMAP, SETUP_GUIDE va checklist test dang lech trang thai voi code hien tai.
+
+**Prompt:**
+> "Y toi la Swagger UI. Hay them Swagger UI/OpenAPI vao du an Next.js hien tai, mo ta backend dang dung Server Actions + Supabase, sau do cap nhat toan bo file Markdown theo trang thai that cua du an: tinh nang da xong, Docker da pass, Swagger da co, con lai VPS/domain/HTTPS, bao cao PDF, demo video va manual test."
+
+**Ly do dung:** Yeu cau lien quan nhieu file va can thong nhat giua implementation, documentation va checklist nop bai. AI duoc dung de doc cau truc project, them route dung Next.js 16, tao OpenAPI spec va chuan hoa tai lieu.
+
+**Ket qua:**
+- Them `/api-docs` hien Swagger UI.
+- Them `/api/openapi` tra OpenAPI JSON.
+- Xoa file Word backend tao nham.
+- Cap nhat README, ROADMAP, SPEC, SETUP_GUIDE, SUPABASE_SETUP, deployment guide, manual testing checklist va source structure docs.
+- Lint/build pass sau khi them Swagger UI.
+
+## Cap Nhat Thong Ke Moi
+
+| Metric | So luong hien tai |
+| --- | --- |
+| Tong prompts | 20+ |
+| Files duoc sinh/chinh sua | ~80 files |
+| Lines of code/docs uoc tinh | ~7500+ |
+| Time saved uoc tinh | ~55 gio |
+
+*Cap nhat cuoi: Tuan 6 - sau Swagger UI, Docker smoke test, UI polish va dong bo tai lieu Markdown.*
