@@ -28,15 +28,15 @@ export default function AdminSidebar() {
   const pathname = usePathname()
 
   return (
-    <aside className="w-64 shrink-0 border-r border-amber-100 bg-white min-h-screen sticky top-0">
+    <aside className="w-64 shrink-0 border-r border-slate-200 bg-white text-slate-950 min-h-screen sticky top-0">
       {/* Logo */}
-      <div className="h-16 flex items-center gap-2 px-6 border-b border-amber-100">
-        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center shadow-md">
+      <div className="h-16 flex items-center gap-2 px-6 border-b border-slate-200">
+        <div className="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center shadow-md shadow-blue-900/20">
           <Hotel className="w-5 h-5 text-white" />
         </div>
         <div>
           <div className="font-black text-sm">HBMS</div>
-          <div className="text-[10px] uppercase tracking-widest text-amber-700 font-semibold">
+          <div className="text-[10px] uppercase tracking-widest text-blue-700 font-semibold">
             Admin
           </div>
         </div>
@@ -56,8 +56,8 @@ export default function AdminSidebar() {
               className={cn(
                 'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all',
                 isActive
-                  ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-md shadow-amber-500/30'
-                  : 'text-gray-700 hover:bg-amber-50 hover:text-amber-700'
+                  ? 'bg-blue-600 text-white shadow-md shadow-blue-900/20'
+                  : 'text-slate-700 hover:bg-blue-50 hover:text-blue-700'
               )}
             >
               <Icon className="w-4 h-4" />
@@ -68,10 +68,10 @@ export default function AdminSidebar() {
       </nav>
 
       {/* Back to site */}
-      <div className="p-3 mt-4 border-t border-amber-100">
+      <div className="p-3 mt-4 border-t border-slate-200">
         <Link
           href="/"
-          className="flex items-center gap-2 px-3 py-2 text-xs text-gray-500 hover:text-amber-700 transition-colors"
+          className="flex items-center gap-2 px-3 py-2 text-xs text-slate-500 hover:text-blue-700 transition-colors"
         >
           ← Về trang chủ
         </Link>

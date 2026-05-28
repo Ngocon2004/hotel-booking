@@ -1,13 +1,14 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
-import { ArrowLeft, BedDouble, CalendarDays, Users } from 'lucide-react'
+import { ArrowLeft, BedDouble, CalendarDays, Star, Users } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import BookingActionButton from '@/components/bookings/booking-action-button'
 import { BookingStatusBadge, PaymentStatusBadge } from '@/components/bookings/status-badge'
 import { cancelBooking } from '@/server/actions/bookings'
-import { formatCurrency, formatDate, nightsBetween } from '@/lib/utils/format'
+import ReviewForm from '@/components/reviews/review-form'
+import { formatCurrency, formatDate, hoursUntilHotelDate, nightsBetween } from '@/lib/utils/format'
 import type { BookingStatus, PaymentStatus } from '@/types/database'
 
 type Params = Promise<{ id: string }>
@@ -32,6 +33,13 @@ type BookingDetail = {
   } | null
 }
 
+type BookingReview = {
+  id: string
+  rating: number
+  comment: string | null
+  created_at: string
+}
+
 export default async function MyBookingDetailPage({ params }: { params: Params }) {
   const { id } = await params
   const supabase = await createClient()
@@ -54,11 +62,20 @@ export default async function MyBookingDetailPage({ params }: { params: Params }
   const booking = data as unknown as BookingDetail | null
   if (!booking) redirect('/my-bookings')
 
+  const { data: existingReview } = await supabase
+    .from('reviews')
+    .select('id, rating, comment, created_at')
+    .eq('booking_id', booking.id)
+    .eq('customer_id', user.id)
+    .maybeSingle()
+
+  const review = existingReview as BookingReview | null
+
   const cover = booking.room?.images?.[0]
   const nights = nightsBetween(booking.check_in_date, booking.check_out_date)
   const canCancel =
     booking.status === 'pending' ||
-    new Date(`${booking.check_in_date}T00:00:00`).getTime() - Date.now() > 86_400_000
+    hoursUntilHotelDate(booking.check_in_date) > 24
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -106,6 +123,40 @@ export default async function MyBookingDetailPage({ params }: { params: Params }
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-gray-600">{booking.special_requests}</p>
+              </CardContent>
+            </Card>
+          )}
+
+          {booking.status === 'checked_out' && (
+            <Card className="border-amber-100">
+              <CardHeader>
+                <CardTitle>Danh gia luu tru</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {review ? (
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-1">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`h-5 w-5 ${
+                            i < review.rating
+                              ? 'fill-amber-500 text-amber-500'
+                              : 'text-gray-200'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    {review.comment && (
+                      <p className="text-sm leading-relaxed text-gray-600">{review.comment}</p>
+                    )}
+                    <p className="text-xs text-gray-400">
+                      Da danh gia ngay {formatDate(review.created_at)}
+                    </p>
+                  </div>
+                ) : (
+                  <ReviewForm bookingId={booking.id} />
+                )}
               </CardContent>
             </Card>
           )}

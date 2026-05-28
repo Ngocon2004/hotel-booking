@@ -4,6 +4,14 @@
 
 Prerequisite: Docker Desktop must be running.
 
+Latest local result: **passed on 2026-05-27**.
+
+- Command: `docker compose up -d --build`
+- Containers: `hotel-booking-app-1`, `hotel-booking-nginx-1`
+- HTTP check: `http://localhost` returned `200`
+- Current app image size after optional features: `hotel-booking-app:latest` is about `197MB`
+- Docker target: passed `<200MB`
+
 1. Create `.env.production` from `.env.example`.
 2. Fill Supabase variables:
 

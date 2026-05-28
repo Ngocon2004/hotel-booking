@@ -25,7 +25,7 @@
 |---|---------|-----------|
 | 1 | Frontend: Next.js (App Router) + Tailwind/shadcn | ⏳ |
 | 2 | Backend: Supabase (Auth + DB + Storage hoặc Realtime) | ⏳ |
-| 3 | Containerization: Dockerfile + Docker Compose (multi-stage) | ⏳ |
+| 3 | Containerization: Dockerfile + Docker Compose (multi-stage) | ✅ |
 | 4 | Deployment: VPS với Domain + SSL (HTTPS) | ⏳ |
 | 5 | Source code: GitHub với Conventional Commits | ⏳ |
 | 6 | AI Tool: Sử dụng + minh chứng (>5 prompts) | ⏳ |
@@ -204,27 +204,27 @@ $$ LANGUAGE SQL STABLE;
 
 ### **Tuần 1: Foundation**
 - [x] Tạo SPEC.md
-- [ ] Khởi tạo Next.js + TypeScript + Tailwind + shadcn/ui
-- [ ] Setup Supabase (project + .env.local)
-- [ ] Viết schema.sql (8 bảng + RLS + function)
-- [ ] Auth flow (login/register/middleware)
-- [ ] Layout chung (Navbar + Footer)
+- [x] Khởi tạo Next.js + TypeScript + Tailwind + shadcn/ui
+- [x] Setup Supabase (project + .env.local)
+- [x] Viết schema.sql (8 bảng + RLS + function)
+- [x] Auth flow (login/register/proxy)
+- [x] Layout chung (Navbar + Footer)
 
 ### **Tuần 2: Quản lý Phòng**
-- [ ] Admin: CRUD room_types, rooms
-- [ ] Upload ảnh lên Supabase Storage
-- [ ] Public: trang `/rooms` và `/rooms/[id]`
+- [x] Admin: CRUD room_types, rooms
+- [x] Upload ảnh lên Supabase Storage
+- [x] Public: trang `/rooms` và `/rooms/[id]`
 
 ### **Tuần 3: Booking Flow**
-- [ ] Search form với date picker
-- [ ] Logic check phòng trống
-- [ ] Trang đặt phòng + sinh booking_code
+- [x] Search form với date picker
+- [x] Logic check phòng trống
+- [x] Trang đặt phòng + sinh booking_code
 - [ ] Email xác nhận (Supabase Edge Function/Resend)
 
 ### **Tuần 4: Quản lý Booking**
-- [ ] Customer: lịch sử booking, hủy đặt phòng
-- [ ] Admin: xác nhận/hủy/check-in/check-out
-- [ ] Trang in phiếu đặt phòng
+- [x] Customer: lịch sử booking, hủy đặt phòng
+- [x] Admin: xác nhận/hủy/check-in/check-out
+- [x] Trang in phiếu đặt phòng
 
 ### **Tuần 5: Tính năng nâng cao**
 - [ ] Reviews (rating + comment) sau khi checked_out
@@ -233,10 +233,10 @@ $$ LANGUAGE SQL STABLE;
 - [ ] Filter/Sort/Search nâng cao + Pagination
 
 ### **Tuần 6: Polish + Deploy**
-- [ ] Dockerfile (multi-stage build) + docker-compose.yml
+- [x] Dockerfile (multi-stage build) + docker-compose.yml
 - [ ] Deploy VPS (Vultr/DigitalOcean) + Nginx + Let's Encrypt SSL
 - [ ] GitHub repo với Conventional Commits
-- [ ] AI prompts log (phụ lục) - tối thiểu 5 prompts
+- [x] AI prompts log (phụ lục) - tối thiểu 5 prompts
 - [ ] Báo cáo PDF (≥20 trang, Times New Roman 13)
 - [ ] Demo video 3-5 phút
 

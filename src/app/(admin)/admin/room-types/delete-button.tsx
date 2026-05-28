@@ -30,8 +30,8 @@ export default function DeleteRoomTypeButton({
         await deleteRoomType(id)
         toast.success(`Đã xoá loại phòng "${name}"`)
         setOpen(false)
-      } catch (err: any) {
-        toast.error(err?.message || 'Xoá thất bại')
+      } catch (err) {
+        toast.error(err instanceof Error ? err.message : 'Xoa that bai')
       }
     })
   }
@@ -73,3 +73,4 @@ export default function DeleteRoomTypeButton({
     </>
   )
 }
+

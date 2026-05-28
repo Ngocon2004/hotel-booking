@@ -1,16 +1,19 @@
 import Link from 'next/link'
-import { CalendarCheck, Search } from 'lucide-react'
+import { CalendarCheck } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { BookingStatusBadge, PaymentStatusBadge } from '@/components/bookings/status-badge'
+import RealtimeBookingToast from '@/components/bookings/realtime-booking-toast'
+import Pagination from '@/components/ui/pagination'
+import DebouncedSearch from '@/components/ui/debounced-search'
 import { formatCurrency, formatDate } from '@/lib/utils/format'
 import type { BookingStatus, PaymentStatus } from '@/types/database'
 
 type SearchParams = Promise<{
   status?: BookingStatus
   q?: string
+  page?: string
 }>
 
 type BookingRow = {
@@ -41,6 +44,8 @@ export default async function AdminBookingsPage({
 }) {
   const params = await searchParams
   const supabase = await createClient()
+  const currentPage = Math.max(1, Number(params.page || 1))
+  const pageSize = 10
 
   let query = supabase
     .from('bookings')
@@ -66,8 +71,13 @@ export default async function AdminBookingsPage({
     )
   }
 
+  const totalPages = Math.max(1, Math.ceil(bookings.length / pageSize))
+  const page = Math.min(currentPage, totalPages)
+  const pagedBookings = bookings.slice((page - 1) * pageSize, page * pageSize)
+
   return (
     <div className="space-y-6">
+      <RealtimeBookingToast />
       <div>
         <div className="inline-flex items-center gap-2 rounded-full bg-amber-100 px-3 py-1 text-xs font-bold uppercase tracking-wider text-amber-800">
           <CalendarCheck className="h-3 w-3" />
@@ -81,14 +91,12 @@ export default async function AdminBookingsPage({
 
       <Card className="border-amber-100">
         <CardContent className="space-y-4 p-5">
-          <form action="/admin/bookings" className="flex gap-2">
-            {params.status && <input type="hidden" name="status" value={params.status} />}
-            <Input name="q" defaultValue={params.q || ''} placeholder="Tìm mã booking, khách, phòng..." />
-            <Button type="submit" className="bg-amber-600 hover:bg-amber-700">
-              <Search className="mr-2 h-4 w-4" />
-              Tìm
-            </Button>
-          </form>
+          <DebouncedSearch
+            basePath="/admin/bookings"
+            defaultValue={params.q || ''}
+            placeholder="Tìm mã booking, khách, phòng..."
+            searchParams={{ status: params.status }}
+          />
 
           <div className="flex flex-wrap gap-2">
             {statusFilters.map((filter) => (
@@ -126,7 +134,7 @@ export default async function AdminBookingsPage({
             </tr>
           </thead>
           <tbody>
-            {bookings.map((booking) => (
+            {pagedBookings.map((booking) => (
               <tr key={booking.id} className="border-t border-amber-50">
                 <td className="px-4 py-3 font-bold">{booking.booking_code}</td>
                 <td className="px-4 py-3">
@@ -158,7 +166,7 @@ export default async function AdminBookingsPage({
                 </td>
               </tr>
             ))}
-            {bookings.length === 0 && (
+            {pagedBookings.length === 0 && (
               <tr>
                 <td colSpan={7} className="px-4 py-12 text-center text-gray-400">
                   Không có booking phù hợp.
@@ -168,6 +176,13 @@ export default async function AdminBookingsPage({
           </tbody>
         </table>
       </div>
+
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        basePath="/admin/bookings"
+        searchParams={{ status: params.status, q: params.q }}
+      />
     </div>
   )
 }

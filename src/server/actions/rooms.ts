@@ -55,8 +55,8 @@ export async function createRoom(
     if (error) {
       return { errors: { _form: [error.message] } }
     }
-  } catch (e: any) {
-    return { errors: { _form: [e.message || 'Có lỗi xảy ra'] } }
+  } catch (e) {
+    return { errors: { _form: [e instanceof Error ? e.message : 'Co loi xay ra'] } }
   }
 
   revalidatePath('/admin/rooms')
@@ -100,8 +100,8 @@ export async function updateRoom(
     if (error) {
       return { errors: { _form: [error.message] } }
     }
-  } catch (e: any) {
-    return { errors: { _form: [e.message || 'Có lỗi xảy ra'] } }
+  } catch (e) {
+    return { errors: { _form: [e instanceof Error ? e.message : 'Co loi xay ra'] } }
   }
 
   revalidatePath('/admin/rooms')
@@ -146,7 +146,8 @@ export async function uploadRoomImage(formData: FormData): Promise<{ url?: strin
     } = supabase.storage.from('rooms').getPublicUrl(path)
 
     return { url: publicUrl }
-  } catch (e: any) {
-    return { error: e.message || 'Upload thất bại' }
+  } catch (e) {
+    return { error: e instanceof Error ? e.message : 'Upload that bai' }
   }
 }
+

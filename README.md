@@ -10,7 +10,7 @@
 
 ## 🎯 Demo
 
-- **Production**: TBD (sẽ deploy ở Tuần 6)
+- **Production**: TBD (deploy VPS/domain/HTTPS làm sau cùng)
 - **Repository**: TBD
 
 ## ✨ Tính năng
@@ -44,8 +44,8 @@
 | Date/Time | dayjs |
 | Charts | Recharts |
 | Date Picker | react-day-picker |
-| Container | Docker + Docker Compose (sẽ làm) |
-| Deploy | VPS + Domain + SSL (sẽ làm) |
+| Container | Docker + Docker Compose (local smoke test pass, image ~194MB) |
+| Deploy | VPS + Domain + SSL (làm sau cùng) |
 
 ## 🚀 Quick Start
 
@@ -95,15 +95,16 @@ scripts/seed.ts       # data mẫu
 - [SPEC.md](./SPEC.md) - Đặc tả chi tiết dự án
 - [SETUP_GUIDE.md](./SETUP_GUIDE.md) - Hướng dẫn cài đặt
 - [docs/ai-prompts.md](./docs/ai-prompts.md) - Log AI prompts đã dùng
+- [docs/manual-testing.md](./docs/manual-testing.md) - Checklist test thủ công trước khi demo/deploy
 
 ## 📅 Roadmap
 
 - [x] **Tuần 1**: Foundation (Auth, Schema, Layout)
 - [x] **Tuần 2**: Quản lý phòng (Admin CRUD + Upload ảnh + Public list/detail)
-- [ ] **Tuần 3**: Booking flow (Search + Đặt phòng)
-- [ ] **Tuần 4**: Quản lý booking (Lifecycle)
+- [x] **Tuần 3**: Booking flow (Search + Đặt phòng)
+- [x] **Tuần 4**: Quản lý booking (Lifecycle core)
 - [ ] **Tuần 5**: Tính năng nâng cao (Reviews, Realtime, Dashboard)
-- [ ] **Tuần 6**: Docker + VPS Deploy + Báo cáo
+- [ ] **Tuần 6**: Docker + VPS Deploy + Báo cáo (Docker local đã pass; deploy/báo cáo/demo làm sau cùng)
 
 ## 👤 Tác giả
 

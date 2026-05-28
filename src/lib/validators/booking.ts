@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { hotelToday, parseHotelDate } from '@/lib/utils/format'
 
 const dateStringSchema = z
   .string()
@@ -11,13 +12,11 @@ export const bookingSearchSchema = z
     guests: z.coerce.number().int().min(1, 'Số khách tối thiểu là 1'),
   })
   .superRefine((value, ctx) => {
-    const today = new Date()
-    today.setHours(0, 0, 0, 0)
+    const today = hotelToday()
+    const checkIn = parseHotelDate(value.check_in)
+    const checkOut = parseHotelDate(value.check_out)
 
-    const checkIn = new Date(`${value.check_in}T00:00:00`)
-    const checkOut = new Date(`${value.check_out}T00:00:00`)
-
-    if (checkIn < today) {
+    if (checkIn.isBefore(today)) {
       ctx.addIssue({
         code: 'custom',
         path: ['check_in'],
@@ -25,7 +24,7 @@ export const bookingSearchSchema = z
       })
     }
 
-    if (checkOut <= checkIn) {
+    if (!checkOut.isAfter(checkIn)) {
       ctx.addIssue({
         code: 'custom',
         path: ['check_out'],

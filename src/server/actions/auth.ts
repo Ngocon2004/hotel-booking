@@ -17,9 +17,6 @@ function safeRedirectPath(value: FormDataEntryValue | string | null): string {
   return path
 }
 
-/**
- * Đăng nhập bằng email + mật khẩu.
- */
 export async function login(
   _prevState: AuthFormState,
   formData: FormData
@@ -45,14 +42,24 @@ export async function login(
     }
   }
 
-  const redirectTo = safeRedirectPath(formData.get('redirect'))
+  let redirectTo = safeRedirectPath(formData.get('redirect'))
+  if (redirectTo === '/') {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+    const { data: profile } = user
+      ? await supabase.from('profiles').select('role').eq('id', user.id).single()
+      : { data: null }
+
+    if (profile?.role === 'admin') {
+      redirectTo = '/admin'
+    }
+  }
+
   revalidatePath('/', 'layout')
   redirect(redirectTo)
 }
 
-/**
- * Gửi magic link đăng nhập qua email.
- */
 export async function loginWithEmail(
   _prevState: AuthFormState,
   formData: FormData
@@ -84,9 +91,6 @@ export async function loginWithEmail(
   }
 }
 
-/**
- * Đăng nhập bằng Google OAuth.
- */
 export async function loginWithGoogle(formData: FormData) {
   const redirectTo = safeRedirectPath(formData.get('redirect'))
   const origin = (await headers()).get('origin') || process.env.NEXT_PUBLIC_SITE_URL || ''
@@ -109,10 +113,6 @@ export async function loginWithGoogle(formData: FormData) {
   redirect('/auth/login')
 }
 
-/**
- * Đăng ký tài khoản mới.
- * Trigger trong DB sẽ tự động tạo profiles row.
- */
 export async function register(
   _prevState: AuthFormState,
   formData: FormData
@@ -147,9 +147,6 @@ export async function register(
   redirect('/')
 }
 
-/**
- * Đăng xuất.
- */
 export async function logout() {
   const supabase = await createClient()
   await supabase.auth.signOut()

@@ -3,13 +3,39 @@ import RoomCard from '@/components/rooms/room-card'
 import RoomsFilter from '@/components/rooms/rooms-filter'
 import { Suspense } from 'react'
 import { BedDouble } from 'lucide-react'
+import Pagination from '@/components/ui/pagination'
+import GsapReveal from '@/components/animations/gsap-reveal'
 
 type SearchParams = Promise<{
   type?: string
   min?: string
   max?: string
   sort?: string
+  page?: string
 }>
+
+type RoomListItem = {
+  id: string
+  room_number: string
+  images: string[]
+  description: string | null
+  room_type: {
+    name: string
+    base_price: number
+    max_occupancy: number
+    amenities: string[]
+  } | null
+}
+
+type RoomBookingRef = {
+  id: string
+  room_id: string
+}
+
+type RoomReviewRef = {
+  rating: number
+  booking_id: string
+}
 
 export default async function RoomsListPage({
   searchParams,
@@ -18,6 +44,8 @@ export default async function RoomsListPage({
 }) {
   const params = await searchParams
   const supabase = await createClient()
+  const currentPage = Math.max(1, Number(params.page || 1))
+  const pageSize = 9
 
   // Lấy room types để fill filter
   const { data: roomTypes } = await supabase
@@ -50,28 +78,23 @@ export default async function RoomsListPage({
   const { data: roomsRaw } = await query
 
   // Filter by price (client-side vì giá ở room_types)
-  let rooms =
-    roomsRaw?.filter((r: any) => {
+  let rooms = ((roomsRaw || []) as unknown as RoomListItem[]).filter((r) => {
       if (!r.room_type) return false
       const price = r.room_type.base_price
       if (params.min && price < Number(params.min)) return false
       if (params.max && price > Number(params.max)) return false
       return true
-    }) || []
+    })
 
   // Sort by price (client-side)
   if (params.sort === 'price_asc' || !params.sort) {
-    rooms = rooms.sort(
-      (a: any, b: any) => (a.room_type?.base_price || 0) - (b.room_type?.base_price || 0)
-    )
+    rooms = rooms.sort((a, b) => (a.room_type?.base_price || 0) - (b.room_type?.base_price || 0))
   } else if (params.sort === 'price_desc') {
-    rooms = rooms.sort(
-      (a: any, b: any) => (b.room_type?.base_price || 0) - (a.room_type?.base_price || 0)
-    )
+    rooms = rooms.sort((a, b) => (b.room_type?.base_price || 0) - (a.room_type?.base_price || 0))
   }
 
   // Lấy ratings (gom theo room_id qua bookings)
-  const roomIds = rooms.map((r: any) => r.id)
+  const roomIds = rooms.map((r) => r.id)
   const ratingMap: Record<string, { sum: number; count: number }> = {}
 
   if (roomIds.length > 0) {
@@ -81,15 +104,16 @@ export default async function RoomsListPage({
       .select('id, room_id')
       .in('room_id', roomIds)
 
-    if (roomBookings && roomBookings.length > 0) {
-      const bookingToRoom = new Map(roomBookings.map((b) => [b.id, b.room_id]))
+    const typedRoomBookings = (roomBookings || []) as unknown as RoomBookingRef[]
+    if (typedRoomBookings.length > 0) {
+      const bookingToRoom = new Map(typedRoomBookings.map((b) => [b.id, b.room_id]))
       // 2) Lấy reviews theo booking_id
       const { data: reviews } = await supabase
         .from('reviews')
         .select('rating, booking_id')
         .in('booking_id', Array.from(bookingToRoom.keys()))
 
-      ;(reviews || []).forEach((r: any) => {
+      ;((reviews || []) as unknown as RoomReviewRef[]).forEach((r) => {
         const rid = bookingToRoom.get(r.booking_id)
         if (!rid) return
         ratingMap[rid] = ratingMap[rid] || { sum: 0, count: 0 }
@@ -101,17 +125,20 @@ export default async function RoomsListPage({
 
   // Sort by rating nếu chọn
   if (params.sort === 'rating') {
-    rooms = rooms.sort((a: any, b: any) => {
+    rooms = rooms.sort((a, b) => {
       const ra = ratingMap[a.id] ? ratingMap[a.id].sum / ratingMap[a.id].count : 0
       const rb = ratingMap[b.id] ? ratingMap[b.id].sum / ratingMap[b.id].count : 0
       return rb - ra
     })
   }
+  const totalPages = Math.max(1, Math.ceil(rooms.length / pageSize))
+  const page = Math.min(currentPage, totalPages)
+  const pagedRooms = rooms.slice((page - 1) * pageSize, page * pageSize)
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <GsapReveal className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       {/* Header */}
-      <div className="text-center mb-10">
+      <div data-gsap-reveal className="text-center mb-10">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-xs font-bold uppercase tracking-wider mb-3">
           <BedDouble className="w-3 h-3" />
           Khám phá phòng
@@ -124,7 +151,7 @@ export default async function RoomsListPage({
         </p>
       </div>
 
-      <div className="grid lg:grid-cols-[280px_1fr] gap-8">
+      <div data-gsap-reveal data-gsap-delay="0.08" className="grid lg:grid-cols-[280px_1fr] gap-8">
         {/* Filter sidebar */}
         <Suspense fallback={null}>
           <RoomsFilter roomTypes={roomTypes || []} />
@@ -135,10 +162,10 @@ export default async function RoomsListPage({
           {rooms.length > 0 ? (
             <>
               <p className="text-sm text-gray-500 mb-4">
-                Hiển thị <strong>{rooms.length}</strong> phòng
+                Hiển thị <strong>{pagedRooms.length}</strong> / {rooms.length} phòng
               </p>
-              <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-5">
-                {rooms.map((r: any) => {
+              <div data-gsap-stagger className="grid sm:grid-cols-2 xl:grid-cols-3 gap-5">
+                {pagedRooms.map((r) => {
                   const rating =
                     ratingMap[r.id] && ratingMap[r.id].count > 0
                       ? ratingMap[r.id].sum / ratingMap[r.id].count
@@ -153,6 +180,19 @@ export default async function RoomsListPage({
                   )
                 })}
               </div>
+              <div className="mt-8">
+                <Pagination
+                  page={page}
+                  totalPages={totalPages}
+                  basePath="/rooms"
+                  searchParams={{
+                    type: params.type,
+                    min: params.min,
+                    max: params.max,
+                    sort: params.sort,
+                  }}
+                />
+              </div>
             </>
           ) : (
             <div className="rounded-2xl border-2 border-dashed border-amber-200 bg-amber-50/50 p-12 text-center">
@@ -165,6 +205,6 @@ export default async function RoomsListPage({
           )}
         </div>
       </div>
-    </div>
+    </GsapReveal>
   )
 }

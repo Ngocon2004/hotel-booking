@@ -121,13 +121,13 @@ npm start
 
 ---
 
-## 🐳 Bước 5: Docker (sẽ làm ở Tuần 6)
+## 🐳 Bước 5: Docker
 
 ```bash
 docker compose up -d --build
 ```
 
-(Dockerfile + docker-compose.yml sẽ được thêm ở giai đoạn cuối)
+Dockerfile + docker-compose.yml đã có. Local smoke test đã pass ngày 2026-05-27, image `hotel-booking-app:latest` khoảng 194MB.
 
 ---
 
@@ -192,12 +192,27 @@ hotel-booking/
 - [x] Layout: Navbar (với dropdown user menu), Footer, Trang chủ Hero
 - [x] Seed script với data mẫu phong phú
 
-## 📅 Tuần 2 (tiếp theo)
+## 📅 Tuần 2 (đã xong)
 
-- [ ] Trang `/rooms` - danh sách phòng public
-- [ ] Trang `/rooms/[id]` - chi tiết phòng
-- [ ] `/admin/room-types` - CRUD loại phòng
-- [ ] `/admin/rooms` - CRUD phòng + upload ảnh
+- [x] Trang `/rooms` - danh sách phòng public
+- [x] Trang `/rooms/[id]` - chi tiết phòng
+- [x] `/admin/room-types` - CRUD loại phòng
+- [x] `/admin/rooms` - CRUD phòng + upload ảnh
+
+## 📅 Tuần 3-4 (core đã xong)
+
+- [x] Search phòng theo ngày/số khách
+- [x] Booking flow + confirmation code
+- [x] Customer xem/hủy booking
+- [x] Admin quản lý lifecycle booking
+- [x] Trang in phiếu booking
+
+## 📅 Tuần 5-6 (còn lại)
+
+- [ ] Tính năng nâng cao nếu còn thời gian: reviews, services CRUD, profile, realtime, dashboard, pagination
+- [ ] Deploy VPS/domain/HTTPS (làm sau cùng)
+- [ ] Báo cáo PDF tối thiểu 20 trang (làm sau cùng)
+- [ ] Demo video 3-5 phút (làm sau cùng)
 
 ---
 

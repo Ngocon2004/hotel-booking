@@ -1,10 +1,12 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { Button } from '@/components/ui/button'
-import { Hotel, Menu, User } from 'lucide-react'
+import { Hotel, User } from 'lucide-react'
+import ThemeToggle from '@/components/theme-toggle'
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -40,32 +42,32 @@ export default async function Navbar() {
     : user?.email?.charAt(0).toUpperCase() || 'U'
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b border-amber-100 bg-white/80 backdrop-blur-md">
+    <nav className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/88 backdrop-blur-md dark:border-white/10 dark:bg-slate-950/88">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
+          <div className="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center shadow-md shadow-blue-900/20 group-hover:shadow-lg transition-shadow">
             <Hotel className="w-5 h-5 text-white" />
           </div>
-          <span className="text-xl font-black tracking-tight">
+          <span className="text-xl font-black tracking-tight text-slate-950 dark:text-white">
             HBMS
-            <span className="text-amber-700"> Hotel</span>
+            <span className="text-blue-600 dark:text-blue-300"> Hotel</span>
           </span>
         </Link>
 
         {/* Menu */}
         <div className="hidden md:flex items-center gap-1">
-          <Link href="/" className="px-4 py-2 text-sm font-semibold text-gray-700 hover:text-amber-700 transition-colors">
+          <Link href="/" className="px-4 py-2 text-sm font-semibold text-slate-700 hover:text-blue-600 transition-colors dark:text-slate-200 dark:hover:text-blue-300">
             Trang chủ
           </Link>
-          <Link href="/rooms" className="px-4 py-2 text-sm font-semibold text-gray-700 hover:text-amber-700 transition-colors">
+          <Link href="/rooms" className="px-4 py-2 text-sm font-semibold text-slate-700 hover:text-blue-600 transition-colors dark:text-slate-200 dark:hover:text-blue-300">
             Phòng
           </Link>
-          <Link href="/search" className="px-4 py-2 text-sm font-semibold text-gray-700 hover:text-amber-700 transition-colors">
+          <Link href="/search" className="px-4 py-2 text-sm font-semibold text-slate-700 hover:text-blue-600 transition-colors dark:text-slate-200 dark:hover:text-blue-300">
             Tìm kiếm
           </Link>
           {user && (
-            <Link href="/my-bookings" className="px-4 py-2 text-sm font-semibold text-gray-700 hover:text-amber-700 transition-colors">
+            <Link href="/my-bookings" className="px-4 py-2 text-sm font-semibold text-slate-700 hover:text-blue-600 transition-colors dark:text-slate-200 dark:hover:text-blue-300">
               Đặt chỗ của tôi
             </Link>
           )}
@@ -77,23 +79,28 @@ export default async function Navbar() {
 
         {/* Right side */}
         <div className="flex items-center gap-3">
+          <div className="hidden sm:block">
+            <ThemeToggle />
+          </div>
           {user ? (
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center gap-2 hover:bg-amber-50 rounded-full p-1 transition-colors outline-none">
-                <Avatar className="w-9 h-9 border-2 border-amber-200">
+              <DropdownMenuTrigger className="flex items-center gap-2 hover:bg-blue-50 rounded-full p-1 transition-colors outline-none dark:hover:bg-white/10">
+                <Avatar className="w-9 h-9 border-2 border-blue-200">
                   <AvatarImage src={profile?.avatar_url || undefined} />
-                  <AvatarFallback className="bg-amber-100 text-amber-700 font-bold text-sm">
+                  <AvatarFallback className="bg-blue-100 text-blue-700 font-bold text-sm">
                     {initials}
                   </AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>
-                  <div className="flex flex-col">
-                    <span className="font-semibold">{profile?.full_name || user.email}</span>
-                    <span className="text-xs font-normal text-muted-foreground truncate">{user.email}</span>
-                  </div>
-                </DropdownMenuLabel>
+                <DropdownMenuGroup>
+                  <DropdownMenuLabel>
+                    <div className="flex flex-col">
+                      <span className="font-semibold">{profile?.full_name || user.email}</span>
+                      <span className="text-xs font-normal text-muted-foreground truncate">{user.email}</span>
+                    </div>
+                  </DropdownMenuLabel>
+                </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem render={<Link href="/profile" />}>
                   <User className="w-4 h-4 mr-2" />
@@ -106,7 +113,7 @@ export default async function Navbar() {
                   <>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
-                      className="font-semibold text-amber-700"
+                      className="font-semibold text-blue-700 dark:text-blue-300"
                       render={<Link href="/admin" />}
                     >
                       🛡️ Trang quản trị
@@ -117,6 +124,7 @@ export default async function Navbar() {
                 <form action={logout}>
                   <DropdownMenuItem
                     className="text-red-600 cursor-pointer"
+                    nativeButton
                     render={<button type="submit" />}
                   >
                     Đăng xuất
@@ -132,7 +140,7 @@ export default async function Navbar() {
                 </Button>
               </Link>
               <Link href="/auth/register" className="hidden sm:block">
-                <Button className="bg-gradient-to-r from-amber-500 to-amber-700 hover:from-amber-600 hover:to-amber-800 font-semibold">
+                <Button className="bg-blue-600 font-semibold text-white hover:bg-blue-700">
                   Đăng ký
                 </Button>
               </Link>

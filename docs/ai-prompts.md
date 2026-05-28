@@ -211,7 +211,160 @@
 
 ---
 
-### **Tuần 4-6** (sẽ cập nhật khi hoàn thành)
+### **Tuần 4 - Quản lý Booking Lifecycle**
+
+#### Prompt #13: Customer booking history và hủy booking
+**Ngữ cảnh:** Sau khi đặt phòng thành công, customer cần có khu vực riêng để xem toàn bộ lịch sử đặt phòng, lọc theo trạng thái và hủy booking theo đúng rule nghiệp vụ. Dự án đang dùng Next.js App Router, Supabase RLS và Server Actions nên logic phân quyền phải nằm ở server, không chỉ ẩn nút ở UI.
+
+**Prompt:**
+> "Tạo flow quản lý booking cho customer trong hotel-booking. Cần trang `/my-bookings` hiển thị lịch sử booking của user đang đăng nhập, có filter theo status pending/confirmed/checked_in/checked_out/cancelled. Tạo trang `/my-bookings/[id]` xem chi tiết booking, hiển thị phòng, ngày check-in/check-out, số khách, tổng tiền, payment status. Viết server action `cancelBooking()` chỉ cho phép user hủy booking của chính họ, chỉ hủy khi booking đang `pending` hoặc còn hơn 24 giờ trước check-in. Sau khi hủy phải revalidate danh sách và trang chi tiết."
+
+**Lý do dùng:** Flow này liên quan trực tiếp đến phân quyền và dữ liệu cá nhân của customer. Nếu chỉ filter ở client hoặc tin vào UI thì user có thể sửa request để hủy booking của người khác. AI được dùng để thiết kế lại luồng theo hướng server-side guard + RLS + revalidate đúng route.
+
+**Kết quả:**
+- Tạo `src/app/(public)/my-bookings/page.tsx` để customer xem lịch sử booking và filter theo trạng thái.
+- Tạo `src/app/(public)/my-bookings/[id]/page.tsx` để xem chi tiết booking.
+- Thêm `cancelBooking()` trong `src/server/actions/bookings.ts`.
+- Kiểm tra ownership bằng `booking.customer_id === user.id` trước khi update.
+- Áp dụng rule hủy: `pending` hoặc trước check-in tối thiểu 24 giờ.
+- Revalidate `/my-bookings`, `/my-bookings/[id]` và `/admin/bookings` sau khi hủy.
+
+---
+
+#### Prompt #14: Admin booking lifecycle actions
+**Ngữ cảnh:** Admin cần quản lý vòng đời booking từ lúc khách đặt đến lúc hoàn tất lưu trú. Các trạng thái chính gồm `pending`, `confirmed`, `checked_in`, `checked_out`, `cancelled`; payment status cũng cần cập nhật khi checkout hoặc hủy.
+
+**Prompt:**
+> "Xây dựng admin booking lifecycle cho Next.js + Supabase. Tạo trang `/admin/bookings` dạng table có search/filter và trang `/admin/bookings/[id]` hiển thị chi tiết booking. Thêm các Server Actions: `confirmBooking()` đổi pending sang confirmed, `checkInBooking()` đổi confirmed sang checked_in, `checkOutBooking()` đổi checked_in sang checked_out và cập nhật `payment_status = paid`, `cancelBookingAdmin()` đổi sang cancelled và cập nhật `payment_status = refunded`. Mọi action phải check role admin ở server, trả lỗi rõ ràng, revalidate lại admin pages."
+
+**Lý do dùng:** Booking lifecycle có nhiều trạng thái và dễ bị thiếu bước cập nhật dữ liệu phụ như `payment_status`. AI được dùng để đảm bảo các action có cấu trúc nhất quán, tái sử dụng helper kiểm tra admin và không lặp code update/revalidate.
+
+**Kết quả:**
+- Tạo `src/app/(admin)/admin/bookings/page.tsx` với table booking, filter/search và status badges.
+- Tạo `src/app/(admin)/admin/bookings/[id]/page.tsx` với chi tiết khách, phòng, ngày lưu trú và khu vực thao tác lifecycle.
+- Thêm helper `updateBookingStatus()` trong `src/server/actions/bookings.ts`.
+- Thêm `confirmBooking()`, `checkInBooking()`, `checkOutBooking()`, `cancelBookingAdmin()`.
+- Checkout cập nhật `payment_status` thành `paid`.
+- Admin cancel cập nhật `payment_status` thành `refunded`.
+- Các route admin được revalidate sau mutation.
+
+---
+
+#### Prompt #15: Customer management và phiếu in booking
+**Ngữ cảnh:** Ngoài quản lý booking, admin cần xem danh sách khách hàng và lịch sử booking từng khách. Customer/admin cũng cần có bản in phiếu đặt phòng để minh chứng flow đặt phòng trong demo và báo cáo.
+
+**Prompt:**
+> "Bổ sung customer management cho admin và trang in phiếu đặt phòng. Tạo `/admin/customers` để liệt kê khách hàng, search theo tên/email/số điện thoại nếu có dữ liệu. Tạo `/admin/customers/[id]` hiển thị thông tin khách và booking history. Tạo trang `/booking/[roomId]/print` dùng print stylesheet, bố cục gọn để in phiếu đặt phòng với booking code, thông tin phòng, ngày lưu trú, khách, tổng tiền. Thêm nút in ở trang detail."
+
+**Lý do dùng:** Đây là nhóm tính năng phụ trợ nhưng quan trọng khi demo nghiệp vụ end-to-end: admin không chỉ xử lý từng booking mà còn xem được lịch sử theo khách, còn người dùng có chứng từ đặt phòng. AI được dùng để nhanh chóng dựng các page đọc dữ liệu nhiều bảng mà vẫn giữ đúng route convention.
+
+**Kết quả:**
+- Tạo `src/app/(admin)/admin/customers/page.tsx`.
+- Tạo `src/app/(admin)/admin/customers/[id]/page.tsx`.
+- Tạo `src/app/(public)/booking/[roomId]/print/page.tsx`.
+- Tạo `src/components/bookings/print-button.tsx`.
+- Bổ sung UI hiển thị status/payment badges và thông tin booking phục vụ in ấn.
+
+---
+
+### **Tuần 5 - Rà soát tính năng nâng cao**
+
+#### Prompt #16: Ưu tiên tính năng nâng cao trước deadline
+**Ngữ cảnh:** Sau khi hoàn thành core flow Tuần 1-4, dự án còn nhiều tính năng nâng cao như reviews, services CRUD, profile, realtime, dashboard chart và pagination. Cần phân loại việc nào bắt buộc, việc nào optional để không ảnh hưởng deadline nộp bài.
+
+**Prompt:**
+> "Rà soát backlog Tuần 5 cho dự án hotel-booking: reviews, services CRUD, profile page + avatar upload, Supabase Realtime, dashboard Recharts, pagination/search nâng cao. Hãy phân loại theo mức độ quan trọng cho đồ án: bắt buộc để qua môn, nên làm nếu còn thời gian, và optional đạt điểm cao. Đề xuất thứ tự triển khai thực tế khi core booking flow đã xong nhưng còn Docker/deploy/report."
+
+**Lý do dùng:** Backlog Tuần 5 rộng, nếu làm dàn trải sẽ dễ chậm các yêu cầu bắt buộc như Docker, deploy và báo cáo. AI được dùng để sắp xếp lại ưu tiên theo rủi ro deadline.
+
+**Kết quả:**
+- Xác định các mục Tuần 5 là optional/nâng cao, không chặn core requirement nếu đã có auth, CRUD, upload, RLS và booking flow.
+- Đưa reviews, services CRUD, profile, realtime, dashboard, pagination vào nhóm "làm nếu còn thời gian".
+- Giữ Docker smoke test, AI prompts log, polish, deploy và report ở luồng chuẩn bị nộp bài.
+- Cập nhật `ROADMAP.md` để phản ánh Tuần 5 đang pending/optional.
+
+---
+
+### **Tuần 6 - Docker, tài liệu và kiểm tra trước nộp**
+
+#### Prompt #17: Docker multi-stage build cho Next.js standalone
+**Ngữ cảnh:** Quy chế yêu cầu containerization bằng Dockerfile và Docker Compose. Dự án dùng Next.js 16, cần build production theo standalone output để chạy gọn trong container, kèm Nginx reverse proxy.
+
+**Prompt:**
+> "Tạo Dockerfile multi-stage cho Next.js 16 production build. Dùng `node:20-alpine`, `npm ci`, `npm run build`, copy `.next/standalone`, `.next/static`, `public` sang runner non-root user. Thêm `.dockerignore`, `docker-compose.yml` gồm service app và nginx reverse proxy port 80, thêm `docker/nginx.conf` proxy sang app:3000. Cập nhật `next.config.ts` nếu cần `output: 'standalone'`."
+
+**Lý do dùng:** Docker cho Next.js standalone có nhiều chi tiết dễ thiếu: copy đúng output, chạy non-root, exclude file không cần thiết, và cấu hình Nginx đúng upstream trong compose network. AI được dùng để tạo cấu hình theo best practice nhưng vẫn bám stack hiện tại.
+
+**Kết quả:**
+- Tạo `Dockerfile` multi-stage.
+- Tạo `.dockerignore`.
+- Tạo `docker-compose.yml` với `app` và `nginx`.
+- Tạo `docker/nginx.conf`.
+- Cấu hình Next.js standalone output.
+- Smoke test ngày 2026-05-27: `docker compose up -d --build` build thành công, container `hotel-booking-app-1` và `hotel-booking-nginx-1` đều chạy, truy cập `http://localhost` trả HTTP 200.
+- Tối ưu runner stage từ `node:20-alpine` sang `alpine:3.23` + `apk add nodejs`, giảm image `hotel-booking-app:latest` từ khoảng 276MB xuống khoảng 194MB.
+- Image đã đạt target `<200MB`.
+
+---
+
+#### Prompt #18: Cập nhật roadmap và thứ tự công việc cuối kỳ
+**Ngữ cảnh:** Một số việc như deploy VPS/domain/HTTPS, viết báo cáo PDF và quay demo video cần làm sau cùng vì phụ thuộc vào trạng thái app đã ổn định. Cần cập nhật roadmap để không triển khai sớm các việc cuối kỳ trước khi test Docker, polish và hoàn thiện prompt log.
+
+**Prompt:**
+> "Đọc toàn bộ Markdown trong dự án hotel-booking, tổng hợp công việc còn lại, rồi cập nhật `ROADMAP.md` để xếp Deploy VPS/domain/HTTPS, báo cáo PDF tối thiểu 20 trang và demo video 3-5 phút xuống nhóm làm sau cùng. Sau đó hệ thống lại Next Actions theo thứ tự: Docker smoke test, verify manual booking lifecycle, optional features nếu còn thời gian, cập nhật AI prompts, cuối cùng mới deploy/report/demo."
+
+**Lý do dùng:** Roadmap cũ có nhiều nguồn trạng thái lệch nhau giữa README, SPEC, SETUP_GUIDE và ROADMAP. AI được dùng để đọc đồng loạt tài liệu Markdown, xác định nguồn đáng tin nhất và chỉnh thứ tự công việc theo chiến lược nộp bài.
+
+**Kết quả:**
+- Rà soát 10 file Markdown trong dự án.
+- Xác định `ROADMAP.md` là nguồn trạng thái chính.
+- Chuyển `VPS Deploy/domain/HTTPS`, `Báo cáo PDF`, `Demo Video` xuống cuối nhóm Tuần 6.
+- Chỉnh `Next Actions` để deploy/report/demo nằm sau Docker, polish, optional features và AI prompts.
+- Phát hiện `README.md`, `SETUP_GUIDE.md`, `SPEC.md` còn một số checklist cũ chưa khớp với code hiện tại.
+
+---
+
+#### Prompt #19: Verify AI prompts log đủ tiêu chí minh chứng
+**Ngữ cảnh:** Quy chế yêu cầu minh chứng sử dụng AI tool tối thiểu 5 prompts. Dự án đã có hơn 10 prompts, nhưng cần kiểm tra mỗi prompt có đủ 4 phần: ngữ cảnh, prompt, lý do dùng và kết quả để đưa vào báo cáo/phụ lục.
+
+**Prompt:**
+> "Kiểm tra `docs/ai-prompts.md` và chuẩn hóa các prompt log. Mỗi prompt phải có đủ: `Ngữ cảnh`, `Prompt`, `Lý do dùng`, `Kết quả`. Bổ sung prompt Tuần 4-6 thật chi tiết, nêu rõ file/tính năng tạo ra, quyết định kỹ thuật và trạng thái verify. Cập nhật thống kê tổng số prompts, số file, LOC ước tính và thời gian tiết kiệm."
+
+**Lý do dùng:** Prompt log là bằng chứng trực tiếp cho yêu cầu AI tool. Nếu ghi quá sơ sài hoặc thiếu trường, phụ lục báo cáo sẽ yếu dù số lượng prompt đã đủ. AI được dùng để chuẩn hóa tài liệu theo checklist nhất quán.
+
+**Kết quả:**
+- Bổ sung chi tiết Prompt #13 đến #19.
+- Mỗi prompt có đủ 4 phần: `Ngữ cảnh`, `Prompt`, `Lý do dùng`, `Kết quả`.
+- Cập nhật trạng thái thống kê sang Tuần 6.
+- Thêm bảng kiểm tra coverage prompt để dễ đưa vào báo cáo.
+
+---
+
+## ✅ Kiểm tra cấu trúc Prompt Log
+
+| Prompt | Ngữ cảnh | Prompt | Lý do dùng | Kết quả |
+|--------|----------|--------|------------|---------|
+| #1 | ✅ | ✅ | ✅ | ✅ |
+| #2 | ✅ | ✅ | ✅ | ✅ |
+| #3 | ✅ | ✅ | ✅ | ✅ |
+| #4 | ✅ | ✅ | ✅ | ✅ |
+| #5 | ✅ | ✅ | ✅ | ✅ |
+| #6 | ✅ | ✅ | ✅ | ✅ |
+| #7 | ✅ | ✅ | ✅ | ✅ |
+| #8 | ✅ | ✅ | ✅ | ✅ |
+| #9 | ✅ | ✅ | ✅ | ✅ |
+| #10 | ✅ | ✅ | ✅ | ✅ |
+| #11 | ✅ | ✅ | ✅ | ✅ |
+| #12 | ✅ | ✅ | ✅ | ✅ |
+| #13 | ✅ | ✅ | ✅ | ✅ |
+| #14 | ✅ | ✅ | ✅ | ✅ |
+| #15 | ✅ | ✅ | ✅ | ✅ |
+| #16 | ✅ | ✅ | ✅ | ✅ |
+| #17 | ✅ | ✅ | ✅ | ✅ |
+| #18 | ✅ | ✅ | ✅ | ✅ |
+| #19 | ✅ | ✅ | ✅ | ✅ |
+
+**Kết luận:** Đã vượt yêu cầu tối thiểu ≥5 prompts. Toàn bộ prompt hiện có đủ ngữ cảnh, nội dung prompt, lý do sử dụng và kết quả.
 
 ---
 
@@ -227,13 +380,13 @@
 
 ## 📈 Thống kê
 
-| Metric | Số lượng (đang Tuần 3) |
+| Metric | Số lượng (đang Tuần 6) |
 |--------|---------|
-| Tổng prompts | 12+ |
-| Files được sinh ra | ~58 files |
-| Lines of code (LOC) | ~5600 |
-| Time saved (ước tính) | ~36 giờ |
+| Tổng prompts | 19 |
+| Files được sinh ra/chỉnh sửa | ~75 files |
+| Lines of code (LOC) | ~7000+ |
+| Time saved (ước tính) | ~50 giờ |
 
 ---
 
-*Cập nhật cuối: Tuần 3 đang triển khai.*
+*Cập nhật cuối: Tuần 6 - sau booking lifecycle core, Docker smoke test và chuẩn hóa prompt log.*

@@ -16,12 +16,23 @@ import { getAmenityLabel } from '@/lib/validators/room'
 import { Plus, Pencil } from 'lucide-react'
 import DeleteRoomTypeButton from './delete-button'
 
+type RoomTypeRow = {
+  id: string
+  name: string
+  description: string | null
+  base_price: number
+  max_occupancy: number
+  amenities: string[]
+}
+
 export default async function RoomTypesPage() {
   const supabase = await createClient()
   const { data: roomTypes } = await supabase
     .from('room_types')
     .select('*')
     .order('base_price', { ascending: true })
+
+  const rows = (roomTypes || []) as unknown as RoomTypeRow[]
 
   return (
     <div className="space-y-6">
@@ -42,7 +53,7 @@ export default async function RoomTypesPage() {
 
       <Card className="border-amber-100">
         <CardContent className="p-0">
-          {roomTypes && roomTypes.length > 0 ? (
+          {rows.length > 0 ? (
             <Table>
               <TableHeader>
                 <TableRow className="bg-amber-50/50 hover:bg-amber-50/50">
@@ -54,7 +65,7 @@ export default async function RoomTypesPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {roomTypes.map((rt: any) => (
+                {rows.map((rt) => (
                   <TableRow key={rt.id}>
                     <TableCell>
                       <div>

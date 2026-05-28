@@ -36,11 +36,11 @@ export default async function AdminLayout({
       .toUpperCase() || 'A'
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-amber-50/30 via-white to-amber-50/30">
+    <div className="admin-light flex min-h-screen bg-white text-slate-950 [color-scheme:light]">
       <AdminSidebar />
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top header */}
-        <header className="h-16 border-b border-amber-100 bg-white/80 backdrop-blur-md flex items-center justify-between px-6 sticky top-0 z-40">
+        <header className="h-16 border-b border-slate-200 bg-white flex items-center justify-between px-6 sticky top-0 z-40">
           <div>
             <h1 className="text-sm font-semibold text-gray-500">
               Khu vực quản trị
@@ -49,14 +49,14 @@ export default async function AdminLayout({
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-3">
               <div className="text-right">
-                <div className="text-sm font-bold">{profile?.full_name || user.email}</div>
-                <Badge className="bg-amber-100 text-amber-800 hover:bg-amber-200 text-[10px] uppercase tracking-wider">
+                <div className="text-sm font-bold text-slate-950">{profile?.full_name || user.email}</div>
+                <Badge className="bg-blue-50 text-blue-700 hover:bg-blue-50 text-[10px] uppercase tracking-wider">
                   Admin
                 </Badge>
               </div>
-              <Avatar className="w-9 h-9 border-2 border-amber-200">
+              <Avatar className="w-9 h-9 border-2 border-blue-100">
                 <AvatarImage src={profile?.avatar_url || undefined} />
-                <AvatarFallback className="bg-amber-100 text-amber-700 font-bold text-sm">
+                <AvatarFallback className="bg-blue-50 text-blue-700 font-bold text-sm">
                   {initials}
                 </AvatarFallback>
               </Avatar>

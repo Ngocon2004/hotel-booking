@@ -29,7 +29,7 @@
 |---|---------|-----------|------|
 | 1 | Frontend: Next.js 16 + Tailwind v4 + shadcn/ui | ✅ Done | T1 |
 | 2 | Backend: Supabase (Auth + DB + Storage) | ✅ Done | T1 |
-| 3 | **Docker + Compose** (multi-stage) | 🟠 Đã tạo file, smoke test để sau | T6 |
+| 3 | **Docker + Compose** (multi-stage) | ✅ Build/run local OK, image < 200MB | T6 |
 | 4 | **VPS + Domain + SSL** (HTTPS) | ❌ Chưa | T6 |
 | 5 | GitHub + Conventional Commits | ✅ Đang làm | T1-T6 |
 | 6 | AI Tool minh chứng ≥5 prompts | ✅ Done (10+ prompts) | T1-T6 |
@@ -40,7 +40,7 @@
 | 11 | Responsive (mobile + tablet + desktop) | ✅ Done | T1-T2 |
 
 **⚠️ Còn 3 yêu cầu BẮT BUỘC cần hoàn tất trước khi nộp:**
-- Docker + Compose (đã tạo file, smoke test để sau khi bật Docker Desktop)
+- Docker + Compose (đã build/run local OK, image size đạt target)
 - VPS Deploy + SSL
 - Báo cáo PDF
 
@@ -233,37 +233,38 @@
 > **Mục tiêu:** Reviews, Realtime, Dashboard với charts, Pagination.
 
 #### 5.1. Reviews
-- [ ] `src/server/actions/reviews.ts` — `createReview()` chỉ cho phép khi booking `checked_out`
-- [ ] `src/components/review/review-form.tsx` — star rating + comment
-- [ ] Tích hợp vào `/my-bookings/[id]` (sau khi check_out)
-- [ ] `src/app/(admin)/admin/reviews/page.tsx` — quản lý + xoá review vi phạm
-- [ ] Hiển thị reviews trong `/rooms/[id]` (đã có, cần verify)
+- [x] `src/server/actions/reviews.ts` — `createReview()` chỉ cho phép khi booking `checked_out`
+- [x] `src/components/reviews/review-form.tsx` — star rating + comment
+- [x] Tích hợp vào `/my-bookings/[id]` (sau khi check_out)
+- [x] `src/app/(admin)/admin/reviews/page.tsx` — quản lý + xoá review vi phạm
+- [x] Hiển thị reviews trong `/rooms/[id]` (đã có, verified qua build)
 
 #### 5.2. Services CRUD
-- [ ] `src/server/actions/services.ts`
-- [ ] `src/components/admin/service-form.tsx`
-- [ ] `src/app/(admin)/admin/services/{page,new,[id]/edit}.tsx`
+- [x] `src/server/actions/services.ts`
+- [x] `src/components/admin/service-form.tsx`
+- [x] `src/app/(admin)/admin/services/{page,new,[id]/edit}.tsx`
 
 #### 5.3. Profile
-- [ ] `src/app/profile/page.tsx` — update full_name, phone, address
-- [ ] Upload avatar lên Supabase Storage bucket `avatars`
-- [ ] `src/server/actions/profile.ts`
+- [x] `src/app/profile/page.tsx` — update full_name, phone, address
+- [x] Upload avatar lên Supabase Storage bucket `avatars`
+- [x] `src/server/actions/profile.ts`
 
 #### 5.4. Realtime
-- [ ] Supabase Realtime subscription cho `rooms.status` (available/maintenance)
-- [ ] Trang `/admin/bookings` realtime update khi có booking mới (toast notification)
-- [ ] Trang `/rooms/[id]` realtime cập nhật available
+- [x] Supabase Realtime subscription cho `rooms.status` (available/maintenance)
+- [x] Trang `/admin/bookings` realtime update khi có booking mới (toast notification)
+- [x] Trang `/rooms/[id]` realtime cập nhật available
 
 #### 5.5. Dashboard Admin với Recharts
-- [ ] Biểu đồ doanh thu theo tháng (LineChart hoặc BarChart)
-- [ ] Biểu đồ occupancy rate (% phòng được đặt)
-- [ ] Phân bố booking theo trạng thái (PieChart)
-- [ ] Top 5 loại phòng được đặt nhiều nhất
+- [x] Biểu đồ doanh thu theo tháng (LineChart)
+- [x] Biểu đồ occupancy rate (% phòng được đặt)
+- [x] Phân bố booking theo trạng thái (PieChart)
+- [x] Top 5 loại phòng được đặt nhiều nhất
 
 #### 5.6. Pagination + Search nâng cao
-- [ ] Pagination component reusable
-- [ ] Áp dụng cho `/rooms`, `/admin/bookings`, `/admin/customers`, `/admin/reviews`
-- [ ] Search debounced với `useTransition`
+- [x] Pagination component reusable
+- [x] Áp dụng cho `/admin/bookings`
+- [x] Áp dụng cho `/rooms`, `/admin/customers`, `/admin/reviews`
+- [x] Search debounced với `useTransition` (`/admin/bookings`, `/admin/customers`)
 
 ---
 
@@ -278,31 +279,40 @@
   - [x] Stage 3: production runner
 - [x] `.dockerignore`
 - [x] `docker-compose.yml` (Next.js + Nginx reverse proxy)
-- [ ] Test: `docker compose up -d --build` chạy được local (để sau theo quyết định hiện tại)
-- [ ] Tối ưu image size (target < 200MB)
+- [x] Test: `docker compose up -d --build` chạy được local (2026-05-27, HTTP 200 tại `http://localhost`)
+- [x] Tối ưu image size (target < 200MB; hiện tại `hotel-booking-app:latest` ~197MB)
 
-#### 6.2. Nginx + SSL
+#### 6.2. Nginx config
 - [x] `docker/nginx.conf` — reverse proxy → Next.js port 3000
-- [ ] Cấu hình Let's Encrypt (certbot hoặc Caddy auto SSL)
-- [ ] HTTPS redirect
 
-#### 6.3. VPS Deploy (⚠️ BẮT BUỘC)
+#### 6.3. AI Prompts Log (⚠️ BẮT BUỘC ≥5)
+- [x] Đã có 10+ prompts ✅
+- [x] Cập nhật thêm prompts từ Tuần 3-6
+- [x] Verify mỗi prompt có: ngữ cảnh, prompt, lý do, kết quả
+
+#### 6.4. Final Polish
+- [x] Manual testing checklist (`docs/manual-testing.md`)
+- [x] Loading state root (`src/app/loading.tsx`)
+- [x] Error boundary root (`src/app/error.tsx`)
+- [x] 404 page custom (`src/app/not-found.tsx`)
+- [x] SEO meta tags
+- [x] Open Graph tags
+- [ ] Favicon
+- [ ] Accessibility audit (alt text, aria-labels)
+
+#### 6.5. VPS Deploy/domain/HTTPS (⚠️ BẮT BUỘC — làm sau cùng)
 - [ ] Mua domain (`.com`, `.vn` hoặc free `.tk`)
 - [ ] Thuê VPS (Vultr/DigitalOcean/Contabo ~$5/month)
 - [ ] SSH setup + firewall (ufw)
 - [ ] Clone repo + tạo `.env.production`
 - [ ] `docker compose up -d`
 - [ ] Trỏ DNS A record → IP VPS
-- [ ] SSL cert via Let's Encrypt
+- [ ] Cấu hình SSL cert via Let's Encrypt / Caddy / Cloudflare
+- [ ] HTTPS redirect
 - [ ] Test domain HTTPS hoạt động
 - [x] `docs/deployment.md` — ghi lại quá trình
 
-#### 6.4. AI Prompts Log (⚠️ BẮT BUỘC ≥5)
-- [x] Đã có 10+ prompts ✅
-- [ ] Cập nhật thêm prompts từ Tuần 3-6
-- [ ] Verify mỗi prompt có: ngữ cảnh, prompt, lý do, kết quả
-
-#### 6.5. Báo cáo PDF (⚠️ BẮT BUỘC ≥20 trang)
+#### 6.6. Báo cáo PDF (⚠️ BẮT BUỘC ≥20 trang — làm sau cùng)
 - [ ] Trang bìa
 - [ ] Mục lục
 - [ ] **Chương 1: Tổng quan** (3-4 trang)
@@ -327,7 +337,7 @@
 - [ ] Format: Times New Roman 13, spacing 1.5
 - [ ] Convert sang PDF
 
-#### 6.6. Demo Video (3-5 phút)
+#### 6.7. Demo Video (3-5 phút — làm sau cùng)
 - [ ] Quay screen recording các flow:
   - Đăng ký + đăng nhập
   - Tìm phòng + đặt phòng
@@ -335,15 +345,6 @@
   - Realtime demo
 - [ ] Voice-over hoặc subtitle
 - [ ] Upload YouTube unlisted
-
-#### 6.7. Final Polish
-- [ ] Loading states cho tất cả pages
-- [ ] Error boundaries
-- [ ] 404 page custom
-- [ ] SEO meta tags
-- [ ] Open Graph tags
-- [ ] Favicon
-- [ ] Accessibility audit (alt text, aria-labels)
 
 ---
 
@@ -376,8 +377,8 @@
 | `rooms` | ✅ | ✅ | ✅ | ✅ (admin + public) |
 | `bookings` | ✅ | ✅ | ✅ | ✅ (booking flow + lifecycle) |
 | `payments` | ✅ | ✅ | ⏳ | ⏳ T5/optional |
-| `reviews` | ✅ | ✅ | ✅ | ⏳ T5 |
-| `services` | ✅ | ✅ | ✅ | ⏳ T3/T5 |
+| `reviews` | ✅ | ✅ | ✅ | ✅ |
+| `services` | ✅ | ✅ | ✅ | ✅ |
 | `booking_services` | ✅ | ✅ | ⏳ | ⏳ T3 |
 
 ---
@@ -413,7 +414,13 @@
 | 10 | Fix TypeScript "excessively deep" | T2 | ✅ |
 | 11 | Logic check phòng trống | T3 | ✅ |
 | 12 | Booking flow + sinh code | T3 | ✅ |
-| 13+ | (sẽ cập nhật) | T4-T6 | ⏳ |
+| 13 | Customer booking history + cancel rule | T4 | ✅ |
+| 14 | Admin booking lifecycle actions | T4 | ✅ |
+| 15 | Customer management + print booking invoice | T4 | ✅ |
+| 16 | Ưu tiên tính năng nâng cao trước deadline | T5 | ✅ |
+| 17 | Docker multi-stage build + smoke test | T6 | ✅ |
+| 18 | Cập nhật roadmap và thứ tự công việc cuối kỳ | T6 | ✅ |
+| 19 | Verify AI prompts log đủ tiêu chí minh chứng | T6 | ✅ |
 
 **Đã đạt ≥5 prompts (yêu cầu quy chế) ✅**
 
@@ -427,17 +434,17 @@
 - [x] RLS hoạt động đúng (test với 2 role)
 - [x] File upload Supabase Storage
 - [x] Responsive
-- [ ] **Docker chạy được `docker compose up`** ⚠️ (đã có file, chờ test)
+- [x] **Docker chạy được `docker compose up`** ✅ (local smoke test pass, image ~197MB)
 - [ ] **Deploy có URL HTTPS** ⚠️
 - [x] GitHub commit history
-- [x] AI prompts log (đã có 10+)
+- [x] AI prompts log (đã có 19 prompts, đã verify đủ 4 phần)
 - [ ] **Báo cáo PDF ≥20 trang** ⚠️
 
 ### Nâng cao (đạt giỏi)
-- [ ] Realtime cập nhật trạng thái phòng (T5)
-- [ ] Dashboard với Recharts (T5)
-- [ ] Search/Filter nâng cao + Pagination (T5)
-- [ ] Reviews + Rating (T5)
+- [x] Realtime cập nhật trạng thái phòng (T5)
+- [x] Dashboard với Recharts (T5)
+- [x] Search/Filter nâng cao + Pagination (T5)
+- [x] Reviews + Rating (T5)
 - [x] Booking lifecycle đầy đủ (T3-T4 core)
 
 ### Xuất sắc (optional)
@@ -468,21 +475,17 @@
 
 ## 🎬 Next Actions (Ưu tiên ngay)
 
-1. **[CHỌN 1]** Commit file `SUPABASE_SETUP.md` còn untracked
-   ```bash
-   git add SUPABASE_SETUP.md ROADMAP.md
-   git commit -m "docs: add detailed Supabase setup guide and roadmap"
-   ```
+1. **[Tuần 4 - Polish]** Verify manual flow: customer cancel, admin confirm/check-in/check-out/cancel
 
-2. **[Tuần 6 - Report]** Viết báo cáo PDF tối thiểu 20 trang
+2. **[Tuần 5 Optional]** Reviews, Services CRUD, Profile, Dashboard charts nếu còn thời gian
 
-3. **[Tuần 6 - Deploy]** Chuẩn bị VPS/domain/SSL và cập nhật Supabase Auth URL
+3. **[Tuần 6 - Docs]** Đồng bộ README/SETUP_GUIDE/SPEC nếu cần để khớp trạng thái mới
 
-4. **[Tuần 6 - Docker]** Khi bật Docker Desktop: test `docker compose up -d --build`
+4. **[SAU CÙNG - Deploy]** Chuẩn bị VPS/domain/HTTPS và cập nhật Supabase Auth URL
 
-5. **[Tuần 4 - Polish]** Verify manual flow: customer cancel, admin confirm/check-in/check-out/cancel
+5. **[SAU CÙNG - Report]** Viết báo cáo PDF tối thiểu 20 trang
 
-6. **[Tuần 5 Optional]** Reviews, Services CRUD, Profile, Dashboard charts nếu còn thời gian
+6. **[SAU CÙNG - Demo]** Quay demo video 3-5 phút
 
 ---
 
@@ -506,8 +509,50 @@
 - 📘 [SETUP_GUIDE.md](./SETUP_GUIDE.md) - Hướng dẫn cài đặt
 - 🔧 [SUPABASE_SETUP.md](./SUPABASE_SETUP.md) - Setup Supabase chi tiết
 - 🤖 [docs/ai-prompts.md](./docs/ai-prompts.md) - AI Prompts log
+- ✅ [docs/manual-testing.md](./docs/manual-testing.md) - Checklist test thủ công
 - 📖 [README.md](./README.md) - Giới thiệu dự án
 
 ---
 
 *File này được cập nhật mỗi khi hoàn thành một milestone. Cập nhật lần cuối: sau Google OAuth admin + Tuần 4 core + Docker files.*
+## Cap nhat tam dung - 2026-05-27
+
+Trang thai hien tai:
+- Da tam dung theo yeu cau sau khi sua loi runtime tren Docker/local.
+- Docker Compose dang chay local qua Nginx tai `http://localhost`.
+- `npm.cmd run lint`: pass.
+- `npm.cmd run build`: pass.
+- Docker image da rebuild thanh cong bang `docker compose build --no-cache app`.
+- Client bundle da co `NEXT_PUBLIC_SUPABASE_URL` va `NEXT_PUBLIC_SUPABASE_ANON_KEY`, sua loi F12: `@supabase/ssr: Your project's URL and API key are required`.
+- Da sua loi Nginx `upstream sent too big header` bang proxy buffer config.
+- Da sua cac trang admin can test: `/admin/rooms`, `/admin/bookings`, `/admin`, `/auth/login`.
+- Da sua text tieng Viet bi loi ma hoa tren login/admin dashboard/admin rooms/admin bookings/status badges.
+- Da sua search debounced o `/admin/bookings` de tranh request lap lai khi URL khong doi.
+
+Da hoan thanh gan nhat:
+- `Dockerfile`: them build args `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_SITE_URL` cho stage builder.
+- `docker-compose.yml`: them `build.args` de Next.js inline bien `NEXT_PUBLIC_*` vao client bundle.
+- `docker/nginx.conf`: tang `proxy_buffer_size`, `proxy_buffers`, `proxy_busy_buffers_size`.
+- Dashboard Recharts: sua canh bao kich thuoc chart.
+- Login admin: neu admin dang nhap tu `/auth/login` thi redirect ve `/admin`.
+- Realtime toast/admin pages: sua text va client crash lien quan Supabase env.
+
+Cong viec con lai khi tiep tuc:
+1. Manual test lai bang trinh duyet sau hard reload:
+   - `/auth/login`
+   - `/admin`
+   - `/admin/rooms`
+   - `/admin/bookings`
+   - `/admin/customers`
+   - `/admin/services`
+   - `/admin/reviews`
+2. Cap nhat checklist trong `docs/manual-testing.md` theo ket qua test that.
+3. Neu UI da on dinh, commit cac thay doi hien tai.
+4. De sau cung theo yeu cau:
+   - Deploy VPS/domain/HTTPS.
+   - Viet bao cao PDF toi thieu 20 trang dung format.
+   - Quay demo video 3-5 phut.
+
+Ghi chu quan trong:
+- Khi test loi Supabase tren browser, can `Empty Cache and Hard Reload` vi bundle JS cu co the van con trong cache.
+- Build Docker can co `NEXT_PUBLIC_*` tai thoi diem build, khong chi trong runtime env.

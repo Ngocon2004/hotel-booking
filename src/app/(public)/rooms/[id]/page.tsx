@@ -16,6 +16,18 @@ import {
   ArrowLeft,
 } from 'lucide-react'
 import Link from 'next/link'
+import RealtimeRoomStatus from '@/components/rooms/realtime-room-status'
+
+type RoomReview = {
+  id: string
+  rating: number
+  comment: string | null
+  created_at: string
+  customer: {
+    full_name: string | null
+    avatar_url: string | null
+  } | null
+}
 
 export default async function RoomDetailPage({
   params,
@@ -56,9 +68,10 @@ export default async function RoomDetailPage({
         .limit(10)
     : { data: [] }
 
+  const typedReviews = (reviews || []) as unknown as RoomReview[]
   const avgRating =
-    reviews && reviews.length > 0
-      ? reviews.reduce((s, r: any) => s + r.rating, 0) / reviews.length
+    typedReviews.length > 0
+      ? typedReviews.reduce((s, r) => s + r.rating, 0) / typedReviews.length
       : 0
 
   return (
@@ -84,10 +97,11 @@ export default async function RoomDetailPage({
               Tầng {room.floor}
             </span>
           )}
+          <RealtimeRoomStatus roomId={room.id} initialStatus={room.status} />
           {avgRating > 0 && (
             <span className="text-sm text-amber-600 flex items-center gap-1 font-semibold">
               <Star className="w-4 h-4 fill-amber-500 text-amber-500" />
-              {avgRating.toFixed(1)} ({reviews?.length} đánh giá)
+              {avgRating.toFixed(1)} ({typedReviews.length} đánh giá)
             </span>
           )}
         </div>
@@ -170,16 +184,16 @@ export default async function RoomDetailPage({
                     <Star className="w-5 h-5 fill-amber-500 text-amber-500" />
                     <span className="font-black">{avgRating.toFixed(1)}</span>
                     <span className="text-sm text-gray-500 font-normal">
-                      ({reviews?.length})
+                      ({typedReviews.length})
                     </span>
                   </div>
                 )}
               </CardTitle>
             </CardHeader>
             <CardContent>
-              {reviews && reviews.length > 0 ? (
+              {typedReviews.length > 0 ? (
                 <div className="space-y-4">
-                  {reviews.map((r: any) => {
+                  {typedReviews.map((r) => {
                     const initials =
                       r.customer?.full_name
                         ?.split(' ')

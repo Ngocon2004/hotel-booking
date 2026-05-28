@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useState, useTransition, useEffect } from 'react'
+import { useState, useTransition } from 'react'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import {
@@ -28,13 +28,6 @@ export default function RoomsFilter({ roomTypes }: Props) {
   const [minPrice, setMinPrice] = useState(searchParams.get('min') || '')
   const [maxPrice, setMaxPrice] = useState(searchParams.get('max') || '')
   const [sort, setSort] = useState(searchParams.get('sort') || 'price_asc')
-
-  useEffect(() => {
-    setType(searchParams.get('type') || '')
-    setMinPrice(searchParams.get('min') || '')
-    setMaxPrice(searchParams.get('max') || '')
-    setSort(searchParams.get('sort') || 'price_asc')
-  }, [searchParams])
 
   const apply = () => {
     const params = new URLSearchParams()
@@ -84,7 +77,7 @@ export default function RoomsFilter({ roomTypes }: Props) {
           <Label className="text-xs uppercase tracking-wider font-bold">Loại phòng</Label>
           <Select
             value={type || 'all'}
-            onValueChange={(v: any) => setType(!v || v === 'all' ? '' : String(v))}
+            onValueChange={(v) => setType(!v || v === 'all' ? '' : String(v))}
           >
             <SelectTrigger>
               <SelectValue placeholder="Tất cả" />
@@ -128,7 +121,7 @@ export default function RoomsFilter({ roomTypes }: Props) {
         {/* Sắp xếp */}
         <div className="space-y-2">
           <Label className="text-xs uppercase tracking-wider font-bold">Sắp xếp</Label>
-          <Select value={sort} onValueChange={(v: any) => setSort(String(v || 'price_asc'))}>
+          <Select value={sort} onValueChange={(v) => setSort(String(v || 'price_asc'))}>
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>

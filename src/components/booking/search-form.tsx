@@ -46,7 +46,11 @@ export default function SearchForm({
   return (
     <form
       onSubmit={submitSearch}
-      className={compact ? 'flex items-end gap-2' : 'grid gap-4 sm:grid-cols-[1fr_1fr_120px_auto]'}
+      className={
+        compact
+          ? 'flex items-end gap-2 text-slate-900 dark:text-white'
+          : 'grid gap-4 text-slate-900 dark:text-white sm:grid-cols-2 xl:grid-cols-[minmax(150px,1fr)_minmax(150px,1fr)_110px_122px]'
+      }
     >
       <div className="space-y-2">
         {!compact && (
@@ -67,7 +71,11 @@ export default function SearchForm({
               setCheckOut(dayjs(next).add(1, 'day').format('YYYY-MM-DD'))
             }
           }}
-          className={compact ? 'h-9 w-36 text-xs' : undefined}
+          className={
+            compact
+              ? 'h-9 w-36 bg-white text-xs text-slate-950 [color-scheme:light] dark:bg-white/10 dark:text-white dark:[color-scheme:dark]'
+              : 'h-11 bg-white text-slate-950 [color-scheme:light] dark:bg-white/10 dark:text-white dark:[color-scheme:dark]'
+          }
           required
         />
       </div>
@@ -85,7 +93,11 @@ export default function SearchForm({
           min={minCheckOut}
           value={checkOut}
           onChange={(event) => setCheckOut(event.target.value)}
-          className={compact ? 'h-9 w-36 text-xs' : undefined}
+          className={
+            compact
+              ? 'h-9 w-36 bg-white text-xs text-slate-950 [color-scheme:light] dark:bg-white/10 dark:text-white dark:[color-scheme:dark]'
+              : 'h-11 bg-white text-slate-950 [color-scheme:light] dark:bg-white/10 dark:text-white dark:[color-scheme:dark]'
+          }
           required
         />
       </div>
@@ -103,7 +115,11 @@ export default function SearchForm({
           min="1"
           value={guests}
           onChange={(event) => setGuests(Math.max(1, Number(event.target.value)))}
-          className={compact ? 'h-9 w-20 text-xs' : undefined}
+          className={
+            compact
+              ? 'h-9 w-20 bg-white text-xs text-slate-950 [color-scheme:light] dark:bg-white/10 dark:text-white dark:[color-scheme:dark]'
+              : 'h-11 bg-white text-slate-950 [color-scheme:light] dark:bg-white/10 dark:text-white dark:[color-scheme:dark]'
+          }
           required
         />
       </div>
@@ -112,8 +128,8 @@ export default function SearchForm({
         type="submit"
         className={
           compact
-            ? 'h-9 bg-amber-600 hover:bg-amber-700'
-            : 'h-11 self-end bg-gradient-to-r from-amber-500 to-amber-700 font-semibold'
+            ? 'h-9 bg-blue-600 hover:bg-blue-700'
+            : 'h-11 w-full self-end bg-blue-600 font-semibold hover:bg-blue-700 sm:col-span-2 xl:col-span-1'
         }
       >
         <Search className="h-4 w-4" />

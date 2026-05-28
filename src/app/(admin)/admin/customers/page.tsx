@@ -1,11 +1,12 @@
 import Link from 'next/link'
-import { Search, Users } from 'lucide-react'
+import { Users } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import Pagination from '@/components/ui/pagination'
+import DebouncedSearch from '@/components/ui/debounced-search'
 
-type SearchParams = Promise<{ q?: string }>
+type SearchParams = Promise<{ q?: string; page?: string }>
 
 type CustomerRow = {
   id: string
@@ -23,6 +24,8 @@ export default async function AdminCustomersPage({
 }) {
   const params = await searchParams
   const supabase = await createClient()
+  const currentPage = Math.max(1, Number(params.page || 1))
+  const pageSize = 10
 
   const { data } = await supabase
     .from('profiles')
@@ -41,6 +44,9 @@ export default async function AdminCustomersPage({
         customer.address?.toLowerCase().includes(q)
     )
   }
+  const totalPages = Math.max(1, Math.ceil(customers.length / pageSize))
+  const page = Math.min(currentPage, totalPages)
+  const pagedCustomers = customers.slice((page - 1) * pageSize, page * pageSize)
 
   return (
     <div className="space-y-6">
@@ -55,13 +61,11 @@ export default async function AdminCustomersPage({
 
       <Card className="border-amber-100">
         <CardContent className="p-5">
-          <form action="/admin/customers" className="flex gap-2">
-            <Input name="q" defaultValue={params.q || ''} placeholder="Tìm tên, SĐT, địa chỉ..." />
-            <Button type="submit" className="bg-amber-600 hover:bg-amber-700">
-              <Search className="mr-2 h-4 w-4" />
-              Tìm
-            </Button>
-          </form>
+          <DebouncedSearch
+            basePath="/admin/customers"
+            defaultValue={params.q || ''}
+            placeholder="Tim ten, SDT, dia chi..."
+          />
         </CardContent>
       </Card>
 
@@ -77,7 +81,7 @@ export default async function AdminCustomersPage({
             </tr>
           </thead>
           <tbody>
-            {customers.map((customer) => (
+            {pagedCustomers.map((customer) => (
               <tr key={customer.id} className="border-t border-amber-50">
                 <td className="px-4 py-3 font-bold">{customer.full_name || 'Khách'}</td>
                 <td className="px-4 py-3">{customer.phone || '-'}</td>
@@ -92,7 +96,7 @@ export default async function AdminCustomersPage({
                 </td>
               </tr>
             ))}
-            {customers.length === 0 && (
+            {pagedCustomers.length === 0 && (
               <tr>
                 <td colSpan={5} className="px-4 py-12 text-center text-gray-400">
                   Không có khách hàng phù hợp.
@@ -102,6 +106,12 @@ export default async function AdminCustomersPage({
           </tbody>
         </table>
       </div>
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        basePath="/admin/customers"
+        searchParams={{ q: params.q }}
+      />
     </div>
   )
 }

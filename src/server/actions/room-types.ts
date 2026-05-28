@@ -58,8 +58,8 @@ export async function createRoomType(
     if (error) {
       return { errors: { _form: [error.message] } }
     }
-  } catch (e: any) {
-    return { errors: { _form: [e.message || 'Có lỗi xảy ra'] } }
+  } catch (e) {
+    return { errors: { _form: [e instanceof Error ? e.message : 'Co loi xay ra'] } }
   }
 
   revalidatePath('/admin/room-types')
@@ -102,8 +102,8 @@ export async function updateRoomType(
     if (error) {
       return { errors: { _form: [error.message] } }
     }
-  } catch (e: any) {
-    return { errors: { _form: [e.message || 'Có lỗi xảy ra'] } }
+  } catch (e) {
+    return { errors: { _form: [e instanceof Error ? e.message : 'Co loi xay ra'] } }
   }
 
   revalidatePath('/admin/room-types')
@@ -116,3 +116,4 @@ export async function deleteRoomType(id: string) {
   if (error) throw new Error(error.message)
   revalidatePath('/admin/room-types')
 }
+

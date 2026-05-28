@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { redirect, unstable_rethrow } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { hoursUntilHotelDate } from '@/lib/utils/format'
 import { createBookingSchema, type BookingFormState } from '@/lib/validators/booking'
 import type { BookingStatus } from '@/types/database'
 
@@ -129,8 +130,7 @@ export async function cancelBooking(bookingId: string) {
       throw new Error('Không có quyền hủy booking này')
     }
 
-    const checkInTime = new Date(`${booking.check_in_date}T00:00:00`).getTime()
-    const hoursUntilCheckIn = (checkInTime - Date.now()) / 3_600_000
+    const hoursUntilCheckIn = hoursUntilHotelDate(booking.check_in_date)
 
     if (booking.status !== 'pending' && hoursUntilCheckIn < 24) {
       throw new Error('Chỉ có thể hủy booking pending hoặc trước check-in ít nhất 24 giờ')

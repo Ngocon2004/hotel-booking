@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
 /**
  * Seed script - tạo dữ liệu mẫu cho dự án.
  *
@@ -8,8 +9,16 @@
  */
 import { createClient } from '@supabase/supabase-js'
 import { faker } from '@faker-js/faker'
+import dayjs from 'dayjs'
+import timezone from 'dayjs/plugin/timezone'
+import utc from 'dayjs/plugin/utc'
 import * as dotenv from 'dotenv'
 import path from 'path'
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
+
+const HOTEL_TIME_ZONE = 'Asia/Ho_Chi_Minh'
 
 dotenv.config({ path: path.resolve(process.cwd(), '.env.local') })
 
@@ -241,16 +250,16 @@ async function seed() {
     console.log('📅 Tạo bookings...')
     const customers = userIds.filter((u) => u.role === 'customer')
     const bookings: any[] = []
-    const today = new Date()
+    const today = dayjs().tz(HOTEL_TIME_ZONE).startOf('day')
 
     for (let i = 0; i < 10; i++) {
       const room = faker.helpers.arrayElement(createdRooms)
       const roomType = createdTypes.find((t) => t.id === room.room_type_id)!
-      const checkIn = new Date(today)
-      checkIn.setDate(today.getDate() + faker.number.int({ min: -30, max: 30 }))
+      const checkIn = today.add(faker.number.int({ min: -30, max: 30 }), 'day')
       const nights = faker.number.int({ min: 1, max: 5 })
-      const checkOut = new Date(checkIn)
-      checkOut.setDate(checkIn.getDate() + nights)
+      const checkOut = checkIn.add(nights, 'day')
+      const checkInDate = checkIn.format('YYYY-MM-DD')
+      const checkOutDate = checkOut.format('YYYY-MM-DD')
 
       const status = faker.helpers.arrayElement([
         'pending',
@@ -261,13 +270,13 @@ async function seed() {
       ])
 
       bookings.push({
-        booking_code: `HTL-${checkIn.toISOString().slice(0, 10).replace(/-/g, '')}-${faker.string
+        booking_code: `HTL-${checkInDate.replace(/-/g, '')}-${faker.string
           .alphanumeric(4)
           .toUpperCase()}`,
         customer_id: faker.helpers.arrayElement(customers).id,
         room_id: room.id,
-        check_in_date: checkIn.toISOString().slice(0, 10),
-        check_out_date: checkOut.toISOString().slice(0, 10),
+        check_in_date: checkInDate,
+        check_out_date: checkOutDate,
         total_guests: faker.number.int({ min: 1, max: roomType.max_occupancy }),
         total_price: nights * roomType.base_price,
         status,
