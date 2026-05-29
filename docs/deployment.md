@@ -3,7 +3,7 @@
 ## Current Status
 
 - Local Next build: passed.
-- Local Docker Compose: passed in previous smoke test.
+- Local Docker Compose: configured for native Caddy reverse proxy.
 - App image: about `197MB`.
 - Production VPS/domain/HTTPS: not done yet.
 - Manual testing checklist: passed.
@@ -14,7 +14,7 @@
 
 Prerequisite: Docker Desktop must be running.
 
-1. Copy `.env.production.example` to `.env.production` and update values:
+1. Create `.env` and update values:
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
@@ -26,7 +26,7 @@ NEXT_PUBLIC_SITE_URL=http://localhost
 2. Build and run:
 
 ```powershell
-docker compose --env-file .env.production up -d --build
+docker compose up -d --build
 ```
 
 3. Open:
@@ -38,14 +38,14 @@ http://localhost
 4. Useful checks:
 
 ```powershell
-docker compose --env-file .env.production ps
+docker compose ps
 docker images hotel-booking-app
 ```
 
 5. Stop:
 
 ```powershell
-docker compose --env-file .env.production down
+docker compose down
 ```
 
 ## VPS Deployment Checklist
@@ -60,7 +60,7 @@ git clone https://github.com/Ngocon2004/hotel-booking.git
 cd hotel-booking
 ```
 
-5. Copy `.env.production.example` to `.env.production`:
+5. Create `.env`:
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
@@ -72,33 +72,49 @@ NEXT_PUBLIC_SITE_URL=https://your-domain.com
 6. Start containers:
 
 ```bash
-docker compose --env-file .env.production up -d --build
+docker compose up -d --build
 ```
 
-7. Add HTTPS.
+7. HTTPS is handled by native Caddy.
 
-Recommended options:
+Point the domain `A` record to the VPS IP before starting the stack. The Docker app listens on `127.0.0.1:3000`; Caddy listens on ports `80` and `443`, proxies to the app, requests the Let's Encrypt certificate automatically, stores it in Caddy's host storage, and renews it automatically.
 
-- Cloudflare proxy + SSL Full.
-- Or replace Nginx with Caddy for automatic Let's Encrypt.
-- Or keep Nginx and use Certbot.
+Install the Caddyfile:
 
-### Option A: Cloudflare HTTPS
+```bash
+sudo cp docker/caddy/Caddyfile /etc/caddy/Caddyfile
+sudo systemctl reload caddy
+```
 
-1. Point DNS `A` record to VPS IP.
-2. Enable Cloudflare proxy for the record.
-3. Set SSL/TLS mode to `Full`.
-4. Keep the current `docker-compose.yml` exposing port `80`.
+For production, set:
 
-### Option B: Caddy HTTPS
+```env
+NEXT_PUBLIC_SITE_URL=https://your-domain.com
+```
 
-Replace the Nginx service with Caddy and bind ports `80:80` and `443:443`. Caddy will request and renew Let's Encrypt certificates automatically after DNS points to the VPS.
+If using Cloudflare proxy, set SSL/TLS mode to `Full` or `Full (strict)`.
 
-### Option C: Nginx + Certbot
+8. Enable auto-start on VM reboot.
 
-Keep Nginx, install Certbot on the VPS, issue a certificate for the domain, then update Nginx to listen on `443` with the issued certificate files.
+The Docker app uses `restart: unless-stopped`, and native Caddy is enabled with `systemctl enable caddy`. For a full VM reboot, install the included systemd unit so the Docker app is brought up after Docker starts:
 
-8. Verify:
+```bash
+sudo cp docker/systemd/hotel-booking.service /etc/systemd/system/hotel-booking.service
+sudo systemctl daemon-reload
+sudo systemctl enable --now hotel-booking.service
+```
+
+Check status and logs:
+
+```bash
+sudo systemctl status hotel-booking.service
+docker compose ps
+sudo journalctl -u caddy -f
+```
+
+If the repository is deployed somewhere other than `/home/hai/hotel-booking`, update `WorkingDirectory` in `docker/systemd/hotel-booking.service` before copying it.
+
+9. Verify:
 
 - `https://your-domain.com`
 - `https://your-domain.com/rooms`
@@ -128,5 +144,5 @@ https://<project-ref>.supabase.co/auth/v1/callback
 
 - Next.js client env values with `NEXT_PUBLIC_*` are baked during build.
 - If env changes, rebuild the image.
-- Use `docker compose --env-file .env.production up -d --build`; otherwise build args may be blank or fall back to local shell values.
+- Use `docker compose up -d --build` from the repository root. Compose reads `.env` for build args and passes it to the app container. Native Caddy reads `/etc/caddy/Caddyfile`.
 - After deploy, update `README.md` with the production URL.
