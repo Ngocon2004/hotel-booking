@@ -36,6 +36,10 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser()
 
   const pathname = request.nextUrl.pathname
+  const isAdminOnlyPath =
+    pathname === '/api-docs' ||
+    pathname.startsWith('/api-docs/') ||
+    pathname === '/api/openapi'
 
   // Các route công khai - cho phép truy cập không cần đăng nhập
   const publicPaths = [
@@ -59,8 +63,8 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
-  // Nếu truy cập /admin nhưng không phải admin → redirect về home
-  if (user && pathname.startsWith('/admin')) {
+  // Nếu truy cập route chỉ dành cho admin nhưng không phải admin → redirect về home
+  if (user && (pathname.startsWith('/admin') || isAdminOnlyPath)) {
     const { data: profile } = await supabase
       .from('profiles')
       .select('role')
