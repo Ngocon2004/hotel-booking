@@ -43,8 +43,6 @@ export async function updateSession(request: NextRequest) {
     '/auth',
     '/rooms',
     '/search',
-    '/api-docs',
-    '/api/openapi',
     '/about',
     '/contact',
   ]
