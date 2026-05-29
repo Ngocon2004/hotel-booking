@@ -4,9 +4,9 @@ Cập nhật: 2026-05-29
 
 ## Tổng Quan Tiến Độ
 
-Trạng thái tổng thể: **khoảng 95-96% phần code và tài liệu kỹ thuật**.
+Trạng thái tổng thể: **khoảng 97-98% phần code, deploy và tài liệu kỹ thuật**.
 
-Đã hoàn thành phần code chính, Docker production build, Swagger UI admin-only, UI polish, theme sáng/tối, animation, About page, chuẩn hóa tiếng Việt có dấu và các flow nghiệp vụ chính. Manual test có đăng nhập đã pass. Phần còn lại chủ yếu là **deploy VPS/domain/HTTPS**, **báo cáo PDF**, và **demo video**.
+Đã hoàn thành phần code chính, Docker production build, VPS/domain/HTTPS, Swagger UI admin-only, UI polish, theme sáng/tối, animation, About page, chuẩn hóa tiếng Việt có dấu và các flow nghiệp vụ chính. Manual test có đăng nhập đã pass. Phần còn lại chủ yếu là **báo cáo PDF** và **demo video**.
 
 ## Yêu Cầu Bắt Buộc Theo Quy Chế
 
@@ -15,7 +15,7 @@ Trạng thái tổng thể: **khoảng 95-96% phần code và tài liệu kỹ t
 | 1 | Frontend Next.js + Tailwind/shadcn | Done |
 | 2 | Backend Supabase Auth + DB + Storage/Realtime | Done |
 | 3 | Dockerfile + Docker Compose multi-stage | Done, local build/run đã pass |
-| 4 | VPS + Domain + SSL HTTPS | Chưa hoàn tất, đã có domain `dghahai.io.vn` |
+| 4 | VPS + Domain + SSL HTTPS | Done, production: `https://hbms.dghahai.io.vn/` |
 | 5 | GitHub + Conventional Commits | Done |
 | 6 | AI prompts minh chứng >=5 | Done, đã có 20+ prompts |
 | 7 | TypeScript types rõ ràng | Done |
@@ -109,25 +109,18 @@ Trạng thái tổng thể: **khoảng 95-96% phần code và tài liệu kỹ t
 
 ### Ưu Tiên Cao
 
-1. **Deploy VPS/domain/HTTPS**
-   - Trỏ DNS A record của `dghahai.io.vn` về IP VPS.
-   - Tạo `.env` production.
-   - Chạy `docker compose up -d --build`.
-   - Cấu hình HTTPS bằng Cloudflare, Caddy hoặc Nginx/Certbot.
-   - Cập nhật Supabase Auth redirect URLs.
-   - Smoke test lại `/`, `/rooms`, login, booking, admin và API docs admin-only trên domain thật.
-
-2. **Báo cáo PDF >=20 trang**
+1. **Báo cáo PDF >=20 trang**
    - Times New Roman 13, spacing 1.5.
    - Có screenshot giao diện, Supabase, Docker, Swagger UI admin-only, GitHub.
    - Có phụ lục AI prompts.
+   - Có screenshot production `https://hbms.dghahai.io.vn/`.
 
-3. **Demo video 3-5 phút**
+2. **Demo video 3-5 phút**
    - Public search/booking.
    - Customer my bookings/review.
    - Admin dashboard/lifecycle.
    - API docs bằng tài khoản admin.
-   - Docker/deploy nếu đã có production URL.
+   - Docker/deploy và production URL `https://hbms.dghahai.io.vn/`.
 
 ### Polish Nhỏ
 
@@ -158,7 +151,7 @@ Trạng thái tổng thể: **khoảng 95-96% phần code và tài liệu kỹ t
 - [x] Manual testing checklist được tick đầy đủ.
 - [x] API docs chỉ admin được xem.
 - [x] About page không còn nút xem API docs.
-- [ ] Có production HTTPS URL chạy ổn định.
+- [x] Có production HTTPS URL: `https://hbms.dghahai.io.vn/`.
 - [ ] Báo cáo PDF >=20 trang hoàn thành.
 - [ ] Demo video 3-5 phút hoàn thành.
-- [ ] README cập nhật production URL sau deploy.
+- [x] README cập nhật production URL sau deploy.

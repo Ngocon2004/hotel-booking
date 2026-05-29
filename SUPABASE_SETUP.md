@@ -124,7 +124,7 @@ Nếu realtime không chạy, kiểm tra:
 
 ## 9. Production / Deploy
 
-Domain đã chuẩn bị: `dghahai.io.vn`.
+Production URL hiện tại: `https://hbms.dghahai.io.vn/`.
 
 Cập nhật `.env` trên VPS:
 
@@ -132,15 +132,15 @@ Cập nhật `.env` trên VPS:
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
-NEXT_PUBLIC_SITE_URL=https://dghahai.io.vn
+NEXT_PUBLIC_SITE_URL=https://hbms.dghahai.io.vn
 ```
 
 Cập nhật Supabase Authentication URL Configuration:
 
 ```text
-Site URL: https://dghahai.io.vn
+Site URL: https://hbms.dghahai.io.vn
 Redirect URLs:
-https://dghahai.io.vn/auth/callback
+https://hbms.dghahai.io.vn/auth/callback
 ```
 
 Sau khi đổi `NEXT_PUBLIC_*`, phải build lại Docker image:

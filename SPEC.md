@@ -13,7 +13,7 @@
   - Validation: Zod.
   - Chart: Recharts.
   - API docs: OpenAPI 3.0.3 + Swagger UI admin-only.
-  - Deploy: Docker multi-stage + Docker Compose; VPS/HTTPS còn lại.
+  - Deploy: Docker multi-stage + Docker Compose; VPS/HTTPS đã có tại `https://hbms.dghahai.io.vn/`.
 
 ## 2. Mục Tiêu
 
@@ -118,12 +118,12 @@ Hệ thống dùng 8 bảng chính:
 - Local smoke test Docker pass.
 - Image app khoảng `197MB`.
 
-Còn lại:
+Production:
 
-- Deploy VPS.
-- Trỏ domain `dghahai.io.vn`.
-- HTTPS.
-- Cập nhật Supabase Auth redirect URL production.
+- URL: `https://hbms.dghahai.io.vn/`.
+- Domain gốc: `dghahai.io.vn`.
+- Subdomain chạy app: `hbms.dghahai.io.vn`.
+- HTTPS đã có trên production.
 
 ## 8. Kiểm Thử Hiện Tại
 
@@ -136,9 +136,9 @@ Còn lại:
 - Manual test bằng trình duyệt cho Auth Protection, Customer Flow, Admin Booking Lifecycle, Admin CRUD, Profile/Upload, Print Flow, Realtime và Responsive/UI.
 - Realtime đặt/hủy booking với `customer1@hbms.vn`: admin thấy trạng thái phòng/booking cập nhật đúng.
 
-Cần test lại sau deploy:
+Đã có production:
 
-- Domain `https://dghahai.io.vn`.
+- Domain `https://hbms.dghahai.io.vn/`.
 - Supabase Auth callback production.
 - HTTPS và redirect URL.
 - API docs admin-only trên production.
@@ -156,7 +156,7 @@ Cần test lại sau deploy:
 | GitHub + commits | Done |
 | AI prompts >=5 | Done |
 | Swagger UI | Done, admin-only |
-| Deploy HTTPS | Chưa hoàn tất |
+| Deploy HTTPS | Done, `https://hbms.dghahai.io.vn/` |
 | Báo cáo PDF >=20 trang | Chưa |
 | Demo video | Chưa |
 

@@ -12,15 +12,16 @@
 - UI: đã có trang About, giao diện tiếng Việt có dấu, homepage hỗ trợ chuyển tiếng Việt/English.
 - API docs: đã có `/api-docs` và `/api/openapi`, nhưng **chỉ admin được quyền xem**.
 - Manual testing: đã pass và tick đầy đủ trong `docs/manual-testing.md`.
-- Domain đã chuẩn bị: `dghahai.io.vn` tại BKNS.
-- Còn lại bắt buộc: deploy VPS/domain/HTTPS, báo cáo PDF >=20 trang, demo video.
+- Production HTTPS: đã deploy trên VPS tại `https://hbms.dghahai.io.vn/`.
+- Domain: `dghahai.io.vn` tại BKNS, dùng subdomain `hbms.dghahai.io.vn`.
+- Còn lại bắt buộc: báo cáo PDF >=20 trang, demo video.
 
 ## Demo
 
 - Local dev: `http://localhost:3000`
 - API docs admin-only: `http://localhost:3000/api-docs`
 - OpenAPI JSON admin-only: `http://localhost:3000/api/openapi`
-- Production: chưa xác nhận deploy xong; sẽ cập nhật sau khi `https://dghahai.io.vn` chạy ổn định.
+- Production: `https://hbms.dghahai.io.vn/`
 - Repository: `https://github.com/Ngocon2004/hotel-booking`
 
 ## Tính Năng
@@ -145,7 +146,6 @@ Lưu ý: Docker build cần có `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABAS
 
 ## Việc Còn Lại
 
-1. Deploy VPS/domain/HTTPS cho `dghahai.io.vn`.
-2. Viết báo cáo PDF >=20 trang đúng format.
-3. Quay demo video 3-5 phút.
-4. Cập nhật production URL sau khi deploy chạy ổn định.
+1. Viết báo cáo PDF >=20 trang đúng format.
+2. Quay demo video 3-5 phút.
+3. Cập nhật screenshot/minh chứng production trong báo cáo.

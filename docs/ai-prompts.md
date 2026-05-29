@@ -464,13 +464,27 @@
 - Cập nhật deployment theo `docker-compose.yml` hiện tại.
 - Cập nhật phần việc còn lại: deploy HTTPS, báo cáo PDF, demo video.
 
+#### Prompt #24: Cập nhật trạng thái production sau VPS deploy
+**Ngữ cảnh:** Sau khi VPS, deploy và domain đã hoàn tất, tài liệu cần chuyển từ trạng thái chờ deploy sang đã có production HTTPS URL.
+
+**Prompt:**
+> "Tôi đã làm phần VPS, deploy, domain: đây là đường dẫn https://hbms.dghahai.io.vn/"
+
+**Lý do dùng:** Production URL là thông tin quan trọng cho README, roadmap, deployment guide, manual testing và báo cáo. AI được dùng để đồng bộ trạng thái giữa các file Markdown.
+
+**Kết quả:**
+- Cập nhật production URL chính thức: `https://hbms.dghahai.io.vn/`.
+- Đánh dấu VPS/domain/HTTPS đã hoàn thành.
+- Cập nhật việc còn lại còn báo cáo PDF và demo video.
+- Cập nhật Supabase production redirect URL theo subdomain `hbms.dghahai.io.vn`.
+
 ## Cập Nhật Thống Kê Sau Prompt #23
 
 | Metric | Số lượng hiện tại |
 | --- | --- |
-| Tổng prompts | 23+ |
+| Tổng prompts | 24+ |
 | Files được sinh/chỉnh sửa | ~85 files |
 | Lines of code/docs ước tính | ~7800+ |
 | Time saved ước tính | ~60 giờ |
 
-*Cập nhật cuối: Tuần 6 - sau About page, API docs admin-only, manual test realtime và đồng bộ Markdown.*
+*Cập nhật cuối: Tuần 6 - sau VPS/domain/HTTPS production, About page, API docs admin-only, manual test realtime và đồng bộ Markdown.*

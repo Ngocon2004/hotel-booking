@@ -6,7 +6,7 @@
 - Local Docker Compose: app production runs on `127.0.0.1:3000`.
 - App image: about `197MB`.
 - Domain prepared: `dghahai.io.vn` at BKNS.
-- Production VPS/domain/HTTPS: not confirmed as completed yet.
+- Production VPS/domain/HTTPS: completed at `https://hbms.dghahai.io.vn/`.
 - Manual testing checklist: passed.
 - Swagger UI route: `/api-docs`, admin-only.
 - OpenAPI JSON route: `/api/openapi`, admin-only.
@@ -57,16 +57,16 @@ docker compose down
 
 ```text
 Type: A
-Name: @
+Name: hbms
 Value: <VPS_IP>
 ```
 
-If using `www.dghahai.io.vn`, add:
+If you also want the root domain to point to the app, add another A record:
 
 ```text
-Type: CNAME
-Name: www
-Value: dghahai.io.vn
+Type: A
+Name: @
+Value: <VPS_IP>
 ```
 
 3. Clone repository:
@@ -82,7 +82,7 @@ cd hotel-booking
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
-NEXT_PUBLIC_SITE_URL=https://dghahai.io.vn
+NEXT_PUBLIC_SITE_URL=https://hbms.dghahai.io.vn
 ```
 
 5. Start the app container:
@@ -108,7 +108,7 @@ Use Caddy if you want automatic Let's Encrypt certificates.
 Example Caddyfile:
 
 ```caddyfile
-dghahai.io.vn {
+hbms.dghahai.io.vn {
     reverse_proxy 127.0.0.1:3000
 }
 ```
@@ -131,7 +131,7 @@ Proxy target:
 http://127.0.0.1:3000
 ```
 
-Then issue SSL with Certbot for `dghahai.io.vn`.
+Then issue SSL with Certbot for `hbms.dghahai.io.vn`.
 
 ### Option C: Cloudflare Proxy
 
@@ -142,9 +142,9 @@ If DNS is managed through Cloudflare, enable proxy and set SSL/TLS mode to `Full
 In Supabase Dashboard, update Authentication URL Configuration:
 
 ```text
-Site URL: https://dghahai.io.vn
+Site URL: https://hbms.dghahai.io.vn
 Redirect URLs:
-https://dghahai.io.vn/auth/callback
+https://hbms.dghahai.io.vn/auth/callback
 ```
 
 For Google OAuth, Google Cloud authorized redirect URI remains Supabase callback:
@@ -157,9 +157,9 @@ https://<project-ref>.supabase.co/auth/v1/callback
 
 After deploy, verify:
 
-- `https://dghahai.io.vn`
-- `https://dghahai.io.vn/about`
-- `https://dghahai.io.vn/rooms`
+- `https://hbms.dghahai.io.vn/`
+- `https://hbms.dghahai.io.vn/about`
+- `https://hbms.dghahai.io.vn/rooms`
 - Customer login/search/booking/cancel.
 - Admin login/dashboard/booking lifecycle.
 - Realtime booking toast/status.
@@ -173,4 +173,4 @@ After deploy, verify:
 - Next.js client env values with `NEXT_PUBLIC_*` are baked during build.
 - If env changes, rebuild the image with `docker compose up -d --build`.
 - Keep `NEXT_PUBLIC_SITE_URL` aligned with the public URL, otherwise OAuth/callback flow can redirect to the wrong host.
-- After production is stable, update `README.md` with the final production URL.
+- README has been updated with the final production URL.

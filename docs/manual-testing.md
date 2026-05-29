@@ -115,10 +115,11 @@ Dùng checklist này trước khi deploy, quay demo hoặc viết báo cáo kế
 - [x] About page không còn nút xem API docs.
 - [x] Chuyển homepage qua English không còn text tiếng Việt lẫn vào phần chính.
 
-## Cần Test Lại Sau Deploy
+## Production Sau Deploy
 
-- [ ] `https://dghahai.io.vn` trả trang chủ.
-- [ ] `https://dghahai.io.vn/auth/callback` hoạt động với Supabase Auth.
+- [x] Production URL đã có: `https://hbms.dghahai.io.vn/`.
+- [x] VPS/domain/HTTPS đã hoàn thành theo xác nhận triển khai.
+- [ ] `https://hbms.dghahai.io.vn/auth/callback` hoạt động với Supabase Auth.
 - [ ] Google OAuth không redirect về `0.0.0.0`.
 - [ ] API docs vẫn admin-only trên production.
 - [ ] Realtime hoạt động trên domain thật.
@@ -129,5 +130,6 @@ Dùng checklist này trước khi deploy, quay demo hoặc viết báo cáo kế
 - 2026-05-29: API docs đã chuyển từ public sang admin-only; không public `/api-docs` và `/api/openapi`.
 - 2026-05-29: Đã test realtime với customer `customer1@hbms.vn`: sau khi đặt phòng và hủy booking, admin thấy trạng thái cập nhật đúng.
 - 2026-05-29: Đã manual test thành công các nhóm Auth Protection, Customer Flow, Admin Booking Lifecycle, Admin CRUD, Profile/Upload, Print Flow, Realtime và Responsive/UI.
+- 2026-05-29: Đã có production HTTPS URL: `https://hbms.dghahai.io.vn/`.
 - Hiện chưa có Playwright/Cypress trong `package.json`, nên các mục trên được test bằng trình duyệt.
 - Không chạy `npm run seed` trên database cần giữ dữ liệu.

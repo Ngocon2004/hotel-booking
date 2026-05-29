@@ -142,10 +142,9 @@ Lưu ý: với Next.js, các biến `NEXT_PUBLIC_*` phải có ở thời điể
 
 ## 9. Việc Cần Làm Trước Khi Nộp
 
-1. Deploy VPS/domain/HTTPS cho `dghahai.io.vn`.
-2. Cập nhật `README.md` bằng production URL sau khi chạy ổn định.
-3. Viết báo cáo PDF >=20 trang.
-4. Quay demo video 3-5 phút.
+1. Viết báo cáo PDF >=20 trang.
+2. Quay demo video 3-5 phút.
+3. Chụp screenshot production `https://hbms.dghahai.io.vn/` để đưa vào báo cáo.
 
 ## 10. Troubleshooting
 
