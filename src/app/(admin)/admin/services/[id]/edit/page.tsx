@@ -16,7 +16,7 @@ export default async function EditServicePage({ params }: { params: Params }) {
     <ServiceForm
       action={updateService.bind(null, id)}
       initial={data as Service}
-      title="Cap nhat dich vu"
+      title="Cập nhật dịch vụ"
     />
   )
 }

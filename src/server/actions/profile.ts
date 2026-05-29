@@ -10,12 +10,12 @@ async function requireUser() {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user) throw new Error('Ban can dang nhap')
+  if (!user) throw new Error('Bạn cần đăng nhập')
   return { supabase, user }
 }
 
 function getErrorMessage(error: unknown) {
-  return error instanceof Error ? error.message : 'Thao tac that bai'
+  return error instanceof Error ? error.message : 'Thao tác thất bại'
 }
 
 export async function updateProfile(
@@ -59,7 +59,7 @@ export async function uploadAvatar(formData: FormData): Promise<{ url?: string; 
   try {
     const { supabase, user } = await requireUser()
     const file = formData.get('file') as File | null
-    if (!file || file.size === 0) return { error: 'Khong co file' }
+    if (!file || file.size === 0) return { error: 'Không có file' }
 
     const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg'
     if (!['jpg', 'jpeg', 'png', 'webp'].includes(ext)) {

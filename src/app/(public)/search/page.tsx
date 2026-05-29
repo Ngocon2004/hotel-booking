@@ -1,4 +1,4 @@
-import Link from 'next/link'
+﻿import Link from 'next/link'
 import { BedDouble, SearchX } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import SearchForm from '@/components/booking/search-form'

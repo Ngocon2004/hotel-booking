@@ -1,4 +1,4 @@
-import { Badge } from '@/components/ui/badge'
+﻿import { Badge } from '@/components/ui/badge'
 import type { BookingStatus, PaymentStatus } from '@/types/database'
 
 const bookingStatusMap: Record<BookingStatus, { label: string; className: string }> = {
@@ -19,7 +19,7 @@ const bookingStatusMap: Record<BookingStatus, { label: string; className: string
     className: 'bg-gray-100 text-gray-800 hover:bg-gray-100',
   },
   cancelled: {
-    label: 'Đã hủy',
+    label: 'Đã huỷ',
     className: 'bg-red-100 text-red-800 hover:bg-red-100',
   },
 }

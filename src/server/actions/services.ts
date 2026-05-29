@@ -11,7 +11,7 @@ async function requireAdmin() {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user) throw new Error('Ban can dang nhap')
+  if (!user) throw new Error('Bạn cần đăng nhập')
 
   const { data: profile } = await supabase
     .from('profiles')
@@ -19,12 +19,12 @@ async function requireAdmin() {
     .eq('id', user.id)
     .single()
 
-  if (profile?.role !== 'admin') throw new Error('Khong co quyen')
+  if (profile?.role !== 'admin') throw new Error('Không có quyền')
   return supabase
 }
 
 function getErrorMessage(error: unknown) {
-  return error instanceof Error ? error.message : 'Thao tac that bai'
+  return error instanceof Error ? error.message : 'Thao tác thất bại'
 }
 
 function parseServiceForm(formData: FormData) {

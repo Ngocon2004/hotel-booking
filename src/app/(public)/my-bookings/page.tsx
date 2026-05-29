@@ -1,4 +1,4 @@
-import Link from 'next/link'
+﻿import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { CalendarCheck, SearchX } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
@@ -30,7 +30,7 @@ const statusFilters: { value: BookingStatus | 'all'; label: string }[] = [
   { value: 'confirmed', label: 'Đã xác nhận' },
   { value: 'checked_in', label: 'Đã check-in' },
   { value: 'checked_out', label: 'Đã check-out' },
-  { value: 'cancelled', label: 'Đã hủy' },
+  { value: 'cancelled', label: 'Đã huỷ' },
 ]
 
 export default async function MyBookingsPage({

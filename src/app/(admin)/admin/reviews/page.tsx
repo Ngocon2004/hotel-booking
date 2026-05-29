@@ -70,16 +70,16 @@ export default async function AdminReviewsPage({
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-black tracking-tight">Quan ly danh gia</h1>
+        <h1 className="text-3xl font-black tracking-tight">Quản lý đánh giá</h1>
         <p className="mt-1 text-sm text-gray-500">
-          Theo doi va xoa cac danh gia khong phu hop.
+          Theo dõi và xoá các đánh giá không phù hợp.
         </p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3">
         <Card className="border-amber-100">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-semibold text-gray-500">Tong danh gia</CardTitle>
+            <CardTitle className="text-sm font-semibold text-gray-500">Tổng đánh giá</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-3xl font-black">{reviews.length}</p>
@@ -87,7 +87,7 @@ export default async function AdminReviewsPage({
         </Card>
         <Card className="border-amber-100">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-semibold text-gray-500">Diem trung binh</CardTitle>
+            <CardTitle className="text-sm font-semibold text-gray-500">Điểm trung bình</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-3xl font-black">{avgRating.toFixed(1)}</p>
@@ -95,7 +95,7 @@ export default async function AdminReviewsPage({
         </Card>
         <Card className="border-amber-100">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-semibold text-gray-500">Danh gia 5 sao</CardTitle>
+            <CardTitle className="text-sm font-semibold text-gray-500">Đánh giá 5 sao</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-3xl font-black">
@@ -110,13 +110,13 @@ export default async function AdminReviewsPage({
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Khach hang</TableHead>
+                <TableHead>Khách hàng</TableHead>
                 <TableHead>Booking</TableHead>
-                <TableHead>Phong</TableHead>
-                <TableHead>Danh gia</TableHead>
-                <TableHead>Noi dung</TableHead>
-                <TableHead>Ngay tao</TableHead>
-                <TableHead className="text-right">Thao tac</TableHead>
+                <TableHead>Phòng</TableHead>
+                <TableHead>Đánh giá</TableHead>
+                <TableHead>Nội dung</TableHead>
+                <TableHead>Ngày tạo</TableHead>
+                <TableHead className="text-right">Thao tác</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -125,7 +125,7 @@ export default async function AdminReviewsPage({
                   <TableRow key={review.id}>
                     <TableCell>
                       <div>
-                        <p className="font-semibold">{review.customer?.full_name || 'Khach'}</p>
+                        <p className="font-semibold">{review.customer?.full_name || 'Khách'}</p>
                         <p className="text-xs text-gray-500">{review.customer?.phone || '-'}</p>
                       </div>
                     </TableCell>
@@ -144,7 +144,7 @@ export default async function AdminReviewsPage({
                     <TableCell>
                       {review.booking?.room ? (
                         <div>
-                          <p className="font-semibold">Phong {review.booking.room.room_number}</p>
+                          <p className="font-semibold">Phòng {review.booking.room.room_number}</p>
                           <p className="text-xs text-gray-500">
                             {review.booking.room.room_type?.name || '-'}
                           </p>
@@ -171,7 +171,7 @@ export default async function AdminReviewsPage({
                           type="submit"
                           variant="destructive"
                           size="sm"
-                          aria-label="Xoa danh gia"
+                          aria-label="Xoá đánh giá"
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
@@ -182,7 +182,7 @@ export default async function AdminReviewsPage({
               ) : (
                 <TableRow>
                   <TableCell colSpan={7} className="py-10 text-center text-gray-500">
-                    Chua co danh gia nao
+                    Chưa có đánh giá nào
                   </TableCell>
                 </TableRow>
               )}

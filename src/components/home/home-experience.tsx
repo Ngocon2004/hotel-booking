@@ -231,7 +231,7 @@ export default function HomeExperience() {
                 <h2 className="text-lg font-black text-slate-950 dark:text-white">{t.searchTitle}</h2>
                 <CalendarCheck className="h-5 w-5 text-blue-600" />
               </div>
-              <SearchForm />
+              <SearchForm lang={lang} />
             </div>
           </div>
         </div>

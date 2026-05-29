@@ -56,7 +56,7 @@ export async function createRoom(
       return { errors: { _form: [error.message] } }
     }
   } catch (e) {
-    return { errors: { _form: [e instanceof Error ? e.message : 'Co loi xay ra'] } }
+    return { errors: { _form: [e instanceof Error ? e.message : 'Có lỗi xảy ra'] } }
   }
 
   revalidatePath('/admin/rooms')
@@ -101,7 +101,7 @@ export async function updateRoom(
       return { errors: { _form: [error.message] } }
     }
   } catch (e) {
-    return { errors: { _form: [e instanceof Error ? e.message : 'Co loi xay ra'] } }
+    return { errors: { _form: [e instanceof Error ? e.message : 'Có lỗi xảy ra'] } }
   }
 
   revalidatePath('/admin/rooms')
@@ -147,7 +147,7 @@ export async function uploadRoomImage(formData: FormData): Promise<{ url?: strin
 
     return { url: publicUrl }
   } catch (e) {
-    return { error: e instanceof Error ? e.message : 'Upload that bai' }
+    return { error: e instanceof Error ? e.message : 'Upload thất bại' }
   }
 }
 

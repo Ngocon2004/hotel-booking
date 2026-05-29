@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { useState, useTransition } from 'react'
 import { Button } from '@/components/ui/button'
@@ -31,7 +31,7 @@ export default function DeleteRoomTypeButton({
         toast.success(`Đã xoá loại phòng "${name}"`)
         setOpen(false)
       } catch (err) {
-        toast.error(err instanceof Error ? err.message : 'Xoa that bai')
+        toast.error(err instanceof Error ? err.message : 'Xoá thất bại')
       }
     })
   }

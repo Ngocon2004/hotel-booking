@@ -11,7 +11,7 @@ async function getCurrentUserContext() {
   } = await supabase.auth.getUser()
 
   if (!user) {
-    throw new Error('Ban can dang nhap')
+    throw new Error('Bạn cần đăng nhập')
   }
 
   const { data: profile } = await supabase
@@ -24,7 +24,7 @@ async function getCurrentUserContext() {
 }
 
 function getErrorText(error: unknown) {
-  return error instanceof Error ? error.message : 'Thao tac that bai'
+  return error instanceof Error ? error.message : 'Thao tác thất bại'
 }
 
 export async function createReview(
@@ -50,15 +50,15 @@ export async function createReview(
       .single()
 
     if (bookingError || !booking) {
-      throw new Error('Khong tim thay booking')
+      throw new Error('Không tìm thấy booking')
     }
 
     if (booking.customer_id !== user.id) {
-      throw new Error('Khong co quyen danh gia booking nay')
+      throw new Error('Không có quyền đánh giá booking này')
     }
 
     if (booking.status !== 'checked_out') {
-      throw new Error('Chi co the danh gia sau khi check-out')
+      throw new Error('Chỉ có thể đánh giá sau khi check-out')
     }
 
     const { data: existingReview } = await supabase
@@ -69,7 +69,7 @@ export async function createReview(
       .maybeSingle()
 
     if (existingReview) {
-      throw new Error('Booking nay da duoc danh gia')
+      throw new Error('Booking này đã được đánh giá')
     }
 
     const { error } = await supabase.from('reviews').insert({
@@ -88,7 +88,7 @@ export async function createReview(
     revalidatePath('/rooms')
     revalidatePath('/admin/reviews')
 
-    return { success: true, message: 'Cam on ban da danh gia' }
+    return { success: true, message: 'Cảm ơn bạn đã đánh giá' }
   } catch (error) {
     return { errors: { _form: [getErrorText(error)] } }
   }
@@ -98,7 +98,7 @@ export async function deleteReview(reviewId: string) {
   const { supabase, isAdmin } = await getCurrentUserContext()
 
   if (!isAdmin) {
-    throw new Error('Khong co quyen')
+    throw new Error('Không có quyền')
   }
 
   const { data: review, error: fetchError } = await supabase
@@ -108,7 +108,7 @@ export async function deleteReview(reviewId: string) {
     .single()
 
   if (fetchError || !review) {
-    throw new Error('Khong tim thay danh gia')
+    throw new Error('Không tìm thấy đánh giá')
   }
 
   const { error } = await supabase.from('reviews').delete().eq('id', reviewId)

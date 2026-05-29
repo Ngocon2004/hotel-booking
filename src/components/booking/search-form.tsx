@@ -13,6 +13,7 @@ type Props = {
   initialCheckOut?: string
   initialGuests?: number
   compact?: boolean
+  lang?: 'vi' | 'en'
 }
 
 export default function SearchForm({
@@ -20,6 +21,7 @@ export default function SearchForm({
   initialCheckOut,
   initialGuests = 2,
   compact = false,
+  lang = 'vi',
 }: Props) {
   const router = useRouter()
   const today = dayjs().format('YYYY-MM-DD')
@@ -27,6 +29,16 @@ export default function SearchForm({
   const [checkIn, setCheckIn] = useState(initialCheckIn || today)
   const [checkOut, setCheckOut] = useState(initialCheckOut || tomorrow)
   const [guests, setGuests] = useState(initialGuests)
+  const labels =
+    lang === 'en'
+      ? {
+          guests: 'Guests',
+          submit: 'Search rooms',
+        }
+      : {
+          guests: 'Khách',
+          submit: 'Tìm phòng',
+        }
 
   const minCheckOut = useMemo(
     () => dayjs(checkIn || today).add(1, 'day').format('YYYY-MM-DD'),
@@ -106,7 +118,7 @@ export default function SearchForm({
         {!compact && (
           <Label htmlFor="search_guests" className="flex items-center gap-1">
             <Users className="h-4 w-4" />
-            Khách
+            {labels.guests}
           </Label>
         )}
         <Input
@@ -133,7 +145,7 @@ export default function SearchForm({
         }
       >
         <Search className="h-4 w-4" />
-        {!compact && <span className="ml-2">Tìm phòng</span>}
+        {!compact && <span className="ml-2">{labels.submit}</span>}
       </Button>
     </form>
   )

@@ -1,4 +1,4 @@
-import Link from 'next/link'
+﻿import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { CalendarCheck, Copy, Home } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'

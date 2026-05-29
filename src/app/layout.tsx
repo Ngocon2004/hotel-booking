@@ -12,16 +12,16 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
   title: {
-    default: 'HBMS Hotel - Dat phong khach san de dang',
+    default: 'HBMS Hotel - Đặt phòng khách sạn dễ dàng',
     template: '%s | HBMS Hotel',
   },
   description:
-    'He thong quan ly dat phong khach san HBMS. Dat phong nhanh chong, an toan voi nhieu tien ich cao cap.',
-  keywords: ['hotel booking', 'HBMS Hotel', 'dat phong khach san', 'Next.js', 'Supabase'],
+    'Hệ thống quản lý đặt phòng khách sạn HBMS. Đặt phòng nhanh chóng, an toàn với nhiều tiện ích cao cấp.',
+  keywords: ['hotel booking', 'HBMS Hotel', 'đặt phòng khách sạn', 'Next.js', 'Supabase'],
   authors: [{ name: 'HBMS Hotel' }],
   openGraph: {
-    title: 'HBMS Hotel - Dat phong khach san de dang',
-    description: 'Tim phong, dat phong va quan ly luu tru tren he thong HBMS Hotel.',
+    title: 'HBMS Hotel - Đặt phòng khách sạn dễ dàng',
+    description: 'Tìm phòng, đặt phòng và quản lý lưu trú trên hệ thống HBMS Hotel.',
     type: 'website',
     locale: 'vi_VN',
     siteName: 'HBMS Hotel',
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'HBMS Hotel',
-    description: 'Dat phong khach san nhanh chong va an toan.',
+    description: 'Đặt phòng khách sạn nhanh chóng và an toàn.',
   },
   robots: {
     index: true,

@@ -4,9 +4,9 @@ export const reviewSchema = z.object({
   booking_id: z.string().uuid('Booking khong hop le'),
   rating: z.coerce
     .number()
-    .int('Diem danh gia phai la so nguyen')
-    .min(1, 'Vui long chon toi thieu 1 sao')
-    .max(5, 'Diem danh gia toi da la 5 sao'),
+    .int('Điểm đánh giá phải là số nguyên')
+    .min(1, 'Vui lòng chọn tối thiểu 1 sao')
+    .max(5, 'Điểm đánh giá tối đa là 5 sao'),
   comment: z
     .string()
     .trim()

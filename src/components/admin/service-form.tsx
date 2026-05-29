@@ -26,7 +26,7 @@ export default function ServiceForm({ action, initial, title }: Props) {
         <Link href="/admin/services">
           <Button variant="ghost" size="sm">
             <ArrowLeft className="mr-1 h-4 w-4" />
-            Quay lai
+            Quay lại
           </Button>
         </Link>
         <h1 className="text-3xl font-black tracking-tight">{title}</h1>
@@ -34,20 +34,20 @@ export default function ServiceForm({ action, initial, title }: Props) {
 
       <Card className="border-amber-100">
         <CardHeader>
-          <CardTitle>Thong tin dich vu</CardTitle>
+          <CardTitle>Thông tin dịch vụ</CardTitle>
         </CardHeader>
         <CardContent>
           <form action={formAction} className="space-y-5">
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="name">Ten dich vu *</Label>
+                <Label htmlFor="name">Tên dịch vụ *</Label>
                 <Input id="name" name="name" defaultValue={initial?.name} required />
                 {state?.errors?.name && (
                   <p className="text-sm text-red-600">{state.errors.name[0]}</p>
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="price">Gia (VND) *</Label>
+                <Label htmlFor="price">Giá (VND) *</Label>
                 <Input
                   id="price"
                   name="price"
@@ -69,7 +69,7 @@ export default function ServiceForm({ action, initial, title }: Props) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="description">Mo ta</Label>
+              <Label htmlFor="description">Mô tả</Label>
               <Textarea
                 id="description"
                 name="description"
@@ -85,7 +85,7 @@ export default function ServiceForm({ action, initial, title }: Props) {
                 defaultChecked={initial?.is_active ?? true}
                 className="h-4 w-4 rounded border-gray-300"
               />
-              Dang hoat dong
+              Đang hoạt động
             </label>
 
             {state?.errors?._form && (
@@ -100,11 +100,11 @@ export default function ServiceForm({ action, initial, title }: Props) {
                 disabled={pending}
                 className="bg-gradient-to-r from-amber-500 to-amber-700 font-semibold hover:from-amber-600 hover:to-amber-800"
               >
-                {pending ? 'Dang luu...' : initial ? 'Cap nhat' : 'Tao moi'}
+                {pending ? 'Đang lưu...' : initial ? 'Cập nhật' : 'Tạo mới'}
               </Button>
               <Link href="/admin/services">
                 <Button type="button" variant="outline">
-                  Huy
+                  Hủy
                 </Button>
               </Link>
             </div>

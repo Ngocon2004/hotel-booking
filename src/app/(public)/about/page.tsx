@@ -20,51 +20,51 @@ import {
 import GsapReveal from '@/components/animations/gsap-reveal'
 
 export const metadata: Metadata = {
-  title: 'Gioi thieu',
+  title: 'Giới thiệu',
   description:
-    'Kham pha HBMS Hotel - trai nghiem dat phong khach san hien dai, dich vu tan tam va khong gian luu tru cao cap.',
+    'Khám phá HBMS Hotel - trải nghiệm đặt phòng khách sạn hiện đại, dịch vụ tận tâm và không gian lưu trú cao cấp.',
 }
 
 const stats = [
-  { value: '24/7', label: 'Ho tro khach luu tru' },
-  { value: '4.9/5', label: 'Diem hai long trung binh' },
-  { value: '120+', label: 'Phong va suite san sang' },
-  { value: '8', label: 'Tieu chuan van hanh cot loi' },
+  { value: '24/7', label: 'Hỗ trợ khách lưu trú' },
+  { value: '4.9/5', label: 'Điểm hài lòng trung bình' },
+  { value: '120+', label: 'Phòng và suite sẵn sàng' },
+  { value: '8', label: 'Tiêu chuẩn vận hành cốt lõi' },
 ]
 
 const values = [
   {
     icon: HeartHandshake,
-    title: 'Tan tam trong tung cham',
+    title: 'Tận tâm trong từng chạm',
     description:
-      'Moi tuong tac duoc thiet ke de khach hang cam thay duoc lang nghe, duoc ho tro va duoc chao don dung muc.',
+      'Mỗi tương tác được thiết kế để khách hàng cảm thấy được lắng nghe, được hỗ trợ và được chào đón đúng mực.',
   },
   {
     icon: ShieldCheck,
-    title: 'Minh bach va an tam',
+    title: 'Minh bạch và an tâm',
     description:
-      'Thong tin phong, gia, dich vu va trang thai booking duoc cap nhat ro rang, giup quyet dinh nhanh va chinh xac.',
+      'Thông tin phòng, giá, dịch vụ và trạng thái booking được cập nhật rõ ràng, giúp quyết định nhanh và chính xác.',
   },
   {
     icon: Sparkles,
-    title: 'Trai nghiem co gu',
+    title: 'Trải nghiệm có gu',
     description:
-      'HBMS ket hop phong cach hien dai, quy trinh gon gang va dich vu tinh te de moi ky nghi tro nen dang nho.',
+      'HBMS kết hợp phong cách hiện đại, quy trình gọn gàng và dịch vụ tinh tế để mỗi kỳ nghỉ trở nên đáng nhớ.',
   },
 ]
 
 const serviceHighlights = [
-  { icon: ConciergeBell, label: 'Le tan va ho tro nhanh' },
-  { icon: BedDouble, label: 'Phong nghi tien nghi' },
-  { icon: Wifi, label: 'Ket noi va tien ich day du' },
-  { icon: Clock3, label: 'Dat phong theo thoi gian thuc' },
+  { icon: ConciergeBell, label: 'Lễ tân và hỗ trợ nhanh' },
+  { icon: BedDouble, label: 'Phòng nghỉ tiện nghi' },
+  { icon: Wifi, label: 'Kết nối và tiện ích đầy đủ' },
+  { icon: Clock3, label: 'Đặt phòng theo thời gian thực' },
 ]
 
 const standards = [
-  'Quy trinh booking ro rang tu tim phong den xac nhan.',
-  'Trang thai phong va lich su dat cho duoc dong bo realtime.',
-  'Khu quan tri giup nhan vien xu ly booking, khach hang va dich vu tap trung.',
-  'Du lieu duoc bao ve bang Supabase Auth, RLS va phan quyen admin/customer.',
+  'Quy trình booking rõ ràng từ tìm phòng đến xác nhận.',
+  'Trạng thái phòng và lịch sử đặt chỗ được đồng bộ realtime.',
+  'Khu quản trị giúp nhân viên xử lý booking, khách hàng và dịch vụ tập trung.',
+  'Dữ liệu được bảo vệ bằng Supabase Auth, RLS và phân quyền admin/customer.',
 ]
 
 export default function AboutPage() {
@@ -73,7 +73,7 @@ export default function AboutPage() {
       <section className="relative isolate min-h-[calc(100vh-4rem)] overflow-hidden">
         <Image
           src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=2400&q=85"
-          alt="Khong gian sanh khach san cao cap"
+          alt="Không gian sảnh khách sạn cao cấp"
           fill
           priority
           sizes="100vw"
@@ -89,25 +89,25 @@ export default function AboutPage() {
               HBMS Hotel Experience
             </div>
             <h1 className="max-w-4xl text-5xl font-black leading-[0.95] tracking-normal text-white sm:text-6xl lg:text-7xl">
-              Khach san hien dai cho nhung ky nghi co gu.
+              Khách sạn hiện đại cho những kỳ nghỉ có gu.
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-8 text-white/86 sm:text-lg">
-              HBMS Hotel la he thong dat phong va quan ly luu tru duoc xay dung de mang lai
-              trai nghiem nhanh, ro rang va dang tin cay tu luc tim phong den khi hoan tat ky nghi.
+              HBMS Hotel là hệ thống đặt phòng và quản lý lưu trú được xây dựng để mang lại
+              trải nghiệm nhanh, rõ ràng và đáng tin cậy từ lúc tìm phòng đến khi hoàn tất kỳ nghỉ.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href="/rooms"
                 className="inline-flex h-11 items-center justify-center rounded-md bg-white px-8 text-sm font-semibold text-slate-950 transition-colors hover:bg-blue-50"
               >
-                Kham pha phong
+                Khám phá phòng
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
               <Link
                 href="/search"
                 className="inline-flex h-11 items-center justify-center rounded-md border border-white/50 bg-white/10 px-8 text-sm font-semibold text-white transition-colors hover:bg-white/20"
               >
-                Tim phong phu hop
+                Tìm phòng phù hợp
               </Link>
             </div>
           </div>
@@ -131,15 +131,15 @@ export default function AboutPage() {
           <div data-gsap-reveal>
             <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-blue-700 dark:bg-blue-500/12 dark:text-blue-200">
               <Building2 className="h-4 w-4" />
-              Ve chung toi
+              Về chúng tôi
             </div>
             <h2 className="mt-5 text-4xl font-black tracking-normal sm:text-5xl">
-              Noi cong nghe lam cho dich vu tro nen mem mai hon.
+              Nơi công nghệ làm cho dịch vụ trở nên mềm mại hơn.
             </h2>
             <p className="mt-5 text-base leading-8 text-slate-600 dark:text-slate-300">
-              HBMS khong chi la mot website dat phong. Day la mot trai nghiem van hanh khach
-              san tron ven: khach hang tim phong nhanh, nhan thong tin minh bach; nhan vien quan
-              tri booking, phong, dich vu va danh gia trong mot he thong thong nhat.
+              HBMS không chỉ là một website đặt phòng. Đây là một trải nghiệm vận hành khách
+              sạn trọn vẹn: khách hàng tìm phòng nhanh, nhận thông tin minh bạch; nhân viên quản
+              trị booking, phòng, dịch vụ và đánh giá trong một hệ thống thống nhất.
             </p>
             <div className="mt-7 grid gap-3">
               {standards.map((item) => (
@@ -154,7 +154,7 @@ export default function AboutPage() {
           <div data-gsap-reveal data-gsap-delay="0.08" className="relative aspect-[4/3] overflow-hidden rounded-lg">
             <Image
               src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1800&q=85"
-              alt="Khu nghi duong voi ho boi va khach san hien dai"
+              alt="Khu nghỉ dưỡng với hồ bơi và khách sạn hiện đại"
               fill
               sizes="(min-width: 1024px) 50vw, 100vw"
               className="object-cover"
@@ -162,7 +162,7 @@ export default function AboutPage() {
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/86 to-transparent p-6 text-white">
               <div className="flex items-center gap-2 text-sm font-semibold">
                 <MapPin className="h-4 w-4 text-amber-300" />
-                Khong gian luu tru hien dai, van hanh bang du lieu thoi gian thuc
+                Không gian lưu trú hiện đại, vận hành bằng dữ liệu thời gian thực
               </div>
             </div>
           </div>
@@ -174,10 +174,10 @@ export default function AboutPage() {
           <div data-gsap-reveal className="max-w-3xl">
             <div className="inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-amber-700 dark:bg-amber-400/12 dark:text-amber-200">
               <Star className="h-4 w-4" />
-              Gia tri khac biet
+              Giá trị khác biệt
             </div>
             <h2 className="mt-5 text-4xl font-black tracking-normal sm:text-5xl">
-              Dang cap nam o cach moi chi tiet duoc cham chut.
+              Đẳng cấp nằm ở cách mỗi chi tiết được chăm chút.
             </h2>
           </div>
 
@@ -221,21 +221,21 @@ export default function AboutPage() {
           <div data-gsap-reveal data-gsap-delay="0.08">
             <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-emerald-700 dark:bg-emerald-400/12 dark:text-emerald-200">
               <Users className="h-4 w-4" />
-              Danh cho khach hang va doi ngu van hanh
+              Dành cho khách hàng và đội ngũ vận hành
             </div>
             <h2 className="mt-5 text-4xl font-black tracking-normal sm:text-5xl">
-              Mot he sinh thai gon gang cho hanh trinh luu tru tron ven.
+              Một hệ sinh thái gọn gàng cho hành trình lưu trú trọn vẹn.
             </h2>
             <p className="mt-5 text-base leading-8 text-slate-600 dark:text-slate-300">
-              Tu giao dien tim phong cho khach den dashboard quan tri, HBMS dat muc tieu giam
-              thao tac thua, tang toc do phuc vu va giu moi thong tin quan trong trong tam kiem soat.
+              Từ giao diện tìm phòng cho khách đến dashboard quản trị, HBMS đặt mục tiêu giảm
+              thao tác thừa, tăng tốc độ phục vụ và giữ mọi thông tin quan trọng trong tầm kiểm soát.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href="/rooms"
                 className="inline-flex h-11 items-center justify-center rounded-md bg-primary px-8 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
               >
-                Xem phong dang co
+                Xem phòng đang có
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
               <Link

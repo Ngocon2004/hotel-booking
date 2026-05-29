@@ -130,7 +130,7 @@ export default async function MyBookingDetailPage({ params }: { params: Params }
           {booking.status === 'checked_out' && (
             <Card className="border-amber-100">
               <CardHeader>
-                <CardTitle>Danh gia luu tru</CardTitle>
+                <CardTitle>Đánh giá lưu trú</CardTitle>
               </CardHeader>
               <CardContent>
                 {review ? (
@@ -151,7 +151,7 @@ export default async function MyBookingDetailPage({ params }: { params: Params }
                       <p className="text-sm leading-relaxed text-gray-600">{review.comment}</p>
                     )}
                     <p className="text-xs text-gray-400">
-                      Da danh gia ngay {formatDate(review.created_at)}
+                      Đã đánh giá ngày {formatDate(review.created_at)}
                     </p>
                   </div>
                 ) : (

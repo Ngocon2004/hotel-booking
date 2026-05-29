@@ -17,9 +17,9 @@ export default async function ProfilePage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
       <div className="mb-6">
-        <h1 className="text-3xl font-black tracking-tight">Ho so ca nhan</h1>
+        <h1 className="text-3xl font-black tracking-tight">Hồ sơ cá nhân</h1>
         <p className="mt-1 text-sm text-gray-500">
-          Cap nhat thong tin lien he va anh dai dien cua ban.
+          Cập nhật thông tin liên hệ và ảnh đại diện của bạn.
         </p>
       </div>
       <ProfileForm profile={data as Profile} email={user.email || ''} />

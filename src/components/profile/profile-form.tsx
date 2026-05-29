@@ -48,14 +48,14 @@ export default function ProfileForm({ profile, email }: Props) {
     }
     if (result.url) {
       setAvatarUrl(result.url)
-      toast.success('Da upload avatar')
+      toast.success('Đã upload avatar')
     }
   }
 
   return (
     <Card className="border-amber-100">
       <CardHeader>
-        <CardTitle>Ho so ca nhan</CardTitle>
+        <CardTitle>Hồ sơ cá nhân</CardTitle>
       </CardHeader>
       <CardContent>
         <form action={formAction} className="space-y-6">
@@ -85,7 +85,7 @@ export default function ProfileForm({ profile, email }: Props) {
                 onChange={handleAvatarChange}
                 disabled={uploading}
               />
-              <p className="mt-1 text-xs text-gray-500">JPG, PNG, WEBP toi da 3MB.</p>
+              <p className="mt-1 text-xs text-gray-500">JPG, PNG, WEBP tối đa 3MB.</p>
             </div>
           </div>
 
@@ -95,7 +95,7 @@ export default function ProfileForm({ profile, email }: Props) {
               <Input value={email} disabled />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="full_name">Ho ten *</Label>
+              <Label htmlFor="full_name">Họ tên *</Label>
               <Input id="full_name" name="full_name" defaultValue={profile.full_name || ''} required />
               {state?.errors?.full_name && (
                 <p className="text-sm text-red-600">{state.errors.full_name[0]}</p>
@@ -104,12 +104,12 @@ export default function ProfileForm({ profile, email }: Props) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="phone">So dien thoai</Label>
+            <Label htmlFor="phone">Số điện thoại</Label>
             <Input id="phone" name="phone" defaultValue={profile.phone || ''} />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="address">Dia chi</Label>
+            <Label htmlFor="address">Địa chỉ</Label>
             <Textarea id="address" name="address" rows={4} defaultValue={profile.address || ''} />
           </div>
 
@@ -129,7 +129,7 @@ export default function ProfileForm({ profile, email }: Props) {
             disabled={pending || uploading}
             className="bg-gradient-to-r from-amber-500 to-amber-700 font-semibold hover:from-amber-600 hover:to-amber-800"
           >
-            {pending ? 'Dang luu...' : 'Luu ho so'}
+            {pending ? 'Đang lưu...' : 'Lưu hồ sơ'}
           </Button>
         </form>
       </CardContent>

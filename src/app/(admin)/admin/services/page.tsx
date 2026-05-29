@@ -28,15 +28,15 @@ export default async function AdminServicesPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-black tracking-tight">Dich vu</h1>
+          <h1 className="text-3xl font-black tracking-tight">Dịch vụ</h1>
           <p className="mt-1 text-sm text-gray-500">
-            Quan ly dich vu di kem khi khach dat phong.
+            Quản lý dịch vụ đi kèm khi khách đặt phòng.
           </p>
         </div>
         <Link href="/admin/services/new">
           <Button className="bg-gradient-to-r from-amber-500 to-amber-700 font-semibold hover:from-amber-600 hover:to-amber-800">
             <Plus className="mr-1 h-4 w-4" />
-            Them dich vu
+            Thêm dịch vụ
           </Button>
         </Link>
       </div>
@@ -46,12 +46,12 @@ export default async function AdminServicesPage() {
           <Table>
             <TableHeader>
               <TableRow className="bg-amber-50/50 hover:bg-amber-50/50">
-                <TableHead>Ten dich vu</TableHead>
-                <TableHead>Gia</TableHead>
+                <TableHead>Tên dịch vụ</TableHead>
+                <TableHead>Giá</TableHead>
                 <TableHead>Icon</TableHead>
-                <TableHead>Trang thai</TableHead>
-                <TableHead>Mo ta</TableHead>
-                <TableHead className="text-right">Thao tac</TableHead>
+                <TableHead>Trạng thái</TableHead>
+                <TableHead>Mô tả</TableHead>
+                <TableHead className="text-right">Thao tác</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -71,7 +71,7 @@ export default async function AdminServicesPage() {
                             : 'bg-gray-100 text-gray-600'
                         }
                       >
-                        {service.is_active ? 'Dang bat' : 'Da tat'}
+                        {service.is_active ? 'Đang bật' : 'Đã tắt'}
                       </Badge>
                     </TableCell>
                     <TableCell className="max-w-sm whitespace-normal">
@@ -91,7 +91,7 @@ export default async function AdminServicesPage() {
                             type="submit"
                             size="sm"
                             variant="destructive"
-                            aria-label="Xoa dich vu"
+                            aria-label="Xóa dịch vụ"
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>
@@ -103,7 +103,7 @@ export default async function AdminServicesPage() {
               ) : (
                 <TableRow>
                   <TableCell colSpan={6} className="py-10 text-center text-gray-500">
-                    Chua co dich vu nao
+                    Chưa có dịch vụ nào
                   </TableCell>
                 </TableRow>
               )}
