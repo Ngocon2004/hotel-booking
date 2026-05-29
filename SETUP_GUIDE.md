@@ -1,38 +1,38 @@
-# HBMS Hotel - Huong Dan Cai Dat
+# HBMS Hotel - Hướng Dẫn Cài Đặt
 
-Tai lieu nay phan anh trang thai hien tai cua project sau khi da co booking flow, admin, Docker, Swagger UI va cac tinh nang nang cao.
+Tài liệu này phản ánh trạng thái hiện tại của project sau khi đã có booking flow, admin, Docker, Swagger UI admin-only, About page, realtime và các tính năng nâng cao.
 
-## 1. Yeu Cau
+## 1. Yêu Cầu
 
-- Node.js 20.9+ khuyen nghi cho Next.js 16.
+- Node.js 20.9+ khuyến nghị cho Next.js 16.
 - npm.
 - Git.
-- Tai khoan Supabase.
-- Docker Desktop neu can chay container.
+- Tài khoản Supabase.
+- Docker Desktop nếu cần chạy container.
 
-## 2. Cai Dependencies
+## 2. Cài Dependencies
 
 ```bash
 npm install
 ```
 
-## 3. Cau Hinh Supabase
+## 3. Cấu Hình Supabase
 
-Tao project Supabase, sau do chay:
+Tạo project Supabase, sau đó chạy:
 
 ```text
 supabase/schema.sql
 ```
 
-File schema tao:
+File schema tạo:
 
-- 8 bang chinh.
+- 8 bảng chính.
 - RLS policies.
 - Functions/RPC.
 - Triggers.
 - Storage buckets `rooms`, `avatars`.
 
-Tao `.env.local`:
+Tạo `.env.local`:
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
@@ -47,26 +47,28 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 npm run seed
 ```
 
-Tai khoan mau:
+Tài khoản mẫu:
 
 | Role | Email | Password |
 | --- | --- | --- |
 | Admin | `admin@hbms.vn` | `Admin123!` |
 | Customer | `customer1@hbms.vn` | `Customer123!` |
 
-Seed tao room types, rooms, services, customers, bookings va reviews mau.
+Seed tạo room types, rooms, services, customers, bookings và reviews mẫu.
 
-## 5. Chay Development
+## 5. Chạy Development
 
 ```bash
 npm run dev
 ```
 
-Mo:
+Mở:
 
 - App: `http://localhost:3000`
-- Swagger UI: `http://localhost:3000/api-docs`
-- OpenAPI JSON: `http://localhost:3000/api/openapi`
+- Swagger UI admin-only: `http://localhost:3000/api-docs`
+- OpenAPI JSON admin-only: `http://localhost:3000/api/openapi`
+
+Muốn xem API docs phải đăng nhập bằng tài khoản admin `admin@hbms.vn`.
 
 ## 6. Build Production
 
@@ -76,46 +78,47 @@ npm run build
 npm start
 ```
 
-Trang thai gan nhat:
+Trạng thái gần nhất:
 
 - `npm.cmd run lint`: pass.
 - `npm.cmd run build`: pass.
 
 ## 7. Docker
 
-Tao `.env.production`:
+Tạo `.env`:
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
-NEXT_PUBLIC_SITE_URL=http://localhost
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
-Chay:
+Chạy:
 
 ```bash
 docker compose up -d --build
 ```
 
-Mo:
+Mở:
 
 ```text
-http://localhost
+http://localhost:3000
 ```
 
-Docker local da pass truoc do, image app khoang `197MB`.
+Docker local đã pass trước đó, image app khoảng `197MB`.
 
-Luu y: voi Next.js, cac bien `NEXT_PUBLIC_*` phai co o thoi diem build Docker vi se duoc inline vao client bundle.
+Lưu ý: với Next.js, các biến `NEXT_PUBLIC_*` phải có ở thời điểm build Docker vì sẽ được inline vào client bundle.
 
-## 8. Cac Route Chinh De Test
+## 8. Các Route Chính Để Test
 
 ### Public
 
 - `/`
+- `/about`
 - `/rooms`
 - `/rooms/[id]`
 - `/search`
-- `/api-docs`
 
 ### Auth / Customer
 
@@ -134,38 +137,40 @@ Luu y: voi Next.js, cac bien `NEXT_PUBLIC_*` phai co o thoi diem build Docker vi
 - `/admin/customers`
 - `/admin/services`
 - `/admin/reviews`
+- `/api-docs`
+- `/api/openapi`
 
-## 9. Viec Can Lam Truoc Khi Nop
+## 9. Việc Cần Làm Trước Khi Nộp
 
-1. Test bang trinh duyet theo `docs/manual-testing.md`.
-2. Deploy VPS/domain/HTTPS.
-3. Cap nhat `README.md` bang production URL.
-4. Viet bao cao PDF >=20 trang.
-5. Quay demo video 3-5 phut.
+1. Deploy VPS/domain/HTTPS cho `dghahai.io.vn`.
+2. Cập nhật `README.md` bằng production URL sau khi chạy ổn định.
+3. Viết báo cáo PDF >=20 trang.
+4. Quay demo video 3-5 phút.
 
 ## 10. Troubleshooting
 
-### Supabase env bi loi tren browser
+### Supabase env bị lỗi trên browser
 
-- Kiem tra `.env.local`.
+- Kiểm tra `.env.local`.
 - Restart dev server.
-- Hard reload trinh duyet vi client bundle cu co the dang bi cache.
+- Hard reload trình duyệt vì client bundle cũ có thể đang bị cache.
 
 ### RLS permission denied
 
-- Kiem tra user da login.
-- Kiem tra role trong bang `profiles`.
-- Kiem tra da chay dung `supabase/schema.sql`.
+- Kiểm tra user đã login.
+- Kiểm tra role trong bảng `profiles`.
+- Kiểm tra đã chạy đúng `supabase/schema.sql`.
 
-### Docker da sua env nhung van loi
+### Docker đã sửa env nhưng vẫn lỗi
 
-- Build lai container, khong chi restart:
+- Build lại container, không chỉ restart:
 
 ```bash
 docker compose up -d --build
 ```
 
-### Swagger UI khong hien
+### Swagger UI không hiện
 
-- Kiem tra `/api/openapi` co tra JSON khong.
-- Kiem tra internet neu browser can tai asset tu `unpkg.com`.
+- Đăng nhập bằng tài khoản admin.
+- Kiểm tra `/api/openapi` bằng tài khoản admin.
+- Nếu đang dùng VPS, kiểm tra `NEXT_PUBLIC_SITE_URL` và Supabase redirect URL.

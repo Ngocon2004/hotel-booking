@@ -1,165 +1,168 @@
-# DAC TA DU AN - HBMS HOTEL BOOKING MANAGEMENT SYSTEM
+# ĐẶC TẢ DỰ ÁN - HBMS HOTEL BOOKING MANAGEMENT SYSTEM
 
-## 1. Thong Tin Chung
+## 1. Thông Tin Chung
 
-- Ten du an: **HBMS Hotel Booking Management System**.
-- De tai: Website quan ly dat phong khach san.
-- Hinh thuc: do an ca nhan.
-- Stack hien tai:
+- Tên dự án: **HBMS Hotel Booking Management System**.
+- Đề tài: Website quản lý đặt phòng khách sạn.
+- Hình thức: đồ án cá nhân.
+- Stack hiện tại:
   - Frontend: Next.js 16.2.6 App Router, React 19.2.4, TypeScript.
   - UI: Tailwind CSS v4, shadcn/ui, Base UI, lucide-react.
   - Animation: GSAP.
   - Backend: Supabase Auth, PostgreSQL, Storage, Realtime.
   - Validation: Zod.
   - Chart: Recharts.
-  - API docs: OpenAPI 3.0.3 + Swagger UI.
-  - Deploy: Docker multi-stage + Docker Compose + Nginx, VPS/HTTPS con lai.
+  - API docs: OpenAPI 3.0.3 + Swagger UI admin-only.
+  - Deploy: Docker multi-stage + Docker Compose; VPS/HTTPS còn lại.
 
-## 2. Muc Tieu
+## 2. Mục Tiêu
 
-Xay dung he thong dat phong khach san co day du flow cho khach hang va admin:
+Xây dựng hệ thống đặt phòng khách sạn có đầy đủ flow cho khách hàng và admin:
 
-- Khach xem phong, tim phong theo ngay, dat phong, huy booking, danh gia.
-- Admin quan ly phong, loai phong, dich vu, booking, customer, review.
-- He thong co RLS, upload file, realtime, dashboard, Docker va tai lieu API.
+- Khách xem phòng, tìm phòng theo ngày, đặt phòng, hủy booking, đánh giá.
+- Admin quản lý phòng, loại phòng, dịch vụ, booking, customer, review.
+- Hệ thống có RLS, upload file, realtime, dashboard, Docker và tài liệu API nội bộ cho admin.
 
-## 3. Role Va Quyen
+## 3. Role Và Quyền
 
-| Role | Quyen |
+| Role | Quyền |
 | --- | --- |
-| Guest | Xem phong, tim kiem, loc, xem review |
-| Customer | Dat phong, xem/huy booking cua minh, review sau check-out, cap nhat profile/avatar |
-| Admin | CRUD du lieu, quan ly lifecycle booking, dashboard, customer, review |
+| Guest | Xem phòng, tìm kiếm, lọc, xem review |
+| Customer | Đặt phòng, xem/hủy booking của mình, review sau check-out, cập nhật profile/avatar |
+| Admin | CRUD dữ liệu, quản lý lifecycle booking, dashboard, customer, review, xem API docs |
 
 ## 4. Database Schema
 
-He thong dung 8 bang chinh:
+Hệ thống dùng 8 bảng chính:
 
-| Bang | Muc dich |
+| Bảng | Mục đích |
 | --- | --- |
-| `profiles` | Mo rong `auth.users`, luu role va thong tin ca nhan |
-| `room_types` | Loai phong, gia co ban, suc chua, tien nghi |
-| `rooms` | Phong vat ly, trang thai, anh |
-| `bookings` | Dat phong, trang thai, payment status |
-| `payments` | Du lieu thanh toan |
-| `reviews` | Danh gia sau check-out |
-| `services` | Dich vu kem theo |
-| `booking_services` | Quan he booking - services |
+| `profiles` | Mở rộng `auth.users`, lưu role và thông tin cá nhân |
+| `room_types` | Loại phòng, giá cơ bản, sức chứa, tiện nghi |
+| `rooms` | Phòng vật lý, trạng thái, ảnh |
+| `bookings` | Đặt phòng, trạng thái, payment status |
+| `payments` | Dữ liệu thanh toán |
+| `reviews` | Đánh giá sau check-out |
+| `services` | Dịch vụ kèm theo |
+| `booking_services` | Quan hệ booking - services |
 
-### Function / Trigger Quan Trong
+### Function / Trigger Quan Trọng
 
-- `check_room_availability`: kiem tra trung lich bang PostgreSQL daterange.
-- `create_booking_transaction`: tao booking trong transaction, tranh race condition bang lock.
-- `handle_new_user`: tu dong tao profile khi dang ky.
-- `update_updated_at_column`: cap nhat timestamp.
+- `check_room_availability`: kiểm tra trùng lịch bằng PostgreSQL daterange.
+- `create_booking_transaction`: tạo booking trong transaction, tránh race condition bằng lock.
+- `handle_new_user`: tự động tạo profile khi đăng ký.
+- `update_updated_at_column`: cập nhật timestamp.
 
-## 5. RLS / Bao Mat
+## 5. RLS / Bảo Mật
 
-- Guest chi doc du lieu public can thiet.
-- Customer chi xem va cap nhat du lieu cua minh.
-- Admin co quyen quan ly toan bo bang nghiep vu.
+- Guest chỉ đọc dữ liệu public cần thiết.
+- Customer chỉ xem và cập nhật dữ liệu của mình.
+- Admin có quyền quản lý toàn bộ bảng nghiệp vụ.
 - Storage bucket `rooms` public read, admin write.
-- Storage bucket `avatars` public read, user upload/update avatar cua minh.
-- Protected routes duoc bao ve bang `src/proxy.ts`.
+- Storage bucket `avatars` public read, user upload/update avatar của mình.
+- Protected routes được bảo vệ bằng `src/proxy.ts`.
+- `/api-docs` và `/api/openapi` chỉ admin được quyền xem.
 
-## 6. Chuc Nang Da Cai Dat
+## 6. Chức Năng Đã Cài Đặt
 
 ### Public
 
-- `/`: trang chu co hero, animation, search form.
-- `/rooms`: danh sach phong, filter, sort, pagination.
-- `/rooms/[id]`: chi tiet phong, gallery, reviews, realtime status, quick booking.
-- `/search`: tim phong theo check-in/check-out/guests, filter gia/loai phong.
+- `/`: trang chủ có hero, animation, search form.
+- `/about`: trang giới thiệu cao cấp, tiếng Việt có dấu, không public API docs.
+- `/rooms`: danh sách phòng, filter, sort, pagination.
+- `/rooms/[id]`: chi tiết phòng, gallery, reviews, realtime status, quick booking.
+- `/search`: tìm phòng theo check-in/check-out/guests, filter giá/loại phòng.
 
 ### Auth
 
 - `/auth/login`: email/password, magic link, Google OAuth.
-- `/auth/register`: dang ky user.
+- `/auth/register`: đăng ký user.
 - `/auth/callback`: route handler Supabase OAuth/OTP callback.
-- Logout bang Server Action.
+- Logout bằng Server Action.
 
 ### Customer
 
-- `/booking/[roomId]`: form dat phong, chon services, tinh tong tien.
-- `/booking/success/[code]`: xac nhan booking.
-- `/my-bookings`: lich su booking.
-- `/my-bookings/[id]`: chi tiet, huy booking, review sau check-out.
-- `/booking/[roomId]/print`: trang in phieu booking.
-- `/profile`: cap nhat thong tin, upload avatar.
+- `/booking/[roomId]`: form đặt phòng, chọn services, tính tổng tiền.
+- `/booking/success/[code]`: xác nhận booking.
+- `/my-bookings`: lịch sử booking.
+- `/my-bookings/[id]`: chi tiết, hủy booking, review sau check-out.
+- `/booking/[roomId]/print`: trang in phiếu booking.
+- `/profile`: cập nhật thông tin, upload avatar.
 
 ### Admin
 
 - `/admin`: dashboard KPI/charts.
-- `/admin/room-types`: CRUD loai phong.
-- `/admin/rooms`: CRUD phong, upload anh.
-- `/admin/bookings`: quan ly booking, filter/search/pagination.
+- `/admin/room-types`: CRUD loại phòng.
+- `/admin/rooms`: CRUD phòng, upload ảnh.
+- `/admin/bookings`: quản lý booking, filter/search/pagination.
 - `/admin/bookings/[id]`: confirm, check-in, check-out, cancel.
-- `/admin/customers`: danh sach customer.
-- `/admin/customers/[id]`: chi tiet customer + lich su booking.
+- `/admin/customers`: danh sách customer.
+- `/admin/customers/[id]`: chi tiết customer + lịch sử booking.
 - `/admin/services`: CRUD service.
-- `/admin/reviews`: quan ly review.
+- `/admin/reviews`: quản lý review.
 
 ### API Documentation
 
-- `/api-docs`: Swagger UI.
-- `/api/openapi`: OpenAPI JSON.
-- Swagger mo ta cac operation backend dang cai dat qua Server Actions/Supabase.
+- `/api-docs`: Swagger UI admin-only.
+- `/api/openapi`: OpenAPI JSON admin-only.
+- Swagger mô tả các operation backend đang cài đặt qua Server Actions/Supabase.
+- Route docs không public: guest redirect login, customer redirect về `/`, admin được phép xem.
 
 ## 7. Docker / Deploy
 
-Da co:
+Đã có:
 
 - `Dockerfile` multi-stage.
-- `docker-compose.yml`.
-- `docker/nginx.conf`.
+- `docker-compose.yml` chạy app production trên `127.0.0.1:3000`.
+- Cấu hình reverse proxy tham khảo: `docker/nginx.conf`, `docker/caddy/Caddyfile`.
 - Local smoke test Docker pass.
-- Image app khoang `197MB`.
+- Image app khoảng `197MB`.
 
-Con lai:
+Còn lại:
 
-- VPS.
-- Domain.
+- Deploy VPS.
+- Trỏ domain `dghahai.io.vn`.
 - HTTPS.
-- Cap nhat Supabase Auth redirect URL production.
+- Cập nhật Supabase Auth redirect URL production.
 
-## 8. Kiem Thu Hien Tai
+## 8. Kiểm Thử Hiện Tại
 
-Da pass:
+Đã pass:
 
 - `npm.cmd run lint`.
 - `npm.cmd run build`.
-- Docker local smoke test truoc do.
-- HTTP smoke test dev cho cac route public/protected redirect.
+- Docker local smoke test trước đó.
+- HTTP smoke test dev cho route public/protected redirect.
+- Manual test bằng trình duyệt cho Auth Protection, Customer Flow, Admin Booking Lifecycle, Admin CRUD, Profile/Upload, Print Flow, Realtime và Responsive/UI.
+- Realtime đặt/hủy booking với `customer1@hbms.vn`: admin thấy trạng thái phòng/booking cập nhật đúng.
 
-Can test bang trinh duyet:
+Cần test lại sau deploy:
 
-- Customer booking lifecycle.
-- Admin booking lifecycle.
-- Upload avatar/room image.
-- Realtime toast/status.
-- Print preview.
-- Swagger UI hien thi tren browser.
+- Domain `https://dghahai.io.vn`.
+- Supabase Auth callback production.
+- HTTPS và redirect URL.
+- API docs admin-only trên production.
 
-## 9. Yeu Cau Bat Buoc Va Trang Thai
+## 9. Yêu Cầu Bắt Buộc Và Trạng Thái
 
-| Yeu cau | Trang thai |
+| Yêu cầu | Trạng thái |
 | --- | --- |
 | Auth | Done |
-| CRUD >=3 bang | Done |
-| RLS / phan quyen | Done |
+| CRUD >=3 bảng | Done |
+| RLS / phân quyền | Done |
 | File upload | Done |
 | Responsive UI | Done |
 | Docker Compose | Done local |
 | GitHub + commits | Done |
 | AI prompts >=5 | Done |
-| Swagger UI | Done them theo yeu cau bo sung |
-| Deploy HTTPS | Chua |
-| Bao cao PDF >=20 trang | Chua |
-| Demo video | Chua |
+| Swagger UI | Done, admin-only |
+| Deploy HTTPS | Chưa hoàn tất |
+| Báo cáo PDF >=20 trang | Chưa |
+| Demo video | Chưa |
 
 ## 10. Optional
 
 - Email confirmation.
 - VNPay/MoMo sandbox.
-- PDF hoa don.
-- i18n chuan bang `next-intl`.
+- PDF hóa đơn.
+- i18n chuẩn bằng `next-intl`.

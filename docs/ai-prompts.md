@@ -401,8 +401,8 @@
 **Ly do dung:** Yeu cau lien quan nhieu file va can thong nhat giua implementation, documentation va checklist nop bai. AI duoc dung de doc cau truc project, them route dung Next.js 16, tao OpenAPI spec va chuan hoa tai lieu.
 
 **Ket qua:**
-- Them `/api-docs` hien Swagger UI.
-- Them `/api/openapi` tra OpenAPI JSON.
+- Thêm `/api-docs` hiển thị Swagger UI; hiện đã chuyển sang admin-only.
+- Thêm `/api/openapi` trả OpenAPI JSON; hiện đã chuyển sang admin-only.
 - Xoa file Word backend tao nham.
 - Cap nhat README, ROADMAP, SPEC, SETUP_GUIDE, SUPABASE_SETUP, deployment guide, manual testing checklist va source structure docs.
 - Lint/build pass sau khi them Swagger UI.
@@ -417,3 +417,60 @@
 | Time saved uoc tinh | ~55 gio |
 
 *Cap nhat cuoi: Tuan 6 - sau Swagger UI, Docker smoke test, UI polish va dong bo tai lieu Markdown.*
+
+---
+
+#### Prompt #21: About page cao cấp và chuẩn hóa ngôn ngữ
+**Ngữ cảnh:** Cần bổ sung trang giới thiệu có chất lượng trình bày tốt hơn, đồng thời chuẩn hóa tiếng Việt có dấu toàn trang và kiểm tra khi chuyển sang English không còn lẫn nội dung tiếng Việt ở phần chính.
+
+**Prompt:**
+> "Viết thêm trang about đẳng cấp nhất. Sử dụng tiếng Việt có dấu cho toàn trang, và kiểm tra lại ngôn ngữ khi chuyển qua tiếng Anh."
+
+**Lý do dùng:** Yêu cầu liên quan trải nghiệm frontend, nội dung hiển thị và consistency đa ngôn ngữ. AI được dùng để đọc cấu trúc App Router, thêm trang public đúng convention, chỉnh copy UI và kiểm tra build.
+
+**Kết quả:**
+- Thêm trang `/about` với nội dung giới thiệu thương hiệu/sản phẩm.
+- Chuẩn hóa nhiều đoạn UI copy sang tiếng Việt có dấu.
+- Homepage truyền trạng thái ngôn ngữ xuống search form.
+- Kiểm tra lint/build sau chỉnh sửa.
+
+#### Prompt #22: Không public API docs
+**Ngữ cảnh:** Sau khi có Swagger UI, yêu cầu bảo mật thay đổi: API docs không được public, chỉ admin mới được xem. Đồng thời cần xóa nút xem API docs khỏi trang giới thiệu.
+
+**Prompt:**
+> "Không public api-docs. Có nghĩa là chỉ admin mới có quyền xem thôi. Xóa luôn nút xem api docs trong trang giới thiệu."
+
+**Lý do dùng:** Yêu cầu ảnh hưởng auth/proxy và public UI. AI được dùng để xác định route cần bảo vệ, cập nhật middleware/proxy và loại bỏ entry point public.
+
+**Kết quả:**
+- `/api-docs` chuyển sang admin-only.
+- `/api/openapi` chuyển sang admin-only.
+- Guest bị redirect sang login.
+- Customer đăng nhập bị redirect về trang chủ khi truy cập API docs.
+- Xóa nút xem API docs khỏi trang About.
+
+#### Prompt #23: Đồng bộ lại toàn bộ Markdown theo trạng thái dự án
+**Ngữ cảnh:** Sau khi hoàn tất test realtime, bảo vệ API docs và chỉnh About/language, các file Markdown cần phản ánh đúng tiến độ thật của dự án.
+
+**Prompt:**
+> "Cập nhật lại toàn bộ file .md theo trạng thái của dự án."
+
+**Lý do dùng:** Tài liệu phân tán ở README, roadmap, spec, setup, deployment, Supabase, manual testing và source structure; nếu không đồng bộ sẽ gây sai lệch khi nộp bài/deploy.
+
+**Kết quả:**
+- Cập nhật trạng thái manual test đã pass.
+- Ghi rõ API docs admin-only.
+- Ghi rõ domain đã chuẩn bị là `dghahai.io.vn`.
+- Cập nhật deployment theo `docker-compose.yml` hiện tại.
+- Cập nhật phần việc còn lại: deploy HTTPS, báo cáo PDF, demo video.
+
+## Cập Nhật Thống Kê Sau Prompt #23
+
+| Metric | Số lượng hiện tại |
+| --- | --- |
+| Tổng prompts | 23+ |
+| Files được sinh/chỉnh sửa | ~85 files |
+| Lines of code/docs ước tính | ~7800+ |
+| Time saved ước tính | ~60 giờ |
+
+*Cập nhật cuối: Tuần 6 - sau About page, API docs admin-only, manual test realtime và đồng bộ Markdown.*

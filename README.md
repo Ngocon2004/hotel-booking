@@ -1,71 +1,75 @@
 # HBMS Hotel - Hotel Booking Management System
 
-Do an thi cuoi ky mon **Cac cong nghe moi trong phat trien phan mem**.
-De tai: **Website quan ly dat phong khach san**.
+Đồ án thi cuối kỳ môn **Các công nghệ mới trong phát triển phần mềm**.  
+Đề tài: **Website quản lý đặt phòng khách sạn**.
 
-## Trang Thai Hien Tai
+## Trạng Thái Hiện Tại
 
-- Source code: da dong bo tren GitHub `origin/main`.
+- Source code: đã đồng bộ trên GitHub `origin/main`.
 - Lint: `npm.cmd run lint` pass.
-- Build: `npm.cmd run build` pass voi Next.js 16.2.6.
-- Docker local: da build/run thanh cong bang `docker compose up -d --build`, image khoang `197MB`.
-- Swagger UI: da co tai `/api-docs`.
-- OpenAPI JSON: da co tai `/api/openapi`.
-- Manual testing: da pass va tick day du trong `docs/manual-testing.md`.
-- Con lai bat buoc: deploy VPS/domain/HTTPS, bao cao PDF >=20 trang, demo video.
+- Build: `npm.cmd run build` pass với Next.js 16.2.6.
+- Docker: có `Dockerfile` multi-stage và `docker-compose.yml`; app chạy production trên `127.0.0.1:3000`.
+- UI: đã có trang About, giao diện tiếng Việt có dấu, homepage hỗ trợ chuyển tiếng Việt/English.
+- API docs: đã có `/api-docs` và `/api/openapi`, nhưng **chỉ admin được quyền xem**.
+- Manual testing: đã pass và tick đầy đủ trong `docs/manual-testing.md`.
+- Domain đã chuẩn bị: `dghahai.io.vn` tại BKNS.
+- Còn lại bắt buộc: deploy VPS/domain/HTTPS, báo cáo PDF >=20 trang, demo video.
 
 ## Demo
 
 - Local dev: `http://localhost:3000`
-- Swagger UI: `http://localhost:3000/api-docs`
-- OpenAPI JSON: `http://localhost:3000/api/openapi`
-- Production: chua deploy, se cap nhat sau khi co VPS/domain/SSL.
+- API docs admin-only: `http://localhost:3000/api-docs`
+- OpenAPI JSON admin-only: `http://localhost:3000/api/openapi`
+- Production: chưa xác nhận deploy xong; sẽ cập nhật sau khi `https://dghahai.io.vn` chạy ổn định.
 - Repository: `https://github.com/Ngocon2004/hotel-booking`
 
-## Tinh Nang
+## Tính Năng
 
 ### Public
 
-- Trang chu chuyen nghiep voi hero/search, GSAP animation, light/dark theme.
-- Da ngon ngu giao dien chinh: Tieng Viet va English.
-- Danh sach phong `/rooms` co filter, sort, pagination.
-- Chi tiet phong `/rooms/[id]` co gallery, review, realtime status.
-- Tim phong theo ngay, so khach tai `/search`.
+- Trang chủ chuyên nghiệp với hero/search, GSAP animation, light/dark theme.
+- Trang giới thiệu `/about` đã hoàn thiện, không public nút API docs.
+- Đa ngôn ngữ giao diện chính: tiếng Việt và English.
+- Danh sách phòng `/rooms` có filter, sort, pagination.
+- Chi tiết phòng `/rooms/[id]` có gallery, review, realtime status.
+- Tìm phòng theo ngày và số khách tại `/search`.
 
 ### Customer
 
-- Dang ky, dang nhap, dang xuat bang Supabase Auth.
-- Dang nhap email/password, magic link va Google OAuth.
-- Dat phong, chon dich vu kem theo, tinh tong tien real-time.
-- Nhan ma booking dang `HTL-YYYYMMDD-XXXX`.
-- Xem lich su booking, chi tiet booking, huy booking hop le.
-- In phieu booking.
-- Cap nhat profile va upload avatar.
-- Tao review sau khi booking da check-out.
+- Đăng ký, đăng nhập, đăng xuất bằng Supabase Auth.
+- Đăng nhập email/password, magic link và Google OAuth.
+- Đặt phòng, chọn dịch vụ kèm theo, tính tổng tiền real-time.
+- Nhận mã booking dạng `HTL-YYYYMMDD-XXXX`.
+- Xem lịch sử booking, chi tiết booking, hủy booking hợp lệ.
+- In phiếu booking.
+- Cập nhật profile và upload avatar.
+- Tạo review sau khi booking đã check-out.
 
 ### Admin
 
-- Dashboard KPI va bieu do bang Recharts.
+- Dashboard KPI và biểu đồ bằng Recharts.
 - CRUD room types.
-- CRUD rooms va upload anh Supabase Storage.
+- CRUD rooms và upload ảnh Supabase Storage.
 - CRUD services.
-- Quan ly bookings: confirm, check-in, check-out, cancel.
-- Quan ly customers.
-- Quan ly reviews.
-- Realtime toast khi co booking moi.
+- Quản lý bookings: confirm, check-in, check-out, cancel.
+- Quản lý customers.
+- Quản lý reviews.
+- Realtime toast khi có booking mới.
+- Xem Swagger UI/OpenAPI nội bộ.
 
 ### Backend / API Documentation
 
-- Backend chinh: Next.js Server Actions + Supabase Auth/PostgreSQL/Storage/Realtime.
-- Route thuc te:
+- Backend chính: Next.js Server Actions + Supabase Auth/PostgreSQL/Storage/Realtime.
+- Route thực tế:
   - `/auth/callback`
-  - `/api/openapi`
-  - `/api-docs`
-- Swagger UI mo ta cac business operations dang duoc cai dat bang Server Actions.
+  - `/api/openapi` - admin-only.
+  - `/api-docs` - admin-only.
+- Swagger UI mô tả các business operations đang được cài đặt bằng Server Actions.
+- Người chưa đăng nhập bị chuyển về login; customer đăng nhập bị chuyển về trang chủ khi truy cập API docs.
 
-## Stack Cong Nghe
+## Stack Công Nghệ
 
-| Layer | Cong nghe |
+| Layer | Công nghệ |
 | --- | --- |
 | Frontend | Next.js 16.2.6 App Router, React 19.2.4, TypeScript |
 | Styling | Tailwind CSS v4, shadcn/ui, Base UI |
@@ -74,8 +78,8 @@ De tai: **Website quan ly dat phong khach san**.
 | Validation | Zod |
 | Date/Time | dayjs, timezone `Asia/Ho_Chi_Minh` |
 | Chart | Recharts |
-| Docs API | OpenAPI 3.0.3, Swagger UI |
-| Container | Docker multi-stage, Docker Compose, Nginx reverse proxy |
+| Docs API | OpenAPI 3.0.3, Swagger UI admin-only |
+| Container | Docker multi-stage, Docker Compose, reverse proxy ngoài bằng Caddy/Nginx/Cloudflare |
 
 ## Quick Start
 
@@ -84,9 +88,9 @@ npm install
 npm run dev
 ```
 
-Mo `http://localhost:3000`.
+Mở `http://localhost:3000`.
 
-Tao `.env.local`:
+Tạo `.env.local`:
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
@@ -101,7 +105,7 @@ Seed data:
 npm run seed
 ```
 
-Tai khoan seed:
+Tài khoản seed:
 
 | Role | Email | Password |
 | --- | --- | --- |
@@ -110,27 +114,38 @@ Tai khoan seed:
 
 ## Docker
 
+Tạo `.env` ở root project:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+```
+
+Chạy:
+
 ```bash
 docker compose up -d --build
 ```
 
-Mo `http://localhost`.
+Mở `http://localhost:3000`.
 
-Luu y: Docker build can co `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_SITE_URL` o thoi diem build.
+Lưu ý: Docker build cần có `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_SITE_URL` ở thời điểm build.
 
-## Tai Lieu
+## Tài Liệu
 
-- [SPEC.md](./SPEC.md) - dac ta du an cap nhat.
-- [ROADMAP.md](./ROADMAP.md) - tien do va viec con lai.
-- [SETUP_GUIDE.md](./SETUP_GUIDE.md) - huong dan cai dat.
-- [SUPABASE_SETUP.md](./SUPABASE_SETUP.md) - huong dan Supabase.
+- [SPEC.md](./SPEC.md) - đặc tả dự án cập nhật.
+- [ROADMAP.md](./ROADMAP.md) - tiến độ và việc còn lại.
+- [SETUP_GUIDE.md](./SETUP_GUIDE.md) - hướng dẫn cài đặt.
+- [SUPABASE_SETUP.md](./SUPABASE_SETUP.md) - hướng dẫn Supabase.
 - [docs/deployment.md](./docs/deployment.md) - Docker/VPS deploy checklist.
 - [docs/manual-testing.md](./docs/manual-testing.md) - checklist manual test.
 - [docs/ai-prompts.md](./docs/ai-prompts.md) - log AI prompts.
 
-## Viec Con Lai
+## Việc Còn Lại
 
-1. Deploy VPS/domain/HTTPS.
-2. Viet bao cao PDF >=20 trang dung format.
-3. Quay demo video 3-5 phut.
-4. Polish nho: favicon, accessibility audit, screenshot minh chung.
+1. Deploy VPS/domain/HTTPS cho `dghahai.io.vn`.
+2. Viết báo cáo PDF >=20 trang đúng format.
+3. Quay demo video 3-5 phút.
+4. Cập nhật production URL sau khi deploy chạy ổn định.

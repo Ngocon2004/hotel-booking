@@ -1,24 +1,24 @@
-# Huong Dan Setup Supabase Cho HBMS Hotel
+# Hướng Dẫn Setup Supabase Cho HBMS Hotel
 
-File nay tap trung vao phan Supabase theo trang thai hien tai cua project.
+File này tập trung vào phần Supabase theo trạng thái hiện tại của project.
 
-## 1. Tao Project Supabase
+## 1. Tạo Project Supabase
 
-1. Vao `https://supabase.com/dashboard`.
-2. Dang nhap bang GitHub/Google/email.
-3. Tao project moi:
+1. Vào `https://supabase.com/dashboard`.
+2. Đăng nhập bằng GitHub/Google/email.
+3. Tạo project mới:
    - Name: `hotel-booking`.
-   - Region: Singapore neu uu tien gan Viet Nam.
+   - Region: Singapore nếu ưu tiên gần Việt Nam.
    - Plan: Free.
-4. Luu lai database password.
+4. Lưu lại database password.
 
-## 2. Chay Database Schema
+## 2. Chạy Database Schema
 
 Trong Supabase Dashboard:
 
-1. Mo **SQL Editor**.
-2. Tao query moi.
-3. Copy toan bo file:
+1. Mở **SQL Editor**.
+2. Tạo query mới.
+3. Copy toàn bộ file:
 
 ```text
 supabase/schema.sql
@@ -26,28 +26,28 @@ supabase/schema.sql
 
 4. Run query.
 
-Schema hien tai tao:
+Schema hiện tại tạo:
 
-- 8 bang: `profiles`, `room_types`, `rooms`, `bookings`, `payments`, `reviews`, `services`, `booking_services`.
+- 8 bảng: `profiles`, `room_types`, `rooms`, `bookings`, `payments`, `reviews`, `services`, `booking_services`.
 - RLS policies cho guest/customer/admin.
 - Storage buckets `rooms`, `avatars`.
 - RPC `check_room_availability`.
 - RPC `create_booking_transaction`.
-- Triggers auto profile va update timestamp.
+- Triggers auto profile và update timestamp.
 
-## 3. Lay API Keys
+## 3. Lấy API Keys
 
-Vao **Project Settings > API** va copy:
+Vào **Project Settings > API** và copy:
 
 - Project URL.
 - anon public key.
 - service_role key.
 
-`service_role key` chi dung cho seed/admin script, khong dua vao client.
+`service_role key` chỉ dùng cho seed/admin script, không đưa vào client.
 
-## 4. Tao Env Local
+## 4. Tạo Env Local
 
-Tao `.env.local` tai root project:
+Tạo `.env.local` tại root project:
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
@@ -56,16 +56,16 @@ SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
-## 5. Cau Hinh Auth
+## 5. Cấu Hình Auth
 
 Trong Supabase:
 
 1. Authentication > Providers.
-2. Bat Email provider.
-3. Co the tat Confirm email de test local nhanh hon.
-4. Neu dung Google OAuth:
-   - Cau hinh Google Cloud OAuth.
-   - Authorized redirect URI o Google la:
+2. Bật Email provider.
+3. Có thể tắt Confirm email để test local nhanh hơn.
+4. Nếu dùng Google OAuth:
+   - Cấu hình Google Cloud OAuth.
+   - Authorized redirect URI ở Google là:
 
 ```text
 https://<project-ref>.supabase.co/auth/v1/callback
@@ -79,96 +79,107 @@ http://localhost:3000/auth/callback
 
 ## 6. Seed Data
 
-Chay:
+Chạy:
 
 ```bash
 npm run seed
 ```
 
-Seed tao:
+Seed tạo:
 
 - Admin: `admin@hbms.vn` / `Admin123!`.
-- Customers: `customer1@hbms.vn` den `customer5@hbms.vn` / `Customer123!`.
+- Customers: `customer1@hbms.vn` đến `customer5@hbms.vn` / `Customer123!`.
 - Room types, rooms, services, bookings, reviews.
 
-Can co `SUPABASE_SERVICE_ROLE_KEY` trong `.env.local`.
+Cần có `SUPABASE_SERVICE_ROLE_KEY` trong `.env.local`.
 
 ## 7. Storage
 
 Bucket `rooms`:
 
-- Dung cho anh phong.
+- Dùng cho ảnh phòng.
 - Public read.
 - Admin upload/update.
 
 Bucket `avatars`:
 
-- Dung cho avatar user.
+- Dùng cho avatar user.
 - Public read.
-- User upload avatar cua minh.
+- User upload avatar của mình.
 
 ## 8. Realtime
 
-Project dang dung Supabase Realtime cho:
+Project đang dùng Supabase Realtime cho:
 
-- Booking moi tren admin bookings.
-- Room status update tren room pages/admin rooms.
+- Booking mới trên admin bookings.
+- Room status update trên room pages/admin rooms.
 
-Neu realtime khong chay, kiem tra:
+Đã test với `customer1@hbms.vn`: customer đặt và hủy booking, admin thấy trạng thái cập nhật đúng.
 
-- Realtime da bat cho bang can theo doi.
-- Browser console co loi env/session khong.
-- User co quyen doc bang theo RLS khong.
+Nếu realtime không chạy, kiểm tra:
+
+- Realtime đã bật cho bảng cần theo dõi.
+- Browser console có lỗi env/session không.
+- User có quyền đọc bảng theo RLS không.
 
 ## 9. Production / Deploy
 
-Khi co domain:
+Domain đã chuẩn bị: `dghahai.io.vn`.
 
-Cap nhat `.env.production`:
+Cập nhật `.env` trên VPS:
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
-NEXT_PUBLIC_SITE_URL=https://your-domain.com
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+NEXT_PUBLIC_SITE_URL=https://dghahai.io.vn
 ```
 
-Cap nhat Supabase Authentication URL Configuration:
+Cập nhật Supabase Authentication URL Configuration:
 
 ```text
-Site URL: https://your-domain.com
+Site URL: https://dghahai.io.vn
 Redirect URLs:
-https://your-domain.com/auth/callback
+https://dghahai.io.vn/auth/callback
 ```
 
-Sau khi doi `NEXT_PUBLIC_*`, phai build lai Docker image.
+Sau khi đổi `NEXT_PUBLIC_*`, phải build lại Docker image:
 
-## 10. Kiem Tra Nhanh
+```bash
+docker compose up -d --build
+```
 
-- Dang ky user moi co profile trong `profiles`.
-- Login admin vao duoc `/admin`.
-- Customer bi chan khi vao `/admin`.
-- Upload anh phong thanh cong.
-- Upload avatar thanh cong.
-- Dat phong khong trung lich.
-- Review chi tao duoc sau check-out.
+Nếu OAuth bị redirect về `0.0.0.0`, kiểm tra lại `NEXT_PUBLIC_SITE_URL`, Supabase Site URL, Redirect URLs và rebuild container.
+
+## 10. Kiểm Tra Nhanh
+
+- Đăng ký user mới có profile trong `profiles`.
+- Login admin vào được `/admin`.
+- Customer bị chặn khi vào `/admin`.
+- Customer bị chặn khi vào `/api-docs` và `/api/openapi`.
+- Admin xem được `/api-docs` và `/api/openapi`.
+- Upload ảnh phòng thành công.
+- Upload avatar thành công.
+- Đặt phòng không trùng lịch.
+- Review chỉ tạo được sau check-out.
 
 ## 11. Troubleshooting
 
 ### Missing Supabase URL/API key
 
-- Kiem tra `.env.local`.
+- Kiểm tra `.env.local` hoặc `.env` trên VPS.
 - Restart dev server.
 - Hard reload browser.
-- Neu trong Docker, build lai image.
+- Nếu trong Docker, build lại image.
 
 ### RLS permission denied
 
-- Kiem tra role trong `profiles`.
-- Kiem tra user da login.
-- Kiem tra policy trong `schema.sql` da chay day du.
+- Kiểm tra role trong `profiles`.
+- Kiểm tra user đã login.
+- Kiểm tra policy trong `schema.sql` đã chạy đầy đủ.
 
 ### Seed fail
 
-- Kiem tra `SUPABASE_SERVICE_ROLE_KEY`.
-- Kiem tra schema da chay.
-- Khong seed tren database production can giu du lieu.
+- Kiểm tra `SUPABASE_SERVICE_ROLE_KEY`.
+- Kiểm tra schema đã chạy.
+- Không seed trên database production cần giữ dữ liệu.

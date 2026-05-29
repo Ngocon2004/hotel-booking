@@ -1,116 +1,133 @@
 # Manual Testing Checklist
 
-Dung checklist nay truoc khi deploy, quay demo hoac viet bao cao ket qua.
+Dùng checklist này trước khi deploy, quay demo hoặc viết báo cáo kết quả.
 
-## Trang Thai Moi Truong
+## Trạng Thái Môi Trường
 
 - Local dev URL: `http://localhost:3000`.
-- Swagger UI: `http://localhost:3000/api-docs`.
-- OpenAPI JSON: `http://localhost:3000/api/openapi`.
-- Docker local: da pass trong smoke test truoc do.
-- Lint/build gan nhat: pass.
-- Can test tiep: cac flow yeu cau login that bang trinh duyet.
+- Swagger UI admin-only: `http://localhost:3000/api-docs`.
+- OpenAPI JSON admin-only: `http://localhost:3000/api/openapi`.
+- Docker local: đã pass trong smoke test trước đó.
+- Lint/build gần nhất: pass.
+- Manual test bằng trình duyệt: đã hoàn thành các nhóm chính.
 
-## Tai Khoan Seed
+## Tài Khoản Seed
 
 | Role | Email | Password |
 | --- | --- | --- |
 | Admin | `admin@hbms.vn` | `Admin123!` |
 | Customer | `customer1@hbms.vn` | `Customer123!` |
 
-## Smoke Test Khong Dang Nhap
+## Smoke Test Không Đăng Nhập
 
-- [x] `/` tra ve 200 tren dev server.
-- [x] `/rooms` tra ve 200 tren dev server.
-- [x] `/auth/login` tra ve 200 tren dev server.
-- [x] `/my-bookings` khi chua login redirect sang login.
-- [x] `/admin` khi chua login redirect sang login.
-- [x] `/admin/rooms` khi chua login redirect sang login.
-- [x] `/admin/bookings` khi chua login redirect sang login.
-- [x] `/api-docs` hien Swagger UI tren trinh duyet.
-- [x] `/api/openapi` tra OpenAPI JSON hop le tren trinh duyet.
+- [x] `/` trả về 200 trên dev server.
+- [x] `/about` trả về 200 trên dev server.
+- [x] `/rooms` trả về 200 trên dev server.
+- [x] `/auth/login` trả về 200 trên dev server.
+- [x] `/my-bookings` khi chưa login redirect sang login.
+- [x] `/admin` khi chưa login redirect sang login.
+- [x] `/admin/rooms` khi chưa login redirect sang login.
+- [x] `/admin/bookings` khi chưa login redirect sang login.
+- [x] `/api-docs` khi chưa login redirect sang login.
+- [x] `/api/openapi` khi chưa login redirect sang login.
 
 ## Auth Protection
 
-- [x] Login customer thanh cong va redirect dung trang da yeu cau.
-- [x] Login admin thanh cong va truy cap duoc `/admin`.
-- [x] Customer khong truy cap duoc `/admin`.
-- [x] Logout xoa session va quay ve trang public.
-- [x] Theme sang/toi khong mat chu sau khi login/logout.
+- [x] Login customer thành công và redirect đúng trang đã yêu cầu.
+- [x] Login admin thành công và truy cập được `/admin`.
+- [x] Customer không truy cập được `/admin`.
+- [x] Customer không truy cập được `/api-docs`.
+- [x] Customer không truy cập được `/api/openapi`.
+- [x] Admin truy cập được `/api-docs`.
+- [x] Admin truy cập được `/api/openapi`.
+- [x] Logout xóa session và quay về trang public.
+- [x] Theme sáng/tối không mất chữ sau khi login/logout.
 
 ## Customer Flow
 
-- [x] Login bang `customer1@hbms.vn`.
-- [x] Mo `/rooms`, danh sach phong render dung.
-- [x] Mo `/search`, nhap check-in/check-out/so khach.
-- [x] Filter theo loai phong/gia khong mat chu o dark mode.
-- [x] Chon phong trong va bam dat phong.
-- [x] Tao booking thanh cong.
-- [x] Nhan booking code dang `HTL-YYYYMMDD-XXXX`.
-- [x] Mo `/my-bookings`, thay booking vua tao.
-- [x] Mo `/my-bookings/[id]`, thay chi tiet phong/ngay/so khach/tong tien.
-- [x] Huy booking khi con hop le.
-- [x] Sau khi huy, status chuyen sang `cancelled`.
-- [x] Neu booking da `checked_out`, form review hien thi.
-- [x] Tao review thanh cong.
+- [x] Login bằng `customer1@hbms.vn`.
+- [x] Mở `/rooms`, danh sách phòng render đúng.
+- [x] Mở `/search`, nhập check-in/check-out/số khách.
+- [x] Filter theo loại phòng/giá không mất chữ ở dark mode.
+- [x] Chọn phòng trống và bấm đặt phòng.
+- [x] Tạo booking thành công.
+- [x] Nhận booking code dạng `HTL-YYYYMMDD-XXXX`.
+- [x] Mở `/my-bookings`, thấy booking vừa tạo.
+- [x] Mở `/my-bookings/[id]`, thấy chi tiết phòng/ngày/số khách/tổng tiền.
+- [x] Hủy booking khi còn hợp lệ.
+- [x] Sau khi hủy, status chuyển sang `cancelled`.
+- [x] Nếu booking đã `checked_out`, form review hiển thị.
+- [x] Tạo review thành công.
 
 ## Admin Booking Lifecycle
 
-- [x] Login bang `admin@hbms.vn`.
-- [x] Mo `/admin`, dashboard hien KPI va chart.
-- [x] Mo `/admin/bookings`, table render dung.
-- [x] Filter/search booking theo status hoac ma booking.
-- [x] Mo mot booking `pending`.
-- [x] Bam confirm, status chuyen `pending` -> `confirmed`.
-- [x] Bam check-in, status chuyen `confirmed` -> `checked_in`.
-- [x] Bam check-out, status chuyen `checked_in` -> `checked_out`.
-- [x] Sau check-out, `payment_status` chuyen sang `paid`.
-- [x] Mo mot booking co the huy.
-- [x] Bam admin cancel, status chuyen sang `cancelled`.
-- [x] Sau admin cancel, `payment_status` chuyen sang `refunded`.
+- [x] Login bằng `admin@hbms.vn`.
+- [x] Mở `/admin`, dashboard hiện KPI và chart.
+- [x] Mở `/admin/bookings`, table render đúng.
+- [x] Filter/search booking theo status hoặc mã booking.
+- [x] Mở một booking `pending`.
+- [x] Bấm confirm, status chuyển `pending` -> `confirmed`.
+- [x] Bấm check-in, status chuyển `confirmed` -> `checked_in`.
+- [x] Bấm check-out, status chuyển `checked_in` -> `checked_out`.
+- [x] Sau check-out, `payment_status` chuyển sang `paid`.
+- [x] Mở một booking có thể hủy.
+- [x] Bấm admin cancel, status chuyển sang `cancelled`.
+- [x] Sau admin cancel, `payment_status` chuyển sang `refunded`.
 
 ## Admin CRUD
 
-- [x] `/admin/room-types`: tao/sua/xoa loai phong.
-- [x] `/admin/rooms`: tao/sua/xoa phong.
-- [x] Upload anh phong JPG/PNG/WEBP <=5MB.
-- [x] `/admin/services`: tao/sua/xoa dich vu.
+- [x] `/admin/room-types`: tạo/sửa/xóa loại phòng.
+- [x] `/admin/rooms`: tạo/sửa/xóa phòng.
+- [x] Upload ảnh phòng JPG/PNG/WEBP <=5MB.
+- [x] `/admin/services`: tạo/sửa/xóa dịch vụ.
 - [x] `/admin/customers`: search customer.
-- [x] `/admin/reviews`: xoa review vi pham.
+- [x] `/admin/reviews`: xóa review vi phạm.
 
 ## Profile / Upload
 
-- [x] User mo `/profile`.
-- [x] Cap nhat ho ten/so dien thoai/dia chi.
+- [x] User mở `/profile`.
+- [x] Cập nhật họ tên/số điện thoại/địa chỉ.
 - [x] Upload avatar.
-- [x] Navbar hien avatar moi sau refresh.
+- [x] Navbar hiện avatar mới sau refresh.
 
 ## Print Flow
 
-- [x] Mo trang chi tiet booking.
-- [x] Bam in phieu.
-- [x] Trang print hien booking code, phong, ngay luu tru, khach va tong tien.
-- [x] Preview in khong vo layout.
+- [x] Mở trang chi tiết booking.
+- [x] Bấm in phiếu.
+- [x] Trang print hiện booking code, phòng, ngày lưu trú, khách và tổng tiền.
+- [x] Preview in không vỡ layout.
 
 ## Realtime
 
-- [x] Admin dang mo `/admin/bookings` thay toast khi co booking moi.
-- [x] Khi room status thay doi, `/admin/rooms` va `/rooms/[id]` cap nhat.
+- [x] Admin đang mở `/admin/bookings` thấy toast khi có booking mới.
+- [x] Khi room status thay đổi, `/admin/rooms` và `/rooms/[id]` cập nhật.
+- [x] Customer `customer1@hbms.vn` đặt rồi hủy booking, admin thấy trạng thái booking/phòng cập nhật đúng.
 
 ## Responsive / UI
 
-- [x] Trang chu can doi tren desktop.
-- [x] Trang chu can doi tren mobile.
-- [x] Search card trang chu khong lech nut.
-- [x] Dark mode khong mat chu tai `/search`.
-- [x] Admin nen trang/sang dung yeu cau.
-- [x] Navbar dropdown khong con Base UI warning.
+- [x] Trang chủ cân đối trên desktop.
+- [x] Trang chủ cân đối trên mobile.
+- [x] Search card trang chủ không lệch nút.
+- [x] Dark mode không mất chữ tại `/search`.
+- [x] Admin nền trắng/sáng đúng yêu cầu.
+- [x] Navbar dropdown không còn Base UI warning.
+- [x] About page hiển thị tiếng Việt có dấu.
+- [x] About page không còn nút xem API docs.
+- [x] Chuyển homepage qua English không còn text tiếng Việt lẫn vào phần chính.
 
-## Ghi Chu
+## Cần Test Lại Sau Deploy
 
-- 2026-05-29: Da smoke test lai bang local dev server. `/`, `/rooms`, `/auth/login` tra 200; `/my-bookings`, `/admin`, `/admin/rooms`, `/admin/bookings` redirect 307 sang login; `/api-docs` va `/api/openapi` tra 200 sau khi whitelist trong proxy auth.
-- 2026-05-29: Da test realtime voi customer `customer1@hbms.vn`: sau khi dat phong va huy booking, admin thay trang thai cap nhat dung.
-- 2026-05-29: Da manual test thanh cong cac nhom Auth Protection, Customer Flow, Admin Booking Lifecycle, Admin CRUD, Profile/Upload, Print Flow va Responsive/UI.
-- Hien chua co Playwright/Cypress trong `package.json`, nen cac muc tren can test bang trinh duyet.
-- Khong chay `npm run seed` tren database can giu du lieu.
-- Sau khi test xong, tick lai file nay va dung ket qua lam bang chung trong bao cao.
+- [ ] `https://dghahai.io.vn` trả trang chủ.
+- [ ] `https://dghahai.io.vn/auth/callback` hoạt động với Supabase Auth.
+- [ ] Google OAuth không redirect về `0.0.0.0`.
+- [ ] API docs vẫn admin-only trên production.
+- [ ] Realtime hoạt động trên domain thật.
+
+## Ghi Chú
+
+- 2026-05-29: Đã smoke test local dev server. `/`, `/rooms`, `/auth/login` trả 200; `/my-bookings`, `/admin`, `/admin/rooms`, `/admin/bookings` redirect sang login khi chưa đăng nhập.
+- 2026-05-29: API docs đã chuyển từ public sang admin-only; không public `/api-docs` và `/api/openapi`.
+- 2026-05-29: Đã test realtime với customer `customer1@hbms.vn`: sau khi đặt phòng và hủy booking, admin thấy trạng thái cập nhật đúng.
+- 2026-05-29: Đã manual test thành công các nhóm Auth Protection, Customer Flow, Admin Booking Lifecycle, Admin CRUD, Profile/Upload, Print Flow, Realtime và Responsive/UI.
+- Hiện chưa có Playwright/Cypress trong `package.json`, nên các mục trên được test bằng trình duyệt.
+- Không chạy `npm run seed` trên database cần giữ dữ liệu.
