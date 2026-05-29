@@ -17,6 +17,24 @@ function safeRedirectPath(value: FormDataEntryValue | string | null): string {
   return path
 }
 
+function isUsableOrigin(value: string) {
+  try {
+    const url = new URL(value)
+    return url.hostname !== '0.0.0.0' && url.hostname !== '::'
+  } catch {
+    return false
+  }
+}
+
+async function getAuthRedirectOrigin() {
+  const requestOrigin = (await headers()).get('origin') || ''
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || ''
+
+  if (siteUrl && isUsableOrigin(siteUrl)) return new URL(siteUrl).origin
+  if (requestOrigin && isUsableOrigin(requestOrigin)) return new URL(requestOrigin).origin
+  return ''
+}
+
 export async function login(
   _prevState: AuthFormState,
   formData: FormData
@@ -73,7 +91,7 @@ export async function loginWithEmail(
   }
 
   const redirectTo = safeRedirectPath(formData.get('redirect'))
-  const origin = (await headers()).get('origin') || process.env.NEXT_PUBLIC_SITE_URL || ''
+  const origin = await getAuthRedirectOrigin()
   const supabase = await createClient()
   const { error } = await supabase.auth.signInWithOtp({
     email: validated.data.email,
@@ -93,7 +111,7 @@ export async function loginWithEmail(
 
 export async function loginWithGoogle(formData: FormData) {
   const redirectTo = safeRedirectPath(formData.get('redirect'))
-  const origin = (await headers()).get('origin') || process.env.NEXT_PUBLIC_SITE_URL || ''
+  const origin = await getAuthRedirectOrigin()
   const supabase = await createClient()
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
