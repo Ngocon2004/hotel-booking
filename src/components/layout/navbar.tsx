@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { Button } from '@/components/ui/button'
-import { Hotel, User } from 'lucide-react'
+import { BedDouble, CalendarDays, Home, Hotel, Menu, Search, ShieldCheck, User } from 'lucide-react'
 import ThemeToggle from '@/components/theme-toggle'
 import {
   DropdownMenu,
@@ -15,6 +15,14 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { logout } from '@/server/actions/auth'
 import SearchForm from '@/components/booking/search-form'
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet'
 
 export default async function Navbar() {
   const supabase = await createClient()
@@ -40,6 +48,12 @@ export default async function Navbar() {
         .join('')
         .toUpperCase()
     : user?.email?.charAt(0).toUpperCase() || 'U'
+
+  const mobileLinks = [
+    { href: '/', label: 'Trang chủ', icon: Home },
+    { href: '/rooms', label: 'Phòng', icon: BedDouble },
+    { href: '/search', label: 'Tìm kiếm', icon: Search },
+  ]
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/88 backdrop-blur-md dark:border-white/10 dark:bg-slate-950/88">
@@ -146,6 +160,80 @@ export default async function Navbar() {
               </Link>
             </>
           )}
+
+          <Sheet>
+            <SheetTrigger
+              render={
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="md:hidden"
+                  aria-label="Mở menu"
+                />
+              }
+            >
+              <Menu className="h-5 w-5" />
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[18rem] max-w-[85vw] p-0">
+              <SheetHeader className="border-b border-border">
+                <SheetTitle className="flex items-center gap-2">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600">
+                    <Hotel className="h-5 w-5 text-white" />
+                  </span>
+                  HBMS Hotel
+                </SheetTitle>
+              </SheetHeader>
+
+              <div className="flex flex-col gap-1 px-3 py-2">
+                {mobileLinks.map((item) => {
+                  const Icon = item.icon
+                  return (
+                    <SheetClose
+                      key={item.href}
+                      render={
+                        <Link
+                          href={item.href}
+                          className="flex h-11 items-center gap-3 rounded-md px-3 text-sm font-semibold text-foreground hover:bg-muted"
+                        />
+                      }
+                    >
+                      <Icon className="h-4 w-4 text-blue-600" />
+                      {item.label}
+                    </SheetClose>
+                  )
+                })}
+
+                {user && (
+                  <SheetClose
+                    render={
+                      <Link
+                        href="/my-bookings"
+                        className="flex h-11 items-center gap-3 rounded-md px-3 text-sm font-semibold text-foreground hover:bg-muted"
+                      />
+                    }
+                  >
+                    <CalendarDays className="h-4 w-4 text-blue-600" />
+                    Đặt chỗ của tôi
+                  </SheetClose>
+                )}
+
+                {profile?.role === 'admin' && (
+                  <SheetClose
+                    render={
+                      <Link
+                        href="/admin"
+                        className="flex h-11 items-center gap-3 rounded-md px-3 text-sm font-semibold text-blue-700 hover:bg-blue-50 dark:text-blue-300 dark:hover:bg-white/10"
+                      />
+                    }
+                  >
+                    <ShieldCheck className="h-4 w-4" />
+                    Trang quản trị
+                  </SheetClose>
+                )}
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
     </nav>
