@@ -4,9 +4,9 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        NEXT_PUBLIC_SUPABASE_URL: https://fsafiqbloaewidbatsjv.supabase.co
-        NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZzYWZpcWJsb2Fld2lkYmF0c2p2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1MjEyNzUsImV4cCI6MjA5NTA5NzI3NX0.If8mu7tQtpHfG1JNbjTWvabd8iQ0dye0g2ZxbjY35y8
-        NEXT_PUBLIC_SITE_URL: http://localhost
+        NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL}
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL}
     restart: unless-stopped
     env_file:
       - .env.production

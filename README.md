@@ -11,7 +11,8 @@ De tai: **Website quan ly dat phong khach san**.
 - Docker local: da build/run thanh cong bang `docker compose up -d --build`, image khoang `197MB`.
 - Swagger UI: da co tai `/api-docs`.
 - OpenAPI JSON: da co tai `/api/openapi`.
-- Con lai bat buoc: deploy VPS/domain/HTTPS, bao cao PDF >=20 trang, demo video, manual test day du bang trinh duyet.
+- Manual testing: da pass va tick day du trong `docs/manual-testing.md`.
+- Con lai bat buoc: deploy VPS/domain/HTTPS, bao cao PDF >=20 trang, demo video.
 
 ## Demo
 
@@ -129,8 +130,7 @@ Luu y: Docker build can co `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANO
 
 ## Viec Con Lai
 
-1. Manual test bang trinh duyet va tick lai `docs/manual-testing.md`.
-2. Deploy VPS/domain/HTTPS.
-3. Viet bao cao PDF >=20 trang dung format.
-4. Quay demo video 3-5 phut.
-5. Polish nho: favicon, accessibility audit, screenshot minh chung.
+1. Deploy VPS/domain/HTTPS.
+2. Viet bao cao PDF >=20 trang dung format.
+3. Quay demo video 3-5 phut.
+4. Polish nho: favicon, accessibility audit, screenshot minh chung.

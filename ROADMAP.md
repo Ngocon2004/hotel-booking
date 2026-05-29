@@ -1,13 +1,13 @@
 # ROADMAP - Hotel Booking Management System
 
-Cap nhat: 2026-05-28
+Cap nhat: 2026-05-29
 
 ## Tong Quan Tien Do
 
-Trang thai tong the: **khoang 88-90%**.
+Trang thai tong the: **khoang 92-94%**.
 
 Da hoan thanh phan code chinh, Docker local, Swagger UI, UI polish, theme sang/toi, animation, chuc nang nang cao.
-Con lai chu yeu la **manual test co dang nhap**, **deploy VPS/domain/HTTPS**, **bao cao PDF**, va **demo video**.
+Manual test co dang nhap da pass. Con lai chu yeu la **deploy VPS/domain/HTTPS**, **bao cao PDF**, va **demo video**.
 
 ## Yeu Cau Bat Buoc Theo Quy Che
 
@@ -104,28 +104,20 @@ Con lai chu yeu la **manual test co dang nhap**, **deploy VPS/domain/HTTPS**, **
 
 ### Uu Tien Cao
 
-1. **Manual test bang trinh duyet**
-   - Customer login/search/book/cancel.
-   - Admin confirm/check-in/check-out/cancel.
-   - Upload avatar/room image.
-   - Print preview.
-   - Realtime toast/status.
-   - Swagger UI tai `/api-docs`.
-
-2. **Deploy VPS/domain/HTTPS**
+1. **Deploy VPS/domain/HTTPS**
    - Chuan bi VPS.
    - Tro DNS A record.
    - Tao `.env.production`.
-   - Chay `docker compose up -d --build`.
+   - Chay `docker compose --env-file .env.production up -d --build`.
    - Cau hinh HTTPS bang Cloudflare, Caddy hoac Certbot.
    - Cap nhat Supabase Auth redirect URLs.
 
-3. **Bao cao PDF >=20 trang**
+2. **Bao cao PDF >=20 trang**
    - Times New Roman 13, spacing 1.5.
    - Co screenshot giao dien, Supabase, Docker, Swagger UI, GitHub.
    - Co phu luc AI prompts.
 
-4. **Demo video 3-5 phut**
+3. **Demo video 3-5 phut**
    - Public search/booking.
    - Customer my bookings/review.
    - Admin dashboard/lifecycle.
@@ -156,7 +148,7 @@ Con lai chu yeu la **manual test co dang nhap**, **deploy VPS/domain/HTTPS**, **
 
 ## Definition Of Done Con Lai
 
-- [ ] Manual testing checklist duoc tick day du.
+- [x] Manual testing checklist duoc tick day du.
 - [ ] Co production HTTPS URL.
 - [ ] Bao cao PDF >=20 trang hoan thanh.
 - [ ] Demo video 3-5 phut hoan thanh.
