@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { Button } from '@/components/ui/button'
-import { BedDouble, CalendarDays, Home, Hotel, Menu, Search, ShieldCheck, User } from 'lucide-react'
+import { BedDouble, Building2, CalendarDays, Home, Hotel, Menu, Search, ShieldCheck, User } from 'lucide-react'
 import ThemeToggle from '@/components/theme-toggle'
 import {
   DropdownMenu,
@@ -51,6 +51,7 @@ export default async function Navbar() {
 
   const mobileLinks = [
     { href: '/', label: 'Trang chủ', icon: Home },
+    { href: '/about', label: 'Giới thiệu', icon: Building2 },
     { href: '/rooms', label: 'Phòng', icon: BedDouble },
     { href: '/search', label: 'Tìm kiếm', icon: Search },
   ]
@@ -73,6 +74,9 @@ export default async function Navbar() {
         <div className="hidden md:flex items-center gap-1">
           <Link href="/" className="px-4 py-2 text-sm font-semibold text-slate-700 hover:text-blue-600 transition-colors dark:text-slate-200 dark:hover:text-blue-300">
             Trang chủ
+          </Link>
+          <Link href="/about" className="px-4 py-2 text-sm font-semibold text-slate-700 hover:text-blue-600 transition-colors dark:text-slate-200 dark:hover:text-blue-300">
+            Giới thiệu
           </Link>
           <Link href="/rooms" className="px-4 py-2 text-sm font-semibold text-slate-700 hover:text-blue-600 transition-colors dark:text-slate-200 dark:hover:text-blue-300">
             Phòng
